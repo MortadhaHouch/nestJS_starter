@@ -1,0 +1,6 @@
+enum TaskStatus {
+    DONE = "DONE",
+    PENDING = "PENDING",
+    OVERDUE = "OVERDUE"
+}
+export {TaskStatus}
