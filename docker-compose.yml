@@ -1,0 +1,27 @@
+version:
+  1.0
+services:
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    entrypoint:
+      - VITE_PUBLIC_REQUEST_URL : http://localhost:3000
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    entrypoint:
+      - PORT : 3000
+      - MONGO_URL : mongodb://localhost:27018/nest_starter
+      - SECRET_KEY : EMhwy2fzSQaQtKQ/8ELnIHQPpfYNhsZh08OlROOrVh+cCPx2qIQo78/d9u8owNTstrHQnzK5m1pOMZDU4qrN4ehJHsHIB+RuhhEfgxoMXe3wR9/X0DttBKWtyyFypkVZZGCwDISYYkKGXBec9xUgXWll/j03BVg7MxtjDhXGfjLpjr1WfDrfKZTm8e4WZ7+DOxNA8PX06XuzOiJb/Bw3fCqlDiwkf9bSaRDlB159VkmkpN59H+r/VeiRugayEFMqEj5gaLuhIaHAwCvbJ7Z+ai1u/AIAkxlpcQxHISWyuCbQSU8pXKNFuj+CjgbgVOK4Gats59Xyr9UYQ4in1r3n+GQKT88O4M/Fh5oikBVwTPssvQfwupcu6y8FFXfn9tEcgvEEdtjlLb7iI354JIMc2jdsnT3ESCN1iE/qBerNVarK6yst
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    ports:
+      - "27018:27017"
+  analytics:
+    build: ./analytics
+    ports:
+      - "8000:8000"

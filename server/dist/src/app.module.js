@@ -20,7 +20,7 @@ let AppModule = class AppModule {
     configure(consumer) {
         consumer
             .apply(logger_middleware_service_1.LoggerMiddlewareService)
-            .forRoutes('user');
+            .forRoutes('task');
     }
 };
 exports.AppModule = AppModule;

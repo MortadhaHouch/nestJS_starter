@@ -35,6 +35,12 @@ let UserService = class UserService {
     async checkPassword(password, hash) {
         return await bcrypt.compare(password, hash);
     }
+    async findUserByName({ firstName, lastName }) {
+        return await this.userModel.findOne({ firstName, lastName });
+    }
+    async findAllUsers() {
+        return await this.userModel.find();
+    }
 };
 exports.UserService = UserService;
 exports.UserService = UserService = __decorate([

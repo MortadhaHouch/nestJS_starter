@@ -1,10 +1,21 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId, RootFilterQuery } from 'mongoose';
 import { Task } from './entities/task.entity';
+import { TaskStatus } from 'utils/types';
+
+interface FindAllOptions {
+  page?: number;
+  limit?: number;
+  status?: TaskStatus;
+  userId?: ObjectId;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  search?: string;
+}
 
 @Injectable()
 export class TaskService {
@@ -15,19 +26,133 @@ export class TaskService {
     return this.taskModel.create(createTaskDto);
   }
 
-  findAll() {
-    return this.taskModel.find();
+  async findAll(options: FindAllOptions = {}) {
+    try {
+      const {
+        page = 1,
+        limit = 10,
+        status,
+        userId,
+        sortBy = 'createdAt',
+        sortOrder = 'desc',
+        search
+      } = options;
+      if (page < 1 || limit < 1 || limit > 100) {
+        throw new BadRequestException('Invalid pagination parameters');
+      }
+      const query: RootFilterQuery<Task> = {};
+      query.userId = userId;
+      if (status) {
+        query.status = status;
+      }
+      if (search) {
+        query.$or = [
+          { title: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } }
+        ];
+      }
+      
+      const sort: any = {};
+      sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
+
+      const skip = (page - 1) * limit;
+      
+      const [tasks, total] = await Promise.all([
+        this.taskModel
+          .find(query)
+          .sort(sort)
+          .skip(skip)
+          .limit(limit)
+          .populate('userId', 'firstName lastName email')
+          .exec(),
+        this.taskModel.countDocuments(query)
+      ]);
+
+      return {
+        tasks,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+          hasNext: page < Math.ceil(total / limit),
+          hasPrev: page > 1
+        }
+      };
+    } catch (error) {
+      throw new BadRequestException(`Failed to fetch tasks: ${error.message}`);
+    }
   }
 
-  findOne(id: string) {
-    return this.taskModel.findById(id);
+  async getUserTasks(userId: ObjectId, ids:ObjectId[]){
+    const taskSearchP = ids.map((id) => this.taskModel.findOne({
+      _id: id,
+      userId
+    }));
+    const tasks = await Promise.all(taskSearchP);
+    return tasks.flat();
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return this.taskModel.findByIdAndUpdate(id, updateTaskDto);
+  async findOverdueTasks(userId: ObjectId) {
+    const query: RootFilterQuery<Task> = {
+      overdue: { $lt: new Date() },
+      status: { $ne: TaskStatus.DONE },
+      userId
+    };
+    
+    return this.taskModel.find(query).populate('userId', 'firstName lastName email');
   }
 
-  remove(id: string) {
-    return this.taskModel.findByIdAndDelete(id);
+  async getTaskStats(userId: ObjectId) {
+    const stats = await this.taskModel.aggregate([
+      { $match: { userId } },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+    
+    const total = await this.taskModel.countDocuments({ userId });
+    const overdue = await this.taskModel.countDocuments({
+      userId,
+      overdue: { $lt: new Date() },
+      status: { $ne: TaskStatus.DONE }
+    });
+    
+    return {
+      total,
+      overdue,
+      byStatus: stats.reduce((acc: Record<string, number>, stat) => {
+        acc[stat._id] = stat.count;
+        return acc;
+      }, {})
+    };
+  }
+
+  findOne(userId: ObjectId, id: ObjectId) {
+    return this.taskModel.findOne({
+      _id: id,
+      userId
+    });
+  }
+
+  update(id: ObjectId, updateTaskDto: UpdateTaskDto) {
+    return this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
+  }
+
+  async remove(userId: ObjectId, id: ObjectId) {
+    const deletedTask = await this.taskModel.findOneAndDelete({
+      _id: id,
+      userId
+    });
+    if(deletedTask){
+      return {
+        deleted: true,
+        id
+      }
+    }
+    throw new NotFoundException('Task not found');
   }
 }

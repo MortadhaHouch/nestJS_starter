@@ -23,41 +23,83 @@ let TaskController = class TaskController {
     constructor(taskService) {
         this.taskService = taskService;
     }
-    create(createTaskDto) {
-        return this.taskService.create(createTaskDto);
+    create(createTaskDto, req) {
+        const taskData = {
+            ...createTaskDto,
+            userId: req.user._id
+        };
+        return this.taskService.create(taskData);
     }
-    findAll() {
-        return this.taskService.findAll();
+    findAll(req, page, limit, status, sortBy, sortOrder, search) {
+        const options = {
+            page: page ? parseInt(page) : 1,
+            limit: limit ? parseInt(limit) : 10,
+            status: status,
+            userId: req.user._id,
+            sortBy,
+            sortOrder,
+            search
+        };
+        return this.taskService.findAll(options);
     }
-    findOne(id) {
-        return this.taskService.findOne(id);
+    findOverdue(req) {
+        return this.taskService.findOverdueTasks(req.user._id);
+    }
+    getStats(req) {
+        return this.taskService.getTaskStats(req.user._id);
+    }
+    findOne(req, id) {
+        return this.taskService.findOne(req.user._id, id);
     }
     update(id, updateTaskDto) {
         return this.taskService.update(id, updateTaskDto);
     }
-    remove(id) {
-        return this.taskService.remove(id);
+    remove(req, id) {
+        return this.taskService.remove(req.user._id, id);
     }
 };
 exports.TaskController = TaskController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto]),
+    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto, Object]),
     __metadata("design:returntype", void 0)
 ], TaskController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)("page")),
+    __param(2, (0, common_1.Query)("limit")),
+    __param(3, (0, common_1.Query)("status")),
+    __param(4, (0, common_1.Query)("sortBy")),
+    __param(5, (0, common_1.Query)("sortOrder")),
+    __param(6, (0, common_1.Query)("search")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object, String, String, String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], TaskController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    (0, common_1.Get)('overdue'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], TaskController.prototype, "findOverdue", null);
+__decorate([
+    (0, common_1.Get)('stats'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], TaskController.prototype, "getStats", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], TaskController.prototype, "findOne", null);
 __decorate([
@@ -65,14 +107,15 @@ __decorate([
     __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_task_dto_1.UpdateTaskDto]),
+    __metadata("design:paramtypes", [Object, update_task_dto_1.UpdateTaskDto]),
     __metadata("design:returntype", void 0)
 ], TaskController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], TaskController.prototype, "remove", null);
 exports.TaskController = TaskController = __decorate([

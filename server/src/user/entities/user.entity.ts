@@ -2,8 +2,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Task } from 'src/task/entities/task.entity';
 import {Schema as MongooseSchema} from "mongoose"
-import { utils } from 'utils/constants';
-import AutoPopulate from "mongoose-autopopulate"
 @Schema()
 export class User {
   @Prop({
@@ -23,12 +21,6 @@ export class User {
     required: true,
     minlength: 8,
     message: 'Email must be at least 8 characters long',
-    validate: {
-      validator: function (email: string) {
-        return utils.emailReqex.test(email);
-      },
-      message: 'Invalid email format',
-    },
   })
   email: string;
   @Prop({
@@ -49,4 +41,3 @@ export class User {
   isLoggedIn:boolean;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
-UserSchema.plugin(AutoPopulate);

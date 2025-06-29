@@ -7,6 +7,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, {
         logger: new common_1.ConsoleLogger({
             colors: true,
+            timestamp: true,
         }),
     });
     app.enableCors([

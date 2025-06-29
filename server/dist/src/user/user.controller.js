@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
-const create_user_dto_1 = require("./dto/create-user.dto");
 const jwt_1 = require("@nestjs/jwt");
+const login_user_dto_1 = require("./dto/login-user.dto");
+const signup_user_dto_1 = require("./dto/signup-user.dto");
 let UserController = class UserController {
     userService;
     jwtService;
@@ -29,21 +30,43 @@ let UserController = class UserController {
         if (foundUser) {
             const isValid = await this.userService.checkPassword(user.password, foundUser.password);
             if (isValid) {
-                const token = this.jwtService.sign({ email: user.email });
+                const token = this.jwtService.sign({ email: user.email }, {
+                    secret: process.env.SECRET_KEY,
+                    expiresIn: "7d"
+                });
                 return { token };
             }
             else {
-                throw new common_1.UnauthorizedException();
+                throw new common_1.UnauthorizedException({
+                    message: "invalid password"
+                });
             }
+        }
+        else {
+            return new common_1.UnauthorizedException({
+                message: "user not found"
+            });
         }
     }
     async signup(user) {
+        const userByName = await this.userService.findUserByName({ firstName: user.firstName, lastName: user.lastName });
+        if (userByName) {
+            throw new common_1.ConflictException({
+                message: "user with this name already exists",
+            });
+        }
         const foundUser = await this.userService.findUserByEmail(user.email);
         if (foundUser) {
-            throw new common_1.UnauthorizedException();
+            throw new common_1.ConflictException({
+                message: "user with this email already exists",
+            });
         }
-        const createdUser = await this.userService.create(user);
-        const token = this.jwtService.sign({ email: createdUser.email });
+        const hashedPassword = await this.userService.hashPassword(user.password, 10);
+        const createdUser = await this.userService.create({ ...user, password: hashedPassword });
+        const token = this.jwtService.sign({ email: createdUser.email }, {
+            secret: process.env.SECRET_KEY,
+            expiresIn: "7d"
+        });
         return { token };
     }
     async logout(req) {
@@ -68,14 +91,16 @@ let UserController = class UserController {
 exports.UserController = UserController;
 __decorate([
     (0, common_1.Post)("login"),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [login_user_dto_1.LoginUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "login", null);
 __decorate([
     (0, common_1.Post)("signup"),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [signup_user_dto_1.SignupUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "signup", null);
 __decorate([

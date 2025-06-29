@@ -13,6 +13,7 @@ const user_service_1 = require("./user.service");
 const user_controller_1 = require("./user.controller");
 const user_entity_1 = require("./entities/user.entity");
 const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -28,10 +29,12 @@ exports.UserModule = UserModule = __decorate([
                 signOptions: {
                     expiresIn: "7d",
                 },
-            })
+            }),
+            config_1.ConfigModule.forRoot()
         ],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService],
+        exports: [user_service_1.UserService],
     })
 ], UserModule);
 //# sourceMappingURL=user.module.js.map

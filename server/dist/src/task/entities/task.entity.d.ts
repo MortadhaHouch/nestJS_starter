@@ -1,11 +1,14 @@
 import { TaskStatus } from "utils/types";
+import { Schema as MongooseSchema } from "mongoose";
 export declare class Task {
     title: string;
     description: string;
     status: TaskStatus;
     overdue: Date;
+    userId: MongooseSchema.Types.ObjectId;
+    tags: string[];
 }
-export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoose").Model<Task, any, any, any, import("mongoose").Document<unknown, any, Task, any> & Task & {
+export declare const TaskSchema: MongooseSchema<Task, import("mongoose").Model<Task, any, any, any, import("mongoose").Document<unknown, any, Task, any> & Task & {
     _id: import("mongoose").Types.ObjectId;
 } & {
     __v: number;

@@ -1,7 +1,17 @@
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Task } from './entities/task.entity';
+import { TaskStatus } from 'utils/types';
+interface FindAllOptions {
+    page?: number;
+    limit?: number;
+    status?: TaskStatus;
+    userId?: ObjectId;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+    search?: string;
+}
 export declare class TaskService {
     private readonly taskModel;
     constructor(taskModel: Model<Task>);
@@ -10,16 +20,37 @@ export declare class TaskService {
     } & {
         __v: number;
     }>;
-    findAll(): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
+    findAll(options?: FindAllOptions): Promise<{
+        tasks: (import("mongoose").Document<unknown, {}, Task, {}> & Task & {
+            _id: import("mongoose").Types.ObjectId;
+        } & {
+            __v: number;
+        })[];
+        pagination: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+            hasNext: boolean;
+            hasPrev: boolean;
+        };
+    }>;
+    getUserTasks(userId: ObjectId, ids: ObjectId[]): Promise<((import("mongoose").Document<unknown, {}, Task, {}> & Task & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
-    })[], import("mongoose").Document<unknown, {}, Task, {}> & Task & {
+    }) | null)[]>;
+    findOverdueTasks(userId: ObjectId): Promise<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
-    }, {}, Task, "find", {}>;
-    findOne(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
+    })[]>;
+    getTaskStats(userId: ObjectId): Promise<{
+        total: number;
+        overdue: number;
+        byStatus: any;
+    }>;
+    findOne(userId: ObjectId, id: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
@@ -28,7 +59,7 @@ export declare class TaskService {
     } & {
         __v: number;
     }, {}, Task, "findOne", {}>;
-    update(id: string, updateTaskDto: UpdateTaskDto): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
+    update(id: ObjectId, updateTaskDto: UpdateTaskDto): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
@@ -37,13 +68,9 @@ export declare class TaskService {
     } & {
         __v: number;
     }, {}, Task, "findOneAndUpdate", {}>;
-    remove(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }) | null, import("mongoose").Document<unknown, {}, Task, {}> & Task & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }, {}, Task, "findOneAndDelete", {}>;
+    remove(userId: ObjectId, id: ObjectId): Promise<{
+        deleted: boolean;
+        id: import("mongoose").Schema.Types.ObjectId;
+    }>;
 }
+export {};

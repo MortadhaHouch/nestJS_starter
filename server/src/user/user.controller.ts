@@ -9,13 +9,18 @@ import {
   Delete,
   ValidationPipe,
   Req,
-  UnauthorizedException 
+  UnauthorizedException,
+  HttpExceptionBody,
+  ConflictException,
+  BadRequestException,
+  HttpStatus,
+  NotFoundException
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { IsObjectIdPipe } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
+import { LoginUserDto } from './dto/login-user.dto';
+import { SignupUserDto } from './dto/signup-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -24,27 +29,54 @@ export class UserController {
     private readonly jwtService: JwtService
   ) {}
   @Post("login")
-  public async login(user:CreateUserDto){
+  public async login(@Body(ValidationPipe) user:LoginUserDto){
     const foundUser = await this.userService.findUserByEmail(user.email);
     if(foundUser){
       const isValid = await this.userService.checkPassword(user.password,foundUser.password);
       if(isValid){
-        const token = this.jwtService.sign({email:user.email});
+        const token = this.jwtService.sign(
+          {email:user.email},
+          {
+            secret:process.env.SECRET_KEY as string,
+            expiresIn:"7d"
+          }
+        );
         return {token};
       }
       else{
-        throw new UnauthorizedException();
+        throw new UnauthorizedException({
+          message:"invalid password"
+        });
       }
+    }else{
+      return new UnauthorizedException({
+        message:"user not found"
+      });
     }
   }
   @Post("signup")
-  public async signup(user:CreateUserDto){
+  public async signup(@Body(ValidationPipe) user:SignupUserDto){
+    const userByName = await this.userService.findUserByName({firstName:user.firstName,lastName:user.lastName});
+    if(userByName){
+      throw new ConflictException({
+        message:"user with this name already exists",
+      });
+    }
     const foundUser = await this.userService.findUserByEmail(user.email);
     if(foundUser){
-      throw new UnauthorizedException();
+      throw new ConflictException({
+        message:"user with this email already exists",
+      });
     }
-    const createdUser = await this.userService.create(user);
-    const token = this.jwtService.sign({email:createdUser.email});
+    const hashedPassword = await this.userService.hashPassword(user.password,10);
+    const createdUser = await this.userService.create({...user,password:hashedPassword});
+    const token = this.jwtService.sign(
+      {email:createdUser.email},
+      {
+        secret:process.env.SECRET_KEY as string,
+        expiresIn:"7d"
+      }
+    );
     return {token};
   }
   @Post("logout")

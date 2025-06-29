@@ -20,4 +20,17 @@ export declare class UserService {
     }, {}, User, "findOne", {}>;
     hashPassword(password: string, salt?: number): Promise<string>;
     checkPassword(password: string, hash: string): Promise<boolean>;
+    findUserByName({ firstName, lastName }: {
+        firstName: string;
+        lastName: string;
+    }): Promise<(import("mongoose").Document<unknown, {}, User, {}> & User & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }) | null>;
+    findAllUsers(): Promise<(import("mongoose").Document<unknown, {}, User, {}> & User & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    })[]>;
 }

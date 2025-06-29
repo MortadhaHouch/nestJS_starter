@@ -11,12 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateTaskDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 const types_1 = require("../../../utils/types");
 class CreateTaskDto {
     title;
     description;
     status;
     overdue;
+    tags;
 }
 exports.CreateTaskDto = CreateTaskDto;
 __decorate([
@@ -28,11 +30,26 @@ __decorate([
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsEnum)({ values: Object.values(types_1.TaskStatus).map(k => k.toString()) }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(types_1.TaskStatus),
+    (0, class_transformer_1.Transform)(({ value }) => value || types_1.TaskStatus.PENDING),
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "status", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)({ always: true, message: "Overdue date is required" }),
-    __metadata("design:type", Date)
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDateString)(),
+    (0, class_transformer_1.Transform)(({ value }) => {
+        if (!value) {
+            return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+        }
+        return typeof value === 'string' ? value : value.toISOString();
+    }),
+    __metadata("design:type", String)
 ], CreateTaskDto.prototype, "overdue", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value }) => value || []),
+    __metadata("design:type", Array)
+], CreateTaskDto.prototype, "tags", void 0);
 //# sourceMappingURL=create-task.dto.js.map

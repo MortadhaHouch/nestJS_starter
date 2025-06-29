@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const task_entity_1 = require("./entities/task.entity");
+const types_1 = require("../../utils/types");
 let TaskService = class TaskService {
     taskModel;
     constructor(taskModel) {
@@ -25,17 +26,114 @@ let TaskService = class TaskService {
     create(createTaskDto) {
         return this.taskModel.create(createTaskDto);
     }
-    findAll() {
-        return this.taskModel.find();
+    async findAll(options = {}) {
+        try {
+            const { page = 1, limit = 10, status, userId, sortBy = 'createdAt', sortOrder = 'desc', search } = options;
+            if (page < 1 || limit < 1 || limit > 100) {
+                throw new common_1.BadRequestException('Invalid pagination parameters');
+            }
+            const query = {};
+            query.userId = userId;
+            if (status) {
+                query.status = status;
+            }
+            if (search) {
+                query.$or = [
+                    { title: { $regex: search, $options: 'i' } },
+                    { description: { $regex: search, $options: 'i' } }
+                ];
+            }
+            const sort = {};
+            sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
+            const skip = (page - 1) * limit;
+            const [tasks, total] = await Promise.all([
+                this.taskModel
+                    .find(query)
+                    .sort(sort)
+                    .skip(skip)
+                    .limit(limit)
+                    .populate('userId', 'firstName lastName email')
+                    .exec(),
+                this.taskModel.countDocuments(query)
+            ]);
+            return {
+                tasks,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    totalPages: Math.ceil(total / limit),
+                    hasNext: page < Math.ceil(total / limit),
+                    hasPrev: page > 1
+                }
+            };
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(`Failed to fetch tasks: ${error.message}`);
+        }
     }
-    findOne(id) {
-        return this.taskModel.findById(id);
+    async getUserTasks(userId, ids) {
+        const taskSearchP = ids.map((id) => this.taskModel.findOne({
+            _id: id,
+            userId
+        }));
+        const tasks = await Promise.all(taskSearchP);
+        return tasks.flat();
+    }
+    async findOverdueTasks(userId) {
+        const query = {
+            overdue: { $lt: new Date() },
+            status: { $ne: types_1.TaskStatus.DONE },
+            userId
+        };
+        return this.taskModel.find(query).populate('userId', 'firstName lastName email');
+    }
+    async getTaskStats(userId) {
+        const stats = await this.taskModel.aggregate([
+            { $match: { userId } },
+            {
+                $group: {
+                    _id: '$status',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+        const total = await this.taskModel.countDocuments({ userId });
+        const overdue = await this.taskModel.countDocuments({
+            userId,
+            overdue: { $lt: new Date() },
+            status: { $ne: types_1.TaskStatus.DONE }
+        });
+        return {
+            total,
+            overdue,
+            byStatus: stats.reduce((acc, stat) => {
+                acc[stat._id] = stat.count;
+                return acc;
+            }, {})
+        };
+    }
+    findOne(userId, id) {
+        return this.taskModel.findOne({
+            _id: id,
+            userId
+        });
     }
     update(id, updateTaskDto) {
-        return this.taskModel.findByIdAndUpdate(id, updateTaskDto);
+        return this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
     }
-    remove(id) {
-        return this.taskModel.findByIdAndDelete(id);
+    async remove(userId, id) {
+        const deletedTask = await this.taskModel.findOneAndDelete({
+            _id: id,
+            userId
+        });
+        if (deletedTask) {
+            return {
+                deleted: true,
+                id
+            };
+        }
+        throw new common_1.NotFoundException('Task not found');
     }
 };
 exports.TaskService = TaskService;

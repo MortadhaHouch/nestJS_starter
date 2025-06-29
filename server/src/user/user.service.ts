@@ -22,4 +22,10 @@ export class UserService {
   public async checkPassword(password:string,hash:string){
     return await bcrypt.compare(password,hash);
   }
+  public async findUserByName({firstName,lastName}:{firstName:string,lastName:string}){
+    return await this.userModel.findOne({firstName,lastName});
+  }
+  public async findAllUsers(){
+    return await this.userModel.find();
+  }
 }

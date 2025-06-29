@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddlewareService } from './middlewares/logger-middleware/logger-middleware.service';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest_starter'),
+    MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
     UserModule,
     ThrottlerModule.forRoot({
       throttlers: [
@@ -32,6 +32,6 @@ export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddlewareService)
-      .forRoutes('user');
+      .forRoutes('task');
   }
 }

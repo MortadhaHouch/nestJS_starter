@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User, UserSchema } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,9 +18,11 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { 
         expiresIn: "7d",
       },
-    })
+    }),
+    ConfigModule.forRoot()
   ],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

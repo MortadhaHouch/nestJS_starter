@@ -12,11 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskSchema = exports.Task = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const types_1 = require("../../../utils/types");
+const mongoose_2 = require("mongoose");
 let Task = class Task {
     title;
     description;
     status;
     overdue;
+    userId;
+    tags;
 };
 exports.Task = Task;
 __decorate([
@@ -35,6 +38,14 @@ __decorate([
     (0, mongoose_1.Prop)({ default: new Date(new Date().setDate(new Date().getDate() + 1)), required: false }),
     __metadata("design:type", Date)
 ], Task.prototype, "overdue", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: 'User', required: true }),
+    __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
+], Task.prototype, "userId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ tags: [String], required: false }),
+    __metadata("design:type", Array)
+], Task.prototype, "tags", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Task);

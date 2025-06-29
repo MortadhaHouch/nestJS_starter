@@ -12,6 +12,7 @@ const task_service_1 = require("./task.service");
 const task_controller_1 = require("./task.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const task_entity_1 = require("./entities/task.entity");
+const user_module_1 = require("../user/user.module");
 let TaskModule = class TaskModule {
 };
 exports.TaskModule = TaskModule;
@@ -21,6 +22,7 @@ exports.TaskModule = TaskModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: task_entity_1.Task.name, schema: task_entity_1.TaskSchema },
             ]),
+            user_module_1.UserModule,
         ],
         controllers: [task_controller_1.TaskController],
         providers: [task_service_1.TaskService],

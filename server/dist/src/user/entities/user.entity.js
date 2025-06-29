@@ -12,8 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
-const constants_1 = require("../../../utils/constants");
-const mongoose_autopopulate_1 = require("mongoose-autopopulate");
 let User = class User {
     firstName;
     lastName;
@@ -46,12 +44,6 @@ __decorate([
         required: true,
         minlength: 8,
         message: 'Email must be at least 8 characters long',
-        validate: {
-            validator: function (email) {
-                return constants_1.utils.emailReqex.test(email);
-            },
-            message: 'Invalid email format',
-        },
     }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
@@ -83,5 +75,4 @@ exports.User = User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);
 exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
-exports.UserSchema.plugin(mongoose_autopopulate_1.default);
 //# sourceMappingURL=user.entity.js.map

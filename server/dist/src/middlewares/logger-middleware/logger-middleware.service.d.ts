@@ -1,5 +1,15 @@
+import { JwtService } from '@nestjs/jwt';
 import { NestMiddleware } from '@nestjs/common';
-import { NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { UserService } from 'src/user/user.service';
 export declare class LoggerMiddlewareService implements NestMiddleware {
-    use(req: Request, res: Response, next: NextFunction): void;
+    private readonly userService;
+    private readonly jwtService;
+    constructor(userService: UserService, jwtService: JwtService);
+    validateToken(token: string): false | {
+        email: string;
+        iat: number;
+        exp: number;
+    };
+    use(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
