@@ -10,6 +10,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { TaskModule } from './task/task.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddlewareService } from './middlewares/logger-middleware/logger-middleware.service';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
@@ -23,10 +24,14 @@ import { LoggerMiddlewareService } from './middlewares/logger-middleware/logger-
       ],
     }),
     TaskModule,
-    ConfigModule.forRoot()
+    ConfigModule.forRoot(),
+    CacheModule.register({
+      ttl:900*1000,
+      isGlobal:true,
+    })
   ],
   controllers: [AppController],
-  providers: [AppService, LoggerMiddlewareService],
+  providers: [AppService, LoggerMiddlewareService]
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {

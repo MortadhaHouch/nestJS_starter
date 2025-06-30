@@ -16,6 +16,7 @@ const throttler_1 = require("@nestjs/throttler");
 const task_module_1 = require("./task/task.module");
 const config_1 = require("@nestjs/config");
 const logger_middleware_service_1 = require("./middlewares/logger-middleware/logger-middleware.service");
+const cache_manager_1 = require("@nestjs/cache-manager");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -27,7 +28,7 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest_starter'),
+            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
             user_module_1.UserModule,
             throttler_1.ThrottlerModule.forRoot({
                 throttlers: [
@@ -38,10 +39,14 @@ exports.AppModule = AppModule = __decorate([
                 ],
             }),
             task_module_1.TaskModule,
-            config_1.ConfigModule.forRoot()
+            config_1.ConfigModule.forRoot(),
+            cache_manager_1.CacheModule.register({
+                ttl: 900 * 1000,
+                isGlobal: true,
+            })
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, logger_middleware_service_1.LoggerMiddlewareService],
+        providers: [app_service_1.AppService, logger_middleware_service_1.LoggerMiddlewareService]
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

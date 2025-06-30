@@ -18,10 +18,13 @@ const task_service_1 = require("./task.service");
 const create_task_dto_1 = require("./dto/create-task.dto");
 const update_task_dto_1 = require("./dto/update-task.dto");
 const mongoose_1 = require("@nestjs/mongoose");
+const cache_manager_1 = require("@nestjs/cache-manager");
 let TaskController = class TaskController {
     taskService;
-    constructor(taskService) {
+    cacheManager;
+    constructor(taskService, cacheManager) {
         this.taskService = taskService;
+        this.cacheManager = cacheManager;
     }
     create(createTaskDto, req) {
         const taskData = {
@@ -30,7 +33,7 @@ let TaskController = class TaskController {
         };
         return this.taskService.create(taskData);
     }
-    findAll(req, page, limit, status, sortBy, sortOrder, search) {
+    async findAll(req, page, limit, status, sortBy, sortOrder, search) {
         const options = {
             page: page ? parseInt(page) : 1,
             limit: limit ? parseInt(limit) : 10,
@@ -40,22 +43,64 @@ let TaskController = class TaskController {
             sortOrder,
             search
         };
-        return this.taskService.findAll(options);
+        const cacheKey = `${req.user.firstName}_${req.user.lastName}_all_tasks`;
+        const cachedTasks = await this.cacheManager.get(cacheKey);
+        if (cachedTasks) {
+            console.log("cache hit");
+            return cachedTasks;
+        }
+        console.log("cache miss");
+        const tasks = await this.taskService.findAll(options);
+        await this.cacheManager.set(cacheKey, tasks);
+        return tasks;
     }
     findOverdue(req) {
         return this.taskService.findOverdueTasks(req.user._id);
     }
-    getStats(req) {
-        return this.taskService.getTaskStats(req.user._id);
+    async getStats(req) {
+        const cacheKey = `${req.user.firstName}_${req.user.lastName}_stats`;
+        const cachedTasks = await this.cacheManager.get(cacheKey);
+        if (cachedTasks) {
+            return cachedTasks;
+        }
+        const tasks = await this.taskService.getTaskStats(req.user._id);
+        await this.cacheManager.set(cacheKey, tasks);
+        return tasks;
     }
-    findOne(req, id) {
-        return this.taskService.findOne(req.user._id, id);
+    async findOne(req, id) {
+        const cacheKey = `${req.user.firstName}_${req.user.lastName}_${id}`;
+        const foundTask = await this.cacheManager.get(cacheKey);
+        if (foundTask) {
+            return foundTask;
+        }
+        const task = await this.taskService.findOne(req.user._id, id);
+        await this.cacheManager.set(cacheKey, task);
+        return task;
     }
-    update(id, updateTaskDto) {
-        return this.taskService.update(id, updateTaskDto);
+    async update(req, id, updateTaskDto) {
+        const updatedTask = await this.taskService.update(id, updateTaskDto);
+        const cacheKey = `${req.user.firstName}_${req.user.lastName}_${id}`;
+        const cachedTask = await this.cacheManager.get(cacheKey);
+        if (cachedTask) {
+            await this.cacheManager.set(cacheKey, updatedTask);
+        }
+        return updatedTask;
     }
-    remove(req, id) {
-        return this.taskService.remove(req.user._id, id);
+    async remove(req, id) {
+        const promises = await Promise.allSettled([
+            await this.taskService.remove(req.user._id, id),
+            await this.cacheManager.del(`${req.user.firstName}_${req.user.lastName}_${id}`)
+        ]);
+        if (promises.every((p) => p.status == "fulfilled")) {
+            return {
+                message: "task successfully deleted",
+                success: true
+            };
+        }
+        return {
+            error: "error deleting the task",
+            success: false
+        };
     }
 };
 exports.TaskController = TaskController;
@@ -78,7 +123,7 @@ __decorate([
     __param(6, (0, common_1.Query)("search")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String, String, String, String, String, String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TaskController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('overdue'),
@@ -92,7 +137,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TaskController.prototype, "getStats", null);
 __decorate([
     (0, common_1.Get)(':id'),
@@ -100,15 +145,16 @@ __decorate([
     __param(1, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TaskController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
-    __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __param(2, (0, common_1.Body)(common_1.ValidationPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, update_task_dto_1.UpdateTaskDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, Object, update_task_dto_1.UpdateTaskDto]),
+    __metadata("design:returntype", Promise)
 ], TaskController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
@@ -116,10 +162,11 @@ __decorate([
     __param(1, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TaskController.prototype, "remove", null);
 exports.TaskController = TaskController = __decorate([
     (0, common_1.Controller)('task'),
-    __metadata("design:paramtypes", [task_service_1.TaskService])
+    __param(1, (0, common_1.Inject)(cache_manager_1.CACHE_MANAGER)),
+    __metadata("design:paramtypes", [task_service_1.TaskService, Object])
 ], TaskController);
 //# sourceMappingURL=task.controller.js.map

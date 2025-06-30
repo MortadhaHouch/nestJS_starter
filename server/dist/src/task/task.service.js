@@ -123,7 +123,7 @@ let TaskService = class TaskService {
         return this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
     }
     async remove(userId, id) {
-        const deletedTask = await this.taskModel.findOneAndDelete({
+        const deletedTask = await this.taskModel.deleteOne({
             _id: id,
             userId
         });

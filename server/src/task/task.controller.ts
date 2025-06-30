@@ -1,16 +1,18 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query, Inject, UseInterceptors } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { IsObjectIdPipe } from '@nestjs/mongoose';
 import { AuthenticatedRequest, TaskStatus } from 'utils/types';
 import { ObjectId } from 'mongoose';
-
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 @Controller('task')
 export class TaskController {
   constructor(
-    private readonly taskService: TaskService
+    private readonly taskService: TaskService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   @Post()
@@ -23,7 +25,7 @@ export class TaskController {
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Req() req: AuthenticatedRequest,
     @Query("page") page?: string,
     @Query("limit") limit?: string,
@@ -41,8 +43,16 @@ export class TaskController {
       sortOrder,
       search
     };
-    
-    return this.taskService.findAll(options);
+    const cacheKey = `${req.user.firstName}_${req.user.lastName}_all_tasks`;
+    const cachedTasks = await this.cacheManager.get(cacheKey);
+    if(cachedTasks){
+      console.log("cache hit");
+      return cachedTasks;
+    }
+    console.log("cache miss");
+    const tasks = await this.taskService.findAll(options);
+    await this.cacheManager.set(cacheKey,tasks);
+    return tasks;
   }
 
   @Get('overdue')
@@ -51,21 +61,58 @@ export class TaskController {
   }
 
   @Get('stats')
-  getStats(@Req() req: AuthenticatedRequest) {
-    return this.taskService.getTaskStats((req.user as any)._id);
+  async getStats(@Req() req: AuthenticatedRequest) {
+    const cacheKey = `${req.user.firstName}_${req.user.lastName}_stats`;
+    const cachedTasks = await this.cacheManager.get(cacheKey);
+    if(cachedTasks){
+      return cachedTasks;
+    }
+    const tasks = await this.taskService.getTaskStats((req.user as any)._id);
+    await this.cacheManager.set(cacheKey,tasks);
+    return tasks;
   }
 
   @Get(':id')
-  findOne(@Req()req:AuthenticatedRequest, @Param('id',IsObjectIdPipe) id: ObjectId) {
-    return this.taskService.findOne((req.user as any)._id, id);
+  async findOne(@Req()req:AuthenticatedRequest, @Param('id',IsObjectIdPipe) id: ObjectId) {
+    const cacheKey = `${req.user.firstName}_${req.user.lastName}_${id as any}`;
+    const foundTask = await this.cacheManager.get(cacheKey);
+    if(foundTask){
+      return foundTask;
+    }
+    const task = await this.taskService.findOne((req.user as any)._id, id);
+    await this.cacheManager.set(cacheKey,task);
+    return task;
   }
   @Patch(':id')
-  update(@Param('id',IsObjectIdPipe) id: ObjectId, @Body(ValidationPipe) updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(id, updateTaskDto);
+  async update(
+    @Req() req:AuthenticatedRequest,
+    @Param('id',IsObjectIdPipe) id: ObjectId, 
+    @Body(ValidationPipe) updateTaskDto: UpdateTaskDto
+  ) {
+    const updatedTask = await this.taskService.update(id, updateTaskDto);
+    const cacheKey = `${req.user.firstName}_${req.user.lastName}_${id as any}`;
+    const cachedTask = await this.cacheManager.get(cacheKey);
+    if(cachedTask){
+      await this.cacheManager.set(cacheKey,updatedTask);
+    }
+    return updatedTask;
   }
 
   @Delete(':id')
-  remove(@Req()req:AuthenticatedRequest, @Param('id',IsObjectIdPipe) id: ObjectId) {
-    return this.taskService.remove((req.user as any)._id, id);
+  async remove(@Req()req:AuthenticatedRequest, @Param('id',IsObjectIdPipe) id: ObjectId) {
+    const promises = await Promise.allSettled([
+      await this.taskService.remove((req.user as any)._id,id),
+      await this.cacheManager.del(`${req.user.firstName}_${req.user.lastName}_${id as any}`)
+    ])
+    if(promises.every((p)=>p.status == "fulfilled")){
+      return {
+        message:"task successfully deleted",
+        success:true
+      }
+    }
+    return {
+      error:"error deleting the task",
+      success:false
+    }
   }
 }

@@ -20,7 +20,11 @@ This starter project provides a solid foundation for developers looking to build
 - ✅ **Modern & Scalable:** Built with the progressive Node.js framework, NestJS.
 - ✅ **TypeScript First:** Strong typing for robust and maintainable code.
 - ✅ **Modular Architecture:** Organized into modules for clear separation of concerns.
-- ✅ **Pre-configured:** Includes basic setup for services, controllers, and modules.
+- ✅ **Authentication & Authorization:** Pre-configured with JWT-based authentication.
+- ✅ **Database Integration:** Ready-to-use setup with TypeORM and PostgreSQL.
+- ✅ **Configuration Management:** Centralized and environment-aware configuration.
+- ✅ **Validation:** Built-in validation pipes for incoming requests.
+- ✅ **API Documentation:** Automatic API documentation generation with Swagger (OpenAPI).
 
 **Frontend (React)**
 
@@ -28,6 +32,19 @@ This starter project provides a solid foundation for developers looking to build
 - ✅ **TypeScript Support:** Type safety for your frontend components and logic.
 - ✅ **Development Server:** Hot-reloading for a smooth development experience.
 - ✅ **API Proxy:** Pre-configured to proxy API requests to the NestJS backend, avoiding CORS issues in development.
+
+## Roadmap
+
+We are continuously working to improve this starter repository. Here are some of the features we plan to add:
+
+**Frontend:**
+- 🚀 **Kanban Boards:** A feature-rich, interactive Kanban board for task management.
+- 🚀 **Real-time Collaboration:** WebSocket integration for live collaboration features.
+- 🚀 **MDX Editor:** A powerful Markdown editor with component support for creating rich content.
+
+**Backend & DevOps:**
+- 🚀 **Redis Caching:** Integration with Redis for high-performance caching.
+- 🚀 **Nginx Integration:** Configuration for using Nginx as a reverse proxy and load balancer in production.
 
 ## Project Structure
 

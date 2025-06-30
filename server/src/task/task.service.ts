@@ -143,7 +143,7 @@ export class TaskService {
   }
 
   async remove(userId: ObjectId, id: ObjectId) {
-    const deletedTask = await this.taskModel.findOneAndDelete({
+    const deletedTask = await this.taskModel.deleteOne({
       _id: id,
       userId
     });
