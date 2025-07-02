@@ -7,10 +7,15 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import {CookiesProvider} from "react-cookie"
 import {createBrowserRouter,createRoutesFromElements,Route, RouterProvider} from "react-router-dom"
 import { ThemeProvider } from './providers/theme-provider.tsx'
+import Login from './pages/Login.tsx'
+import Signup from './pages/Signup.tsx'
+import KanbanBoard from './components/main/KanbanBoard.tsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route/>
+      <Route path='login' element={<Login />}/>
+      <Route path='signup' element={<Signup />}/>
+      <Route path='kanban' element={<KanbanBoard />}/>
     </Route>
   )
 )

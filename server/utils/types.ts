@@ -13,7 +13,12 @@ enum Role {
   ADMIN = 'ADMIN',
   SUPER_ADMIN = 'SUPER_ADMIN',
 }
+enum TaskPriority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
-export { TaskStatus, Role };
+export { TaskStatus, Role, TaskPriority };

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { TaskStatus } from "utils/types";
+import { TaskPriority, TaskStatus } from "utils/types";
 import { Schema as MongooseSchema } from "mongoose";
 
 @Schema({timestamps: true})
@@ -20,5 +20,7 @@ export class Task {
     userId: MongooseSchema.Types.ObjectId;
     @Prop({tags:[String],required:false})
     tags:string[]
+    @Prop({default: TaskPriority.MEDIUM, enum: Object.keys(TaskPriority).map(k => k.toString()), type: String, required: true})
+    priority: TaskPriority;
 }
 export const TaskSchema = SchemaFactory.createForClass(Task);
