@@ -9,6 +9,19 @@
   A robust starter repository for building modern, full-stack web applications. It combines a powerful <a href="http://nestjs.com/" target="_blank">NestJS</a> backend with a dynamic <a href="https://react.dev/" target="_blank">React</a> frontend, both written in TypeScript.
 </p>
 
+## Latest Update
+
+- Added new dependencies: `@dnd-kit/core`, `@dnd-kit/modifiers`, `@dnd-kit/sortable`, `socket.io-client`, and `uuid` in the client.
+- Updated `package.json` and `package-lock.json` for both client and server to include `@nestjs/platform-socket.io` and `@nestjs/websockets`.
+- Implemented new routes for login, signup, and kanban board in the client application.
+- **Added Kanban board functionality to the client application:**
+  - The Kanban board provides a visual project management tool with multiple columns (e.g., "To Do", "In Progress", "Done").
+  - Users can add new columns to represent different stages or categories in their workflow.
+  - Tasks (tiles) can be created and assigned to any column, representing individual work items or project tasks.
+  - Tasks can be dragged and dropped between columns to update their status or progress.
+  - The board is designed to help teams and individuals organize, prioritize, and track project tasks efficiently.
+- Introduced `TaskPriority` enum in the server for task management.
+
 ## Description
 
 This starter project provides a solid foundation for developers looking to build scalable and maintainable applications. It's pre-configured with a monorepo structure to manage both the server and client code in a single repository.
@@ -45,6 +58,26 @@ We are continuously working to improve this starter repository. Here are some of
 **Backend & DevOps:**
 - 🚀 **Redis Caching:** Integration with Redis for high-performance caching.
 - 🚀 **Nginx Integration:** Configuration for using Nginx as a reverse proxy and load balancer in production.
+
+## Advanced Project Management Features (Planned)
+
+We are considering the following advanced features for future integration to enhance project management capabilities:
+
+- **Task Assignment & User Roles:** Assign tasks to users/teams and define roles with permissions.
+- **Due Dates & Reminders:** Add due dates to tasks and send automated reminders.
+- **Task Dependencies:** Set and visualize dependencies between tasks.
+- **Subtasks & Checklists:** Break down tasks into subtasks or checklists.
+- **Labels, Tags, & Priorities:** Categorize and prioritize tasks with labels and tags.
+- **Comments & Activity Feed:** Enable discussions and maintain an activity log for tasks.
+- **File Attachments:** Attach files and documents to tasks.
+- **Time Tracking & Estimates:** Log time spent and add time estimates for tasks.
+- **Customizable Workflows:** Create custom columns, workflows, and templates.
+- **Notifications & Real-Time Collaboration:** In-app/email notifications and live updates.
+- **Analytics & Reporting:** Visualize progress with charts and export reports.
+- **Calendar & Timeline Views:** Integrate calendar and Gantt/timeline views for planning.
+- **Integration with External Tools:** Connect with Slack, GitHub, Google Drive, Jira, etc.
+- **Advanced Search & Filtering:** Search and filter tasks by various criteria.
+- **Project Archiving & Templates:** Archive projects and reuse templates for workflows.
 
 ## Project Structure
 
