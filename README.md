@@ -82,7 +82,7 @@
   <tr>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="32"/><br/><b>Nginx Proxy</b></td>
     <td align="center"><img src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="32"/><br/><b>TailwindCSS</b></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/TanStack/query/main/media/logo.svg" width="32"/><br/><b>TanStack Query</b></td>
+    <td align="center"><img src="https://ragavkumarv.com/services/tanstack-query-course" width="32"/><br/><b>TanStack Query</b></td>
     <td align="center"><img src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="32"/><br/><b>shadcn UI</b></td>
     <td align="center"><img src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="32"/><br/><b>React Hook Form</b></td>
   </tr>
