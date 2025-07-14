@@ -1,15 +1,15 @@
-import { Moon, Sun } from "lucide-react"
- 
-import { Button } from "@/components/ui/button"
+import { Laptop, Moon, MoonIcon, Sun, SunIcon } from "lucide-react"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "@/providers/theme-provider"
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import {Button} from "../ui/button"
  
-export function ModeToggle() {
+export default function ModeToggle() {
   const { setTheme } = useTheme()
  
   return (
@@ -23,13 +23,13 @@ export function ModeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          <SunIcon/><span>Light</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          <MoonIcon/><span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          <Laptop/><span>System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

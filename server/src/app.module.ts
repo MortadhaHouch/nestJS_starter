@@ -11,6 +11,12 @@ import { TaskModule } from './task/task.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddlewareService } from './middlewares/logger-middleware/logger-middleware.service';
 import { CacheModule } from '@nestjs/cache-manager';
+import { TeamModule } from './team/team.module';
+import { NoteModule } from './note/note.module';
+import { NotificationModule } from './notification/notification.module';
+import { WorkspaceModule } from './workspace/workspace.module';
+import { DiscussionModule } from './discussion/discussion.module';
+import { MessageModule } from './message/message.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
@@ -24,11 +30,20 @@ import { CacheModule } from '@nestjs/cache-manager';
       ],
     }),
     TaskModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     CacheModule.register({
       ttl:900*1000,
       isGlobal:true,
-    })
+    }),
+    TeamModule,
+    NoteModule,
+    NotificationModule,
+    WorkspaceModule,
+    DiscussionModule,
+    MessageModule
   ],
   controllers: [AppController],
   providers: [AppService, LoggerMiddlewareService]
@@ -37,6 +52,6 @@ export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddlewareService)
-      .forRoutes('task');
+      .forRoutes('task','team','workspace','discussion','message','note','notification');
   }
 }

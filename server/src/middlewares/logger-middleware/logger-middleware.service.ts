@@ -11,7 +11,6 @@ export class LoggerMiddlewareService implements NestMiddleware {
         private readonly userService:UserService,
         private readonly jwtService:JwtService
     ){
-
     }
     validateToken(token:string){
         if(token.startsWith("Bearer ") && token.substring(7).length > 0){

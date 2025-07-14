@@ -21,4 +21,9 @@ enum TaskPriority {
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
-export { TaskStatus, Role, TaskPriority };
+enum WorkSpaceStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  DELETED = 'DELETED',
+}
+export { TaskStatus, Role, TaskPriority,WorkSpaceStatus };

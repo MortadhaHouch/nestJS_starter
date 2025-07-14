@@ -20,6 +20,7 @@ let Task = class Task {
     overdue;
     userId;
     tags;
+    priority;
 };
 exports.Task = Task;
 __decorate([
@@ -46,6 +47,10 @@ __decorate([
     (0, mongoose_1.Prop)({ tags: [String], required: false }),
     __metadata("design:type", Array)
 ], Task.prototype, "tags", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: types_1.TaskPriority.MEDIUM, enum: Object.keys(types_1.TaskPriority).map(k => k.toString()), type: String, required: true }),
+    __metadata("design:type", String)
+], Task.prototype, "priority", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Task);

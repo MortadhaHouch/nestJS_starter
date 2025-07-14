@@ -30,6 +30,7 @@ export class UserController {
   ) {}
   @Post("login")
   public async login(@Body(ValidationPipe) user:LoginUserDto){
+    
     const foundUser = await this.userService.findUserByEmail(user.email);
     if(foundUser){
       const isValid = await this.userService.checkPassword(user.password,foundUser.password);

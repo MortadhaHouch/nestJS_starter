@@ -1,101 +1,79 @@
-import React from "react";
 import { HeroParallax as HeroParallaxRoot } from "../ui/hero-parallax";
 
-export function HeroParallaxDemo() {
+export function HeroParallax() {
   return <HeroParallaxRoot products={products} />;
 }
 export const products = [
   {
-    title: "Moonbeam",
-    link: "https://gomoonbeam.com",
+    title: "Kanban Board",
+    link: "/kanban",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+      "https://cdn-icons-png.flaticon.com/512/10010/10010378.png", // placeholder
   },
   {
-    title: "Cursor",
-    link: "https://cursor.so",
+    title: "Task Scheduler",
+    link: "/tasks",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+      "https://cdn-icons-png.flaticon.com/512/4320/4320337.png", // placeholder
   },
   {
-    title: "Rogue",
-    link: "https://userogue.com",
+    title: "Team Collaboration",
+    link: "/teams",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/rogue.png",
-  },
-
-  {
-    title: "Editorially",
-    link: "https://editorially.org",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+      "https://cdn-icons-png.flaticon.com/512/11898/11898101.png", // placeholder
   },
   {
-    title: "Editrix AI",
-    link: "https://editrix.ai",
+    title: "AI Assistant",
+    link: "/ai",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+      "https://cdn-icons-png.flaticon.com/512/7630/7630501.png", // placeholder
   },
   {
-    title: "Pixel Perfect",
-    link: "https://app.pixelperfect.quest",
+    title: "Analytics Dashboard",
+    link: "/analytics",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
-  },
-
-  {
-    title: "Algochurn",
-    link: "https://algochurn.com",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+      "https://cdn-icons-png.flaticon.com/512/893/893257.png", // placeholder
   },
   {
-    title: "Aceternity UI",
-    link: "https://ui.aceternity.com",
+    title: "Notifications Center",
+    link: "/notifications",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+      "https://cdn-icons-png.flaticon.com/512/1827/1827392.png", // placeholder
   },
   {
-    title: "Tailwind Master Kit",
-    link: "https://tailwindmasterkit.com",
+    title: "Documentation",
+    link: "/docs",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+      "https://cdn-icons-png.flaticon.com/512/5352/5352390.png", // placeholder
   },
   {
-    title: "SmartBridge",
-    link: "https://smartbridgetech.com",
+    title: "Project Templates",
+    link: "/templates",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+      "https://cdn-icons-png.flaticon.com/512/9131/9131562.png", // placeholder
   },
   {
-    title: "Renderwork Studio",
-    link: "https://renderwork.studio",
+    title: "Time Tracking",
+    link: "/time-tracking",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
-  },
-
-  {
-    title: "Creme Digital",
-    link: "https://cremedigital.com",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+      "https://cdn-icons-png.flaticon.com/512/1055/1055646.png", // placeholder
   },
   {
-    title: "Golden Bells Academy",
-    link: "https://goldenbellsacademy.com",
+    title: "File Manager",
+    link: "/files",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+      "https://cdn-icons-png.flaticon.com/512/4222/4222615.png", // placeholder
   },
   {
-    title: "Invoker Labs",
-    link: "https://invoker.lol",
+    title: "Blog / Updates",
+    link: "/blog",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+      "https://cdn-icons-png.flaticon.com/512/10613/10613083.png", // placeholder
   },
   {
-    title: "E Free Invoice",
-    link: "https://efreeinvoice.com",
+    title: "Settings",
+    link: "/settings",
     thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+      "https://cdn-icons-png.flaticon.com/512/2099/2099058.png", // placeholder
   },
 ];

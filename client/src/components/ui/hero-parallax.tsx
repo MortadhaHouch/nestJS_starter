@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   motion,
@@ -7,6 +6,7 @@ import {
   useSpring,
   MotionValue,
 } from "motion/react";
+import { Cover } from "../main/Cover";
 
 
 
@@ -57,9 +57,12 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[300vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[300vh] w-full py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
-      <Header />
+      <Cover 
+        title="Product Showcase"
+        description="Discover our range of innovative products that transform your workflow and productivity."
+      />
       <motion.div
         style={{
           rotateX,
@@ -101,16 +104,14 @@ export const HeroParallax = ({
   );
 };
 
-export const Header = () => {
+export const Header = ({title,description}:{title:string,description:string}) => {
   return (
     <div className="relative top-0 left-0 px-4 py-20 mx-auto w-full max-w-7xl md:py-40">
       <h1 className="text-2xl font-bold md:text-7xl dark:text-white">
-        The Ultimate <br /> development studio
+        {title}
       </h1>
       <p className="mt-8 max-w-2xl text-base md:text-xl dark:text-neutral-200">
-        We build beautiful products with the latest technologies and frameworks.
-        We are a team of passionate developers and designers that love to build
-        amazing products.
+        {description}
       </p>
     </div>
   );

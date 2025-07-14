@@ -10,7 +10,17 @@ declare enum Role {
     ADMIN = "ADMIN",
     SUPER_ADMIN = "SUPER_ADMIN"
 }
+declare enum TaskPriority {
+    LOW = "LOW",
+    MEDIUM = "MEDIUM",
+    HIGH = "HIGH"
+}
 export interface AuthenticatedRequest extends Request {
     user: User;
 }
-export { TaskStatus, Role };
+declare enum WorkSpaceStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+    DELETED = "DELETED"
+}
+export { TaskStatus, Role, TaskPriority, WorkSpaceStatus };

@@ -17,11 +17,17 @@ const task_module_1 = require("./task/task.module");
 const config_1 = require("@nestjs/config");
 const logger_middleware_service_1 = require("./middlewares/logger-middleware/logger-middleware.service");
 const cache_manager_1 = require("@nestjs/cache-manager");
+const team_module_1 = require("./team/team.module");
+const note_module_1 = require("./note/note.module");
+const notification_module_1 = require("./notification/notification.module");
+const workspace_module_1 = require("./workspace/workspace.module");
+const discussion_module_1 = require("./discussion/discussion.module");
+const message_module_1 = require("./message/message.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
             .apply(logger_middleware_service_1.LoggerMiddlewareService)
-            .forRoutes('task');
+            .forRoutes('task', 'team', 'workspace', 'discussion', 'message', 'note', 'notification');
     }
 };
 exports.AppModule = AppModule;
@@ -39,11 +45,20 @@ exports.AppModule = AppModule = __decorate([
                 ],
             }),
             task_module_1.TaskModule,
-            config_1.ConfigModule.forRoot(),
+            config_1.ConfigModule.forRoot({
+                envFilePath: '.env',
+                isGlobal: true,
+            }),
             cache_manager_1.CacheModule.register({
                 ttl: 900 * 1000,
                 isGlobal: true,
-            })
+            }),
+            team_module_1.TeamModule,
+            note_module_1.NoteModule,
+            notification_module_1.NotificationModule,
+            workspace_module_1.WorkspaceModule,
+            discussion_module_1.DiscussionModule,
+            message_module_1.MessageModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, logger_middleware_service_1.LoggerMiddlewareService]
