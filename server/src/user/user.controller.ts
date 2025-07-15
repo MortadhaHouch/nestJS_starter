@@ -1,48 +1,54 @@
 /* eslint-disable prettier/prettier */
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   ValidationPipe,
   Req,
   UnauthorizedException,
-  HttpExceptionBody,
   ConflictException,
-  BadRequestException,
-  HttpStatus,
-  NotFoundException
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { IsObjectIdPipe } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { SignupUserDto } from './dto/signup-user.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { OPTCode } from './dto/otp-user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly mailService:MailerService
   ) {}
   @Post("login")
   public async login(@Body(ValidationPipe) user:LoginUserDto){
-    
     const foundUser = await this.userService.findUserByEmail(user.email);
     if(foundUser){
       const isValid = await this.userService.checkPassword(user.password,foundUser.password);
       if(isValid){
-        const token = this.jwtService.sign(
-          {email:user.email},
-          {
-            secret:process.env.SECRET_KEY as string,
-            expiresIn:"7d"
+        foundUser.validationCode = Math.floor(Math.random() * 1000000);
+        await foundUser.save();
+        const emailSend = await this.mailService.sendMail({
+          to:foundUser.email,
+          subject:"Login successful",
+          text:"Login successful",
+          template:'index',
+          context:{
+            verificationCode:foundUser.validationCode,
+            message:`
+              Thank you for logging in, your verification code is ${foundUser.validationCode}
+              <br/>
+              <p>Best Regards</p>
+              <h2>Please copy the code above</h2>
+              <h3>Please do not reply to this email</h3>
+            `
           }
-        );
-        return {token};
+        })
+        return {
+          message:"we have sent you a validation code to your email address please check your inbox",
+        }
       }
       else{
         throw new UnauthorizedException({
@@ -51,6 +57,34 @@ export class UserController {
       }
     }else{
       return new UnauthorizedException({
+        message:"user not found"
+      });
+    }
+  }
+  @Post("validate")
+  public async validate(@Body(ValidationPipe) opt:OPTCode){
+    const foundUser = await this.userService.findUserByEmail(opt.email);
+    if(foundUser){
+      if(foundUser.validationCode === opt.code){
+        const token = this.jwtService.sign(
+          {email:foundUser.email},
+          {
+            secret:process.env.SECRET_KEY as string,
+            expiresIn:"7d"
+          }
+        );
+        foundUser.isLoggedIn = true;
+        foundUser.validationCode = 0;
+        await foundUser.save();
+        return {token};
+      }else{
+        throw new UnauthorizedException({
+          message:"invalid code"
+        });
+      }
+    }
+    else{
+      throw new UnauthorizedException({
         message:"user not found"
       });
     }

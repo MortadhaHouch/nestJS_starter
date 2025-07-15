@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
-
-
+import { BullModule } from '@nestjs/bullmq';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -43,7 +42,13 @@ import { MessageModule } from './message/message.module';
     NotificationModule,
     WorkspaceModule,
     DiscussionModule,
-    MessageModule
+    MessageModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, LoggerMiddlewareService]

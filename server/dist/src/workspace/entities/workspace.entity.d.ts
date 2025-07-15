@@ -7,6 +7,7 @@ export declare class Workspace {
     members: MongooseSchema.Types.ObjectId[];
     tasks: MongooseSchema.Types.ObjectId[];
     status: WorkSpaceStatus;
+    tags: string[];
 }
 export declare const WorkspaceSchema: MongooseSchema<Workspace, import("mongoose").Model<Workspace, any, any, any, import("mongoose").Document<unknown, any, Workspace, any> & Workspace & {
     _id: import("mongoose").Types.ObjectId;

@@ -18,23 +18,43 @@ const user_service_1 = require("./user.service");
 const jwt_1 = require("@nestjs/jwt");
 const login_user_dto_1 = require("./dto/login-user.dto");
 const signup_user_dto_1 = require("./dto/signup-user.dto");
+const mailer_1 = require("@nestjs-modules/mailer");
+const otp_user_dto_1 = require("./dto/otp-user.dto");
 let UserController = class UserController {
     userService;
     jwtService;
-    constructor(userService, jwtService) {
+    mailService;
+    constructor(userService, jwtService, mailService) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.mailService = mailService;
     }
     async login(user) {
         const foundUser = await this.userService.findUserByEmail(user.email);
         if (foundUser) {
             const isValid = await this.userService.checkPassword(user.password, foundUser.password);
             if (isValid) {
-                const token = this.jwtService.sign({ email: user.email }, {
-                    secret: process.env.SECRET_KEY,
-                    expiresIn: "7d"
+                foundUser.validationCode = Math.floor(Math.random() * 1000000);
+                await foundUser.save();
+                const emailSend = await this.mailService.sendMail({
+                    to: foundUser.email,
+                    subject: "Login successful",
+                    text: "Login successful",
+                    template: 'index',
+                    context: {
+                        verificationCode: foundUser.validationCode,
+                        message: `
+              Thank you for logging in, your verification code is ${foundUser.validationCode}
+              <br/>
+              <p>Best Regards</p>
+              <h2>Please copy the code above</h2>
+              <h3>Please do not reply to this email</h3>
+            `
+                    }
                 });
-                return { token };
+                return {
+                    message: "we have sent you a validation code to your email address please check your inbox",
+                };
             }
             else {
                 throw new common_1.UnauthorizedException({
@@ -44,6 +64,31 @@ let UserController = class UserController {
         }
         else {
             return new common_1.UnauthorizedException({
+                message: "user not found"
+            });
+        }
+    }
+    async validate(opt) {
+        const foundUser = await this.userService.findUserByEmail(opt.email);
+        if (foundUser) {
+            if (foundUser.validationCode === opt.code) {
+                const token = this.jwtService.sign({ email: foundUser.email }, {
+                    secret: process.env.SECRET_KEY,
+                    expiresIn: "7d"
+                });
+                foundUser.isLoggedIn = true;
+                foundUser.validationCode = 0;
+                await foundUser.save();
+                return { token };
+            }
+            else {
+                throw new common_1.UnauthorizedException({
+                    message: "invalid code"
+                });
+            }
+        }
+        else {
+            throw new common_1.UnauthorizedException({
                 message: "user not found"
             });
         }
@@ -97,6 +142,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "login", null);
 __decorate([
+    (0, common_1.Post)("validate"),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [otp_user_dto_1.OPTCode]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "validate", null);
+__decorate([
     (0, common_1.Post)("signup"),
     __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
     __metadata("design:type", Function),
@@ -113,6 +165,7 @@ __decorate([
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        mailer_1.MailerService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

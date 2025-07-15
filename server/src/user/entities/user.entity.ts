@@ -4,6 +4,7 @@ import { Task } from 'src/task/entities/task.entity';
 import {Schema as MongooseSchema} from "mongoose"
 @Schema()
 export class User {
+  _id: MongooseSchema.Types.ObjectId;
   @Prop({
     required: true,
     minlength: 3,
@@ -35,9 +36,11 @@ export class User {
     default: 'USER',
   })
   role: string;
-  @Prop({type:[MongooseSchema.Types.ObjectId],ref:'Task'})
-  tasks: Task[];
+  @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"Task"}]})
+  tasks: MongooseSchema.Types.ObjectId[];
   @Prop({type:Boolean,default:false})
   isLoggedIn:boolean;
+  @Prop({type:Number,default:0,required:false})
+  validationCode:number;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

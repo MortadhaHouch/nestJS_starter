@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = void 0;
+exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = void 0;
 var TaskStatus;
 (function (TaskStatus) {
     TaskStatus["DONE"] = "DONE";
@@ -19,6 +19,12 @@ var TaskPriority;
     TaskPriority["MEDIUM"] = "MEDIUM";
     TaskPriority["HIGH"] = "HIGH";
 })(TaskPriority || (exports.TaskPriority = TaskPriority = {}));
+var RequestStatus;
+(function (RequestStatus) {
+    RequestStatus["PENDING"] = "PENDING";
+    RequestStatus["APPROVED"] = "APPROVED";
+    RequestStatus["REJECTED"] = "REJECTED";
+})(RequestStatus || (exports.RequestStatus = RequestStatus = {}));
 var WorkSpaceStatus;
 (function (WorkSpaceStatus) {
     WorkSpaceStatus["ACTIVE"] = "ACTIVE";

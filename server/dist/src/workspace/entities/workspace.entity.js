@@ -20,6 +20,7 @@ let Workspace = class Workspace {
     members;
     tasks;
     status;
+    tags;
 };
 exports.Workspace = Workspace;
 __decorate([
@@ -31,21 +32,25 @@ __decorate([
     __metadata("design:type", String)
 ], Workspace.prototype, "description", void 0);
 __decorate([
-    (0, mongoose_2.Prop)({ required: true, type: mongoose_1.Schema.Types.ObjectId, ref: 'User' }),
+    (0, mongoose_2.Prop)({ required: true, type: mongoose_1.Schema.Types.ObjectId, ref: "User" }),
     __metadata("design:type", mongoose_1.Schema.Types.ObjectId)
 ], Workspace.prototype, "creator", void 0);
 __decorate([
-    (0, mongoose_2.Prop)({ required: false, type: [mongoose_1.Schema.Types.ObjectId], ref: 'User', default: [] }),
+    (0, mongoose_2.Prop)({ required: false, type: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }], default: [] }),
     __metadata("design:type", Array)
 ], Workspace.prototype, "members", void 0);
 __decorate([
-    (0, mongoose_2.Prop)({ required: false, type: [mongoose_1.Schema.Types.ObjectId], ref: 'Task', default: [] }),
+    (0, mongoose_2.Prop)({ required: false, type: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }], default: [] }),
     __metadata("design:type", Array)
 ], Workspace.prototype, "tasks", void 0);
 __decorate([
     (0, mongoose_2.Prop)({ required: false, default: "ACTIVE", enum: Object.keys(types_1.WorkSpaceStatus).map(k => k.toString()), type: String }),
     __metadata("design:type", String)
 ], Workspace.prototype, "status", void 0);
+__decorate([
+    (0, mongoose_2.Prop)({ required: false, type: [String] }),
+    __metadata("design:type", Array)
+], Workspace.prototype, "tags", void 0);
 exports.Workspace = Workspace = __decorate([
     (0, mongoose_2.Schema)({ timestamps: true })
 ], Workspace);

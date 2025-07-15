@@ -18,6 +18,11 @@ enum TaskPriority {
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
 }
+enum RequestStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
@@ -26,4 +31,4 @@ enum WorkSpaceStatus {
   INACTIVE = 'INACTIVE',
   DELETED = 'DELETED',
 }
-export { TaskStatus, Role, TaskPriority,WorkSpaceStatus };
+export { TaskStatus, Role, TaskPriority,WorkSpaceStatus,RequestStatus };

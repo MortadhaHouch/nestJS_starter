@@ -15,6 +15,11 @@ declare enum TaskPriority {
     MEDIUM = "MEDIUM",
     HIGH = "HIGH"
 }
+declare enum RequestStatus {
+    PENDING = "PENDING",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED"
+}
 export interface AuthenticatedRequest extends Request {
     user: User;
 }
@@ -23,4 +28,4 @@ declare enum WorkSpaceStatus {
     INACTIVE = "INACTIVE",
     DELETED = "DELETED"
 }
-export { TaskStatus, Role, TaskPriority, WorkSpaceStatus };
+export { TaskStatus, Role, TaskPriority, WorkSpaceStatus, RequestStatus };

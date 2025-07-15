@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query, ParseIntPipe, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { WorkspaceService } from './workspace.service';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
 import { AuthenticatedRequest, WorkSpaceStatus } from 'utils/types';
+import { IsObjectIdPipe } from '@nestjs/mongoose';
 
 @Controller('workspace')
 export class WorkspaceController {
@@ -36,17 +37,35 @@ export class WorkspaceController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.workspaceService.findOne(id);
+  async findOne(
+    @Req() req:AuthenticatedRequest,
+    @Param('id',IsObjectIdPipe) id: string
+  ) {
+    return await this.workspaceService.findAccessible(id,req.user._id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorkspaceDto: UpdateWorkspaceDto) {
+  async update(
+    @Param('id',IsObjectIdPipe) id: string,
+    @Body(ValidationPipe) updateWorkspaceDto: UpdateWorkspaceDto,
+    @Req() req:AuthenticatedRequest
+  ) {
+    const foundWorkspace = await this.workspaceService.findMyWorkspace(id,req.user._id);
+    if(!foundWorkspace) return new NotFoundException({
+      error:"workspace not found"
+    });
     return this.workspaceService.update(id, updateWorkspaceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.workspaceService.remove(id);
+  async remove(
+    @Param('id',IsObjectIdPipe) id: string,
+    @Req() req:AuthenticatedRequest
+  ) {
+    const foundWorkspace = await this.workspaceService.findMyWorkspace(id,req.user._id);
+    if(foundWorkspace){
+      return this.workspaceService.remove(id);
+    }
+    return new UnauthorizedException({error:"unauthorized"});
   }
 }

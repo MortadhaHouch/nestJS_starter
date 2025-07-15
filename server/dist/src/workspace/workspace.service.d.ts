@@ -1,7 +1,7 @@
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
 import { Workspace } from './entities/workspace.entity';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { WorkSpaceStatus } from 'utils/types';
 export declare class WorkspaceService {
     private readonly workspaceModel;
@@ -29,7 +29,12 @@ export declare class WorkspaceService {
     } & {
         __v: number;
     }, {}, Workspace, "findOne", {}>;
-    update(id: string, updateWorkspaceDto: UpdateWorkspaceDto): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+    update(id: string, updateWorkspaceDto: UpdateWorkspaceDto): import("mongoose").Query<import("mongoose").UpdateWriteOpResult, import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, {}, Workspace, "updateOne", {}>;
+    findAccessible(id: string, userId: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
@@ -37,8 +42,8 @@ export declare class WorkspaceService {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
-    }, {}, Workspace, "findOneAndUpdate", {}>;
-    remove(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+    }, {}, Workspace, "findOne", {}>;
+    findMyWorkspace(id: string, creatorId: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
@@ -46,5 +51,10 @@ export declare class WorkspaceService {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
-    }, {}, Workspace, "findOneAndDelete", {}>;
+    }, {}, Workspace, "findOne", {}>;
+    remove(id: string): import("mongoose").Query<import("mongodb").DeleteResult, import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, {}, Workspace, "deleteOne", {}>;
 }

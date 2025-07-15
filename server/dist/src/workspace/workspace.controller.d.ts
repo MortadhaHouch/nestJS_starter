@@ -1,3 +1,4 @@
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { WorkspaceService } from './workspace.service';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
@@ -19,31 +20,11 @@ export declare class WorkspaceController {
     } & {
         __v: number;
     }, {}, import("./entities/workspace.entity").Workspace, "find", {}>;
-    findOne(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
+    findOne(req: AuthenticatedRequest, id: string): Promise<(import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
-    }) | null, import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }, {}, import("./entities/workspace.entity").Workspace, "findOne", {}>;
-    update(id: string, updateWorkspaceDto: UpdateWorkspaceDto): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }) | null, import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }, {}, import("./entities/workspace.entity").Workspace, "findOneAndUpdate", {}>;
-    remove(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }) | null, import("mongoose").Document<unknown, {}, import("./entities/workspace.entity").Workspace, {}> & import("./entities/workspace.entity").Workspace & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    }, {}, import("./entities/workspace.entity").Workspace, "findOneAndDelete", {}>;
+    }) | null>;
+    update(id: string, updateWorkspaceDto: UpdateWorkspaceDto, req: AuthenticatedRequest): Promise<NotFoundException | import("mongoose").UpdateWriteOpResult>;
+    remove(id: string, req: AuthenticatedRequest): Promise<UnauthorizedException | import("mongodb").DeleteResult>;
 }

@@ -8,22 +8,22 @@ export declare class TaskController {
     private readonly taskService;
     private cacheManager;
     constructor(taskService: TaskService, cacheManager: Cache);
-    create(createTaskDto: CreateTaskDto, req: AuthenticatedRequest): Promise<import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
+    create(createTaskDto: CreateTaskDto, req: AuthenticatedRequest): Promise<import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }> & {
         __v: number;
     }>;
     findAll(req: AuthenticatedRequest, page?: string, limit?: string, status?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', search?: string): Promise<{}>;
-    findOverdue(req: AuthenticatedRequest): Promise<(import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
+    findOverdue(req: AuthenticatedRequest): Promise<(import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }> & {
         __v: number;
     })[]>;
     getStats(req: AuthenticatedRequest): Promise<{}>;
     findOne(req: AuthenticatedRequest, id: ObjectId): Promise<{} | null>;
-    update(req: AuthenticatedRequest, id: ObjectId, updateTaskDto: UpdateTaskDto): Promise<(import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
+    update(req: AuthenticatedRequest, id: ObjectId, updateTaskDto: UpdateTaskDto): Promise<(import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }> & {
         __v: number;
     }) | null>;
     remove(req: AuthenticatedRequest, id: ObjectId): Promise<{

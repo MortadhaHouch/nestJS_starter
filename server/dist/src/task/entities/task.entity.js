@@ -14,6 +14,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const types_1 = require("../../../utils/types");
 const mongoose_2 = require("mongoose");
 let Task = class Task {
+    _id;
     title;
     description;
     status;
@@ -40,7 +41,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Task.prototype, "overdue", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: 'User', required: true }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User", required: true }),
     __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
 ], Task.prototype, "userId", void 0);
 __decorate([

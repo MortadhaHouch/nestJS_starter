@@ -1,6 +1,7 @@
 import { TaskPriority, TaskStatus } from "utils/types";
 import { Schema as MongooseSchema } from "mongoose";
 export declare class Task {
+    _id: MongooseSchema.Types.ObjectId;
     title: string;
     description: string;
     status: TaskStatus;
@@ -9,12 +10,12 @@ export declare class Task {
     tags: string[];
     priority: TaskPriority;
 }
-export declare const TaskSchema: MongooseSchema<Task, import("mongoose").Model<Task, any, any, any, import("mongoose").Document<unknown, any, Task, any> & Task & {
-    _id: import("mongoose").Types.ObjectId;
-} & {
+export declare const TaskSchema: MongooseSchema<Task, import("mongoose").Model<Task, any, any, any, import("mongoose").Document<unknown, any, Task, any> & Task & Required<{
+    _id: MongooseSchema.Types.ObjectId;
+}> & {
     __v: number;
-}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Task, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<Task>, {}> & import("mongoose").FlatRecord<Task> & {
-    _id: import("mongoose").Types.ObjectId;
-} & {
+}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Task, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<Task>, {}> & import("mongoose").FlatRecord<Task> & Required<{
+    _id: MongooseSchema.Types.ObjectId;
+}> & {
     __v: number;
 }>;

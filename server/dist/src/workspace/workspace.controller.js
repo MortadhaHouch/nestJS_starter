@@ -18,6 +18,7 @@ const workspace_service_1 = require("./workspace.service");
 const create_workspace_dto_1 = require("./dto/create-workspace.dto");
 const update_workspace_dto_1 = require("./dto/update-workspace.dto");
 const types_1 = require("../../utils/types");
+const mongoose_1 = require("@nestjs/mongoose");
 let WorkspaceController = class WorkspaceController {
     workspaceService;
     constructor(workspaceService) {
@@ -29,14 +30,23 @@ let WorkspaceController = class WorkspaceController {
     findAll(req, page, limit, search, sort, sortParams, status) {
         return this.workspaceService.findAll(req.user._id, page ? parseInt(page) : 1, limit ? parseInt(limit) : 10, search, sort, sortParams, status);
     }
-    findOne(id) {
-        return this.workspaceService.findOne(id);
+    async findOne(req, id) {
+        return await this.workspaceService.findAccessible(id, req.user._id);
     }
-    update(id, updateWorkspaceDto) {
+    async update(id, updateWorkspaceDto, req) {
+        const foundWorkspace = await this.workspaceService.findMyWorkspace(id, req.user._id);
+        if (!foundWorkspace)
+            return new common_1.NotFoundException({
+                error: "workspace not found"
+            });
         return this.workspaceService.update(id, updateWorkspaceDto);
     }
-    remove(id) {
-        return this.workspaceService.remove(id);
+    async remove(id, req) {
+        const foundWorkspace = await this.workspaceService.findMyWorkspace(id, req.user._id);
+        if (foundWorkspace) {
+            return this.workspaceService.remove(id);
+        }
+        return new common_1.UnauthorizedException({ error: "unauthorized" });
     }
 };
 exports.WorkspaceController = WorkspaceController;
@@ -63,25 +73,28 @@ __decorate([
 ], WorkspaceController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
 ], WorkspaceController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_workspace_dto_1.UpdateWorkspaceDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, update_workspace_dto_1.UpdateWorkspaceDto, Object]),
+    __metadata("design:returntype", Promise)
 ], WorkspaceController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
 ], WorkspaceController.prototype, "remove", null);
 exports.WorkspaceController = WorkspaceController = __decorate([
     (0, common_1.Controller)('workspace'),

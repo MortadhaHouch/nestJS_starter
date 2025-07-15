@@ -2,9 +2,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { TaskPriority, TaskStatus } from "utils/types";
 import { Schema as MongooseSchema } from "mongoose";
+import { User } from "src/user/entities/user.entity";
 
 @Schema({timestamps: true})
 export class Task {
+    _id:MongooseSchema.Types.ObjectId;
     @Prop({required: true})
     title: string;
 
@@ -16,7 +18,7 @@ export class Task {
     @Prop({default:new Date(new Date().setDate(new Date().getDate() + 1)),required:false})
     overdue:Date;
     
-    @Prop({type: MongooseSchema.Types.ObjectId, ref: 'User', required: true})
+    @Prop({type: MongooseSchema.Types.ObjectId, ref: "User", required: true})
     userId: MongooseSchema.Types.ObjectId;
     @Prop({tags:[String],required:false})
     tags:string[]

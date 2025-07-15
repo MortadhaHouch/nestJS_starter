@@ -13,6 +13,7 @@ exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let User = class User {
+    _id;
     firstName;
     lastName;
     email;
@@ -20,6 +21,7 @@ let User = class User {
     role;
     tasks;
     isLoggedIn;
+    validationCode;
 };
 exports.User = User;
 __decorate([
@@ -64,13 +66,17 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: [mongoose_2.Schema.Types.ObjectId], ref: 'Task' }),
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Task" }] }),
     __metadata("design:type", Array)
 ], User.prototype, "tasks", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isLoggedIn", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Number, default: 0, required: false }),
+    __metadata("design:type", Number)
+], User.prototype, "validationCode", void 0);
 exports.User = User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Body, Injectable, Param, ValidationPipe } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
-import { InjectModel, IsObjectIdPipe } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { Workspace } from './entities/workspace.entity';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { WorkSpaceStatus } from 'utils/types';
 
 @Injectable()
@@ -41,18 +41,34 @@ export class WorkspaceService {
     }).skip(p?(p-1)*(limit||10):0).limit(limit||10);
   }
 
-  findOne(@Param('id',IsObjectIdPipe) id: string) {
+  findOne(id: string) {
     return this.workspaceModel.findById(id);
   }
 
-  update(@Param('id',IsObjectIdPipe) id: string,@Body(ValidationPipe) updateWorkspaceDto: UpdateWorkspaceDto) {
-    return this.workspaceModel.findByIdAndUpdate(id,updateWorkspaceDto,{
-      new:true,
-      runValidators:true,
-    });
+  update(id: string,updateWorkspaceDto: UpdateWorkspaceDto) {
+    return this.workspaceModel.updateOne(
+      { _id: id },
+      { $set: updateWorkspaceDto }
+    );
   }
-
-  remove(@Param('id',IsObjectIdPipe) id: string) {
-    return this.workspaceModel.findByIdAndDelete(id);
+  findAccessible(id:string,userId:ObjectId){
+    return this.workspaceModel.findOne({
+      _id:id,
+      $or:[
+        {creator:userId},
+        {members:{
+          $in:[userId]
+        }},
+      ]
+    })
+  }
+  findMyWorkspace(id:string,creatorId:ObjectId){
+    return this.workspaceModel.findOne({
+      _id:id,
+      creator:creatorId
+    })
+  }
+  remove(id: string) {
+    return this.workspaceModel.deleteOne({_id:id});
   }
 }

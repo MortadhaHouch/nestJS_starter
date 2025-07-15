@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WorkspaceService = void 0;
 const common_1 = require("@nestjs/common");
-const update_workspace_dto_1 = require("./dto/update-workspace.dto");
 const mongoose_1 = require("@nestjs/mongoose");
 const workspace_entity_1 = require("./entities/workspace.entity");
 const mongoose_2 = require("mongoose");
@@ -45,35 +44,30 @@ let WorkspaceService = class WorkspaceService {
         return this.workspaceModel.findById(id);
     }
     update(id, updateWorkspaceDto) {
-        return this.workspaceModel.findByIdAndUpdate(id, updateWorkspaceDto, {
-            new: true,
-            runValidators: true,
+        return this.workspaceModel.updateOne({ _id: id }, { $set: updateWorkspaceDto });
+    }
+    findAccessible(id, userId) {
+        return this.workspaceModel.findOne({
+            _id: id,
+            $or: [
+                { creator: userId },
+                { members: {
+                        $in: [userId]
+                    } },
+            ]
+        });
+    }
+    findMyWorkspace(id, creatorId) {
+        return this.workspaceModel.findOne({
+            _id: id,
+            creator: creatorId
         });
     }
     remove(id) {
-        return this.workspaceModel.findByIdAndDelete(id);
+        return this.workspaceModel.deleteOne({ _id: id });
     }
 };
 exports.WorkspaceService = WorkspaceService;
-__decorate([
-    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], WorkspaceService.prototype, "findOne", null);
-__decorate([
-    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
-    __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_workspace_dto_1.UpdateWorkspaceDto]),
-    __metadata("design:returntype", void 0)
-], WorkspaceService.prototype, "update", null);
-__decorate([
-    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], WorkspaceService.prototype, "remove", null);
 exports.WorkspaceService = WorkspaceService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(workspace_entity_1.Workspace.name)),
