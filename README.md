@@ -59,11 +59,16 @@
 ## 🎨 UI Gallery
 
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Kanban Board Screenshot" />
-  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Login Screenshot" />
-  <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Signup Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/10010/10010378.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Kanban Board Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/4320/4320337.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Task Scheduler Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/11898/11898101.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Team Collaboration Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/7630/7630501.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="AI Assistant Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Analytics Dashboard Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Notifications Center Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Settings Screenshot" />
+  <img src="https://cdn-icons-png.flaticon.com/512/9131/9131562.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Project Templates Screenshot" />
   <br/>
-  <i>Replace these with your actual UI screenshots for Kanban, Login, Signup, etc.</i>
+  <i>Gallery: Kanban Board, Task Scheduler, Team Collaboration, AI Assistant, Analytics, Notifications, Settings, Project Templates</i>
 </p>
 
 ---
@@ -92,6 +97,108 @@
   </tr>
 </table>
 <p align="center"><i>On mobile, features will wrap to the next line for better readability.</i></p>
+
+---
+
+### 🆕 Workspace Management API
+
+The backend now supports advanced workspace management features:
+
+- **Create Workspace**: Create a new workspace for your projects or teams.
+- **Get All Workspaces**: List all workspaces accessible to the authenticated user, with support for pagination, search, sorting, and status filtering.
+- **Get Workspace by ID**: Retrieve details of a specific workspace if you have access.
+- **Update Workspace**: Update the details of a workspace you own.
+- **Join Workspace**: Add users to a workspace by their IDs.
+- **Delete Workspace**: Remove a workspace you own.
+
+**Workspace API Routes:**
+
+| Method | Route                   | Description                                                                                  | Auth Required | Latest Feature? |
+|--------|-------------------------|----------------------------------------------------------------------------------------------|:-------------:|:--------------:|
+| POST   | `/workspace`            | Create a new workspace.                                                                      | Yes           |                |
+| GET    | `/workspace`            | List all workspaces accessible to the user. Supports pagination, search, sort, and status.   | Yes           |                |
+| GET    | `/workspace/:id`        | Get a specific workspace by ID, if accessible.                                               | Yes           |                |
+| PATCH  | `/workspace/:id`        | Update a workspace (if owned by the user).                                                   | Yes           |                |
+| PATCH  | `/workspace/join/:id`   | Add users to a workspace by their IDs.                                                       | Yes           |      ✅        |
+| DELETE | `/workspace/:id`        | Delete a workspace (if owned by the user).                                                   | Yes           |                |
+
+#### Latest Added Feature: Join Workspace
+
+- **Join Workspace (`PATCH /workspace/join/:id`)**  
+  Allows the owner of a workspace to add multiple users to the workspace by providing their user IDs. This endpoint ensures only authorized users can add others, and returns an error if the workspace is not found or the user is unauthorized.
+
+All endpoints require authentication. Ownership and access checks are enforced for sensitive operations.
+
+---
+
+## 📚 API Overview
+
+### User API
+
+| Method | Route                | Description                                                                                  | Latest Feature? |
+|--------|----------------------|----------------------------------------------------------------------------------------------|:--------------:|
+| POST   | `/user/login`        | Login with email and password. Sends a verification code to email for 2-step verification.   |                |
+| POST   | `/user/validate`     | Validate the verification code sent to email. Issues JWT on success.                         |      ✅        |
+| POST   | `/user/signup`       | Register a new user. Checks for duplicate name/email.                                        |                |
+| PATCH  | `/user/update-profile`| Update user profile (name, password).                                                        |                |
+| POST   | `/user/logout`       | Log out the current user.                                                                    |                |
+
+**Latest Feature:**  
+- **2-Step Email Verification on Login:**  
+  After login, a verification code is sent to the user's email. The user must validate this code to complete authentication.
+
+---
+
+### Task API
+
+| Method | Route                | Description                                                                                  | Latest Feature? |
+|--------|----------------------|----------------------------------------------------------------------------------------------|:--------------:|
+| POST   | `/task`              | Create a new task. User is auto-assigned as owner.                                           |                |
+| GET    | `/task`              | List all tasks for the user. Supports pagination, filtering, sorting, and search.            |                |
+| GET    | `/task/overdue`      | List all overdue tasks for the user.                                                         |      ✅        |
+| GET    | `/task/stats`        | Get statistics (total, overdue, by status) for the user's tasks.                             |      ✅        |
+| GET    | `/task/:id`          | Get a specific task by ID. Uses caching for performance.                                     |                |
+| PATCH  | `/task/:id`          | Update a task. Updates cache if present.                                                     |                |
+| DELETE | `/task/:id`          | Delete a task. Removes from cache.                                                           |                |
+
+**Latest Features:**  
+- **Overdue Tasks Endpoint:**  
+  Easily fetch all overdue tasks for the user.
+- **Task Statistics Endpoint:**  
+  Get a summary of total, overdue, and status breakdown for tasks.
+
+---
+
+### Workspace API
+
+| Method | Route                   | Description                                                                                  | Latest Feature? |
+|--------|-------------------------|----------------------------------------------------------------------------------------------|:--------------:|
+| POST   | `/workspace`            | Create a new workspace.                                                                      |                |
+| GET    | `/workspace`            | List all workspaces accessible to the user. Supports pagination, search, sort, and status.   |                |
+| GET    | `/workspace/:id`        | Get a specific workspace by ID, if accessible.                                               |                |
+| PATCH  | `/workspace/:id`        | Update a workspace (if owned by the user).                                                   |                |
+| PATCH  | `/workspace/join/:id`   | Add users to a workspace by their IDs.                                                       |      ✅        |
+| DELETE | `/workspace/:id`        | Delete a workspace (if owned by the user).                                                   |                |
+
+**Latest Feature:**  
+- **Join Workspace:**  
+  Owners can add multiple users to a workspace by their IDs.
+
+---
+
+### Team, Note, Discussion, Message, Notification APIs
+
+All these controllers follow a similar RESTful pattern:
+
+| Method | Route                | Description                        |
+|--------|----------------------|------------------------------------|
+| POST   | `/entity`            | Create a new entity                |
+| GET    | `/entity`            | List all entities                  |
+| GET    | `/entity/:id`        | Get a specific entity by ID        |
+| PATCH  | `/entity/:id`        | Update an entity                   |
+| DELETE | `/entity/:id`        | Delete an entity                   |
+
+Replace `/entity` with `/team`, `/note`, `/discussion`, `/message`, or `/notification` as appropriate.
 
 ---
 
