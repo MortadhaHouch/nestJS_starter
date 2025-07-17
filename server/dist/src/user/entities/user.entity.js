@@ -22,6 +22,11 @@ let User = class User {
     tasks;
     isLoggedIn;
     validationCode;
+    latestLoginTrial;
+    ip;
+    friends;
+    notes;
+    discussions;
 };
 exports.User = User;
 __decorate([
@@ -77,6 +82,26 @@ __decorate([
     (0, mongoose_1.Prop)({ type: Number, default: 0, required: false }),
     __metadata("design:type", Number)
 ], User.prototype, "validationCode", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Date, required: false }),
+    __metadata("design:type", Date)
+], User.prototype, "latestLoginTrial", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false }),
+    __metadata("design:type", String)
+], User.prototype, "ip", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "User" }], default: [] }),
+    __metadata("design:type", Array)
+], User.prototype, "friends", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Note" }], default: [], required: false }),
+    __metadata("design:type", Array)
+], User.prototype, "notes", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Discussion" }], default: [], required: false }),
+    __metadata("design:type", Array)
+], User.prototype, "discussions", void 0);
 exports.User = User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

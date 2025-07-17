@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConsoleLogger } from '@nestjs/common';
+// import { doubleCsrf } from 'csrf-csrf';
+import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
@@ -10,6 +12,8 @@ async function bootstrap() {
       timestamp: true,
     }),
   });
+  app.use(helmet());
+  // app.use(doubleCsrf());
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
     options: {

@@ -9,24 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DiscussionSchema = exports.Discussion = void 0;
-const mongoose_1 = require("@nestjs/mongoose");
-const mongoose_2 = require("mongoose");
-let Discussion = class Discussion {
-    members;
-    messages;
-};
-exports.Discussion = Discussion;
+exports.AddUsersDto = void 0;
+const class_validator_1 = require("class-validator");
+class AddUsersDto {
+    ids;
+}
+exports.AddUsersDto = AddUsersDto;
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User", required: true }),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
     __metadata("design:type", Array)
-], Discussion.prototype, "members", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "Message", required: true }),
-    __metadata("design:type", Array)
-], Discussion.prototype, "messages", void 0);
-exports.Discussion = Discussion = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
-], Discussion);
-exports.DiscussionSchema = mongoose_1.SchemaFactory.createForClass(Discussion);
-//# sourceMappingURL=discussion.entity.js.map
+], AddUsersDto.prototype, "ids", void 0);
+//# sourceMappingURL=add-users.dto.js.map

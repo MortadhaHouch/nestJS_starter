@@ -13,7 +13,7 @@ export class Workspace {
     creator:MongooseSchema.Types.ObjectId;
     @Prop({ required: false ,type:[{type:MongooseSchema.Types.ObjectId,ref:"User"}],default:[]})
     members:MongooseSchema.Types.ObjectId[];
-    @Prop({ required: false ,type:[{type:MongooseSchema.Types.ObjectId,ref:"User"}],default:[]})
+    @Prop({ required: false ,type:[{type:MongooseSchema.Types.ObjectId,ref:"Task"}],default:[]})
     tasks:MongooseSchema.Types.ObjectId[];
     @Prop({required:false,default:"ACTIVE",enum: Object.keys(WorkSpaceStatus).map(k => k.toString()),type: String})
     status: WorkSpaceStatus

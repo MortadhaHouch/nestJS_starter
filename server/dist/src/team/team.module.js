@@ -10,6 +10,8 @@ exports.TeamModule = void 0;
 const common_1 = require("@nestjs/common");
 const team_service_1 = require("./team.service");
 const team_controller_1 = require("./team.controller");
+const mongoose_1 = require("@nestjs/mongoose");
+const team_entity_1 = require("./entities/team.entity");
 let TeamModule = class TeamModule {
 };
 exports.TeamModule = TeamModule;
@@ -17,6 +19,9 @@ exports.TeamModule = TeamModule = __decorate([
     (0, common_1.Module)({
         controllers: [team_controller_1.TeamController],
         providers: [team_service_1.TeamService],
+        imports: [
+            mongoose_1.MongooseModule.forFeature([{ name: 'Team', schema: team_entity_1.TeamSchema }])
+        ]
     })
 ], TeamModule);
 //# sourceMappingURL=team.module.js.map

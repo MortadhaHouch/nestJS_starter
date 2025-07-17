@@ -71,4 +71,7 @@ export class WorkspaceService {
   remove(id: string) {
     return this.workspaceModel.deleteOne({_id:id});
   }
+  addUsers(id:string,userIds:string[]){
+    return this.workspaceModel.updateOne({_id:id},{members:{$addToSet:userIds}});
+  }
 }

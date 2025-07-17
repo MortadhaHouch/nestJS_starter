@@ -57,4 +57,9 @@ export declare class WorkspaceService {
     } & {
         __v: number;
     }, {}, Workspace, "deleteOne", {}>;
+    addUsers(id: string, userIds: string[]): import("mongoose").Query<import("mongoose").UpdateWriteOpResult, import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, {}, Workspace, "updateOne", {}>;
 }

@@ -3,6 +3,7 @@ import { WorkspaceService } from './workspace.service';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
 import { AuthenticatedRequest, WorkSpaceStatus } from 'utils/types';
+import { AddUsersDto } from './dto/add-users.dto';
 export declare class WorkspaceController {
     private readonly workspaceService;
     constructor(workspaceService: WorkspaceService);
@@ -26,5 +27,6 @@ export declare class WorkspaceController {
         __v: number;
     }) | null>;
     update(id: string, updateWorkspaceDto: UpdateWorkspaceDto, req: AuthenticatedRequest): Promise<NotFoundException | import("mongoose").UpdateWriteOpResult>;
+    joinWorkspace(id: string, req: AuthenticatedRequest, userIds: AddUsersDto): Promise<NotFoundException | import("mongoose").UpdateWriteOpResult>;
     remove(id: string, req: AuthenticatedRequest): Promise<UnauthorizedException | import("mongodb").DeleteResult>;
 }

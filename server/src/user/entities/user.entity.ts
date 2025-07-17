@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Task } from 'src/task/entities/task.entity';
 import {Schema as MongooseSchema} from "mongoose"
 @Schema()
 export class User {
@@ -42,5 +41,15 @@ export class User {
   isLoggedIn:boolean;
   @Prop({type:Number,default:0,required:false})
   validationCode:number;
+  @Prop({type:Date,required:false})
+  latestLoginTrial: Date;
+  @Prop({type:String,required:false})
+  ip:string;
+  @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"User"}],default:[]})
+  friends:MongooseSchema.Types.ObjectId[]
+  @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"Note"}],default:[],required:false})
+  notes:MongooseSchema.Types.ObjectId[]
+  @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"Discussion"}],default:[],required:false})
+  discussions:MongooseSchema.Types.ObjectId[]
 }
 export const UserSchema = SchemaFactory.createForClass(User);

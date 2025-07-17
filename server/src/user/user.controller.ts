@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable prettier/prettier */
 import {
   Controller,
@@ -7,14 +8,19 @@ import {
   Req,
   UnauthorizedException,
   ConflictException,
+  Patch,
 } from '@nestjs/common';
+import * as requestIp from 'request-ip';
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { SignupUserDto } from './dto/signup-user.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { OPTCode } from './dto/otp-user.dto';
-
+import { utils } from 'utils/constants';
+import { RealIP } from 'nestjs-real-ip';
+import { AuthenticatedRequest } from 'utils/types';
+import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('user')
 export class UserController {
   constructor(
@@ -23,27 +29,25 @@ export class UserController {
     private readonly mailService:MailerService
   ) {}
   @Post("login")
-  public async login(@Body(ValidationPipe) user:LoginUserDto){
+  public async login(@Body(ValidationPipe) user:LoginUserDto,@RealIP() ip: string){
     const foundUser = await this.userService.findUserByEmail(user.email);
+    const reqIP = requestIp.getClientIp(ip);
     if(foundUser){
       const isValid = await this.userService.checkPassword(user.password,foundUser.password);
       if(isValid){
-        foundUser.validationCode = Math.floor(Math.random() * 1000000);
+        foundUser.validationCode = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
+        foundUser.latestLoginTrial = new Date();
+        foundUser.ip = reqIP;
         await foundUser.save();
         const emailSend = await this.mailService.sendMail({
           to:foundUser.email,
           subject:"Login successful",
           text:"Login successful",
-          template:'index',
+          template:'reset-password',
           context:{
             verificationCode:foundUser.validationCode,
-            message:`
-              Thank you for logging in, your verification code is ${foundUser.validationCode}
-              <br/>
-              <p>Best Regards</p>
-              <h2>Please copy the code above</h2>
-              <h3>Please do not reply to this email</h3>
-            `
+            content:`Welcome back ${foundUser.firstName} ${foundUser.lastName} , thanks for joining us`,
+            year:new Date().getFullYear()
           }
         })
         return {
@@ -65,22 +69,29 @@ export class UserController {
   public async validate(@Body(ValidationPipe) opt:OPTCode){
     const foundUser = await this.userService.findUserByEmail(opt.email);
     if(foundUser){
-      if(foundUser.validationCode === opt.code){
-        const token = this.jwtService.sign(
-          {email:foundUser.email},
-          {
-            secret:process.env.SECRET_KEY as string,
-            expiresIn:"7d"
-          }
-        );
-        foundUser.isLoggedIn = true;
-        foundUser.validationCode = 0;
-        await foundUser.save();
-        return {token};
-      }else{
-        throw new UnauthorizedException({
-          message:"invalid code"
+      const timeDiff = new Date().getTime() - foundUser.latestLoginTrial.getTime();
+      if(timeDiff > utils.verificationCodeValidity){
+        return new UnauthorizedException({
+          expiry_message_error:"code expired please try again"
         });
+      }else{
+        if(foundUser.validationCode === opt.code){
+          const token = this.jwtService.sign(
+            {email:foundUser.email},
+            {
+              secret:process.env.SECRET_KEY as string,
+              expiresIn:"7d"
+            }
+          );
+          foundUser.isLoggedIn = true;
+          foundUser.validationCode = 0;
+          await foundUser.save();
+          return {token};
+        }else{
+          throw new UnauthorizedException({
+            message:"invalid code"
+          });
+        }
       }
     }
     else{
@@ -114,23 +125,32 @@ export class UserController {
     );
     return {token};
   }
+  @Patch("/update-profile")
+  public async updatePassword(@Body(ValidationPipe) user:UpdateUserDto,@Req() req:AuthenticatedRequest){
+    const foundUser = await this.userService.findUserByEmail(req.user.email);
+    if(foundUser){
+      if(user.firstName){
+        foundUser.firstName = user.firstName
+      }
+      if(user.lastName){
+        foundUser.lastName = user.lastName
+      }
+      if(user.password){
+        const hashedPassword = await this.userService.hashPassword(user.password,10);
+        foundUser.password = hashedPassword
+      }
+    }
+  }
   @Post("logout")
-  public async logout(@Req() req: Request){
-    const cookie = req.headers.get('Authorization');
-    if(!cookie){
-      throw new UnauthorizedException();
+  public async logout(@Req() req: AuthenticatedRequest){
+    const foundUser = await this.userService.findUserByEmail(req.user.email);
+    if(!foundUser){
+      throw new UnauthorizedException({
+        error_message:"user not found"
+      });
     }
-    const token = cookie.startsWith("Bearer ") && cookie.slice(7);
-    if(!token){
-      throw new UnauthorizedException();
-    }
-    const {email} = this.jwtService.verify(token);
-    const user = await this.userService.findUserByEmail(email as string);
-    if(!user){
-      throw new UnauthorizedException();
-    }
-    user.isLoggedIn = false;
-    await user.save();
-    return {message:"Logout successful"}
+    foundUser.isLoggedIn = false;
+    await foundUser.save();
+    return {success_message:"Logout successful"}
   }
 }

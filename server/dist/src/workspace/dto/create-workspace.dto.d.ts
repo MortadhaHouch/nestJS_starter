@@ -3,4 +3,5 @@ export declare class CreateWorkspaceDto {
     title: string;
     description: string;
     status: WorkSpaceStatus;
+    tags: string[];
 }

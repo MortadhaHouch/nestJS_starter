@@ -22,6 +22,12 @@ let Task = class Task {
     userId;
     tags;
     priority;
+    assignees;
+    comments;
+    attachments;
+    checklist;
+    color;
+    notes;
 };
 exports.Task = Task;
 __decorate([
@@ -52,6 +58,30 @@ __decorate([
     (0, mongoose_1.Prop)({ default: types_1.TaskPriority.MEDIUM, enum: Object.keys(types_1.TaskPriority).map(k => k.toString()), type: String, required: true }),
     __metadata("design:type", String)
 ], Task.prototype, "priority", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: [], type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "User" }] }),
+    __metadata("design:type", Array)
+], Task.prototype, "assignees", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], default: [], required: false }),
+    __metadata("design:type", Array)
+], Task.prototype, "comments", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], required: false, default: [] }),
+    __metadata("design:type", Array)
+], Task.prototype, "attachments", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ name: String, checked: Boolean }], required: false, default: [] }),
+    __metadata("design:type", Array)
+], Task.prototype, "checklist", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false }),
+    __metadata("design:type", String)
+], Task.prototype, "color", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false }),
+    __metadata("design:type", String)
+], Task.prototype, "notes", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Task);

@@ -40,7 +40,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Workspace.prototype, "members", void 0);
 __decorate([
-    (0, mongoose_2.Prop)({ required: false, type: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }], default: [] }),
+    (0, mongoose_2.Prop)({ required: false, type: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Task" }], default: [] }),
     __metadata("design:type", Array)
 ], Workspace.prototype, "tasks", void 0);
 __decorate([

@@ -66,6 +66,9 @@ let WorkspaceService = class WorkspaceService {
     remove(id) {
         return this.workspaceModel.deleteOne({ _id: id });
     }
+    addUsers(id, userIds) {
+        return this.workspaceModel.updateOne({ _id: id }, { members: { $addToSet: userIds } });
+    }
 };
 exports.WorkspaceService = WorkspaceService;
 exports.WorkspaceService = WorkspaceService = __decorate([

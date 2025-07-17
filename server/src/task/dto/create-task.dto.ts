@@ -2,7 +2,7 @@
 
 import { IsDateString, IsEnum, IsString, IsOptional, IsArray } from "class-validator"
 import { Transform } from "class-transformer"
-import { TaskStatus } from "utils/types"
+import { CheckItem, TaskPriority, TaskStatus } from "utils/types"
 
 export class CreateTaskDto {
     @IsString()
@@ -26,4 +26,26 @@ export class CreateTaskDto {
     @IsOptional()
     @Transform(({ value }: { value: string[] | undefined }) => value || [])
     tags?:string[]
+    @IsOptional()
+    @IsEnum(TaskPriority)
+    @Transform(({ value }: { value: TaskPriority | undefined }) => value || TaskPriority.MEDIUM)
+    priority?:TaskPriority
+    @IsOptional()
+    @IsArray()
+    @Transform(({ value }: { value: string[] | undefined }) => value || [])
+    assignees?:string[]
+    @IsOptional()
+    @IsArray()
+    @Transform(({ value }: { value: string[] | undefined }) => value || [])
+    attachments?:string[]
+    @IsOptional()
+    @IsArray()
+    @Transform(({ value }: { value: CheckItem[] | undefined }) => value || [])
+    checklist?:CheckItem[]
+    @IsOptional()
+    @IsString()
+    color:string
+    @IsOptional()
+    @IsString()
+    notes:string
 }

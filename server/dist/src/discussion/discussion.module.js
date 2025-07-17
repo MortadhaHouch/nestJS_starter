@@ -10,6 +10,8 @@ exports.DiscussionModule = void 0;
 const common_1 = require("@nestjs/common");
 const discussion_service_1 = require("./discussion.service");
 const discussion_controller_1 = require("./discussion.controller");
+const mongoose_1 = require("@nestjs/mongoose");
+const discussion_entity_1 = require("./entities/discussion.entity");
 let DiscussionModule = class DiscussionModule {
 };
 exports.DiscussionModule = DiscussionModule;
@@ -17,6 +19,11 @@ exports.DiscussionModule = DiscussionModule = __decorate([
     (0, common_1.Module)({
         controllers: [discussion_controller_1.DiscussionController],
         providers: [discussion_service_1.DiscussionService],
+        imports: [
+            mongoose_1.MongooseModule.forFeature([
+                { name: 'Discussion', schema: discussion_entity_1.DiscussionSchema },
+            ]),
+        ],
     })
 ], DiscussionModule);
 //# sourceMappingURL=discussion.module.js.map

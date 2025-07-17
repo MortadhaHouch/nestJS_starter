@@ -31,4 +31,8 @@ enum WorkSpaceStatus {
   INACTIVE = 'INACTIVE',
   DELETED = 'DELETED',
 }
+export type CheckItem = {
+  name: string;
+  checked: boolean;
+}
 export { TaskStatus, Role, TaskPriority,WorkSpaceStatus,RequestStatus };
