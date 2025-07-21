@@ -51,5 +51,7 @@ export class User {
   notes:MongooseSchema.Types.ObjectId[]
   @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"Discussion"}],default:[],required:false})
   discussions:MongooseSchema.Types.ObjectId[]
+  @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"Notification"}],default:[],required:false})
+  notifications:MongooseSchema.Types.ObjectId[]
 }
 export const UserSchema = SchemaFactory.createForClass(User);

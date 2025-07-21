@@ -16,6 +16,7 @@ import { NotificationModule } from './notification/notification.module';
 import { WorkspaceModule } from './workspace/workspace.module';
 import { DiscussionModule } from './discussion/discussion.module';
 import { MessageModule } from './message/message.module';
+import { AuthProcessesModule } from './processes/auth_processes/auth_processes.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
@@ -49,6 +50,7 @@ import { MessageModule } from './message/message.module';
         port: 6379,
       },
     }),
+    AuthProcessesModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerMiddlewareService]

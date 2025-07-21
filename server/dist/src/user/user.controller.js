@@ -24,14 +24,18 @@ const otp_user_dto_1 = require("./dto/otp-user.dto");
 const constants_1 = require("../../utils/constants");
 const nestjs_real_ip_1 = require("nestjs-real-ip");
 const update_user_dto_1 = require("./dto/update-user.dto");
+const bullmq_1 = require("@nestjs/bullmq");
+const bullmq_2 = require("bullmq");
 let UserController = class UserController {
     userService;
     jwtService;
     mailService;
-    constructor(userService, jwtService, mailService) {
+    notificationJob;
+    constructor(userService, jwtService, mailService, notificationJob) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.mailService = mailService;
+        this.notificationJob = notificationJob;
     }
     async login(user, ip) {
         const foundUser = await this.userService.findUserByEmail(user.email);
@@ -43,16 +47,11 @@ let UserController = class UserController {
                 foundUser.latestLoginTrial = new Date();
                 foundUser.ip = reqIP;
                 await foundUser.save();
-                const emailSend = await this.mailService.sendMail({
-                    to: foundUser.email,
-                    subject: "Login successful",
-                    text: "Login successful",
-                    template: 'reset-password',
-                    context: {
-                        verificationCode: foundUser.validationCode,
-                        content: `Welcome back ${foundUser.firstName} ${foundUser.lastName} , thanks for joining us`,
-                        year: new Date().getFullYear()
-                    }
+                await this.notificationJob.add("login", {
+                    email: foundUser.email,
+                    firstName: foundUser.firstName,
+                    lastName: foundUser.lastName,
+                    validationCode: foundUser.validationCode
                 });
                 return {
                     message: "we have sent you a validation code to your email address please check your inbox",
@@ -91,14 +90,23 @@ let UserController = class UserController {
                     return { token };
                 }
                 else {
-                    throw new common_1.UnauthorizedException({
+                    await this.notificationJob.add("access-failure", {
+                        email: foundUser.email,
+                        subject: "Login failed",
+                        text: "Login failed",
+                        template: 'access-failure',
+                        verificationCode: foundUser.validationCode,
+                        content: `Dear ${foundUser.firstName} ${foundUser.lastName} , your login attempt has failed ,please try again or mark this action as spam`,
+                        year: new Date().getFullYear()
+                    });
+                    return new common_1.UnauthorizedException({
                         message: "invalid code"
                     });
                 }
             }
         }
         else {
-            throw new common_1.UnauthorizedException({
+            return new common_1.UnauthorizedException({
                 message: "user not found"
             });
         }
@@ -191,8 +199,10 @@ __decorate([
 ], UserController.prototype, "logout", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
+    __param(3, (0, bullmq_1.InjectQueue)("auth-processes")),
     __metadata("design:paramtypes", [user_service_1.UserService,
         jwt_1.JwtService,
-        mailer_1.MailerService])
+        mailer_1.MailerService,
+        bullmq_2.Queue])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

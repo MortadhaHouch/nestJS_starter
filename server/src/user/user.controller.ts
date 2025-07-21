@@ -21,12 +21,15 @@ import { utils } from 'utils/constants';
 import { RealIP } from 'nestjs-real-ip';
 import { AuthenticatedRequest } from 'utils/types';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly mailService:MailerService
+    private readonly mailService:MailerService,
+    @InjectQueue("auth-processes") private readonly notificationJob: Queue
   ) {}
   @Post("login")
   public async login(@Body(ValidationPipe) user:LoginUserDto,@RealIP() ip: string){
@@ -39,16 +42,11 @@ export class UserController {
         foundUser.latestLoginTrial = new Date();
         foundUser.ip = reqIP;
         await foundUser.save();
-        const emailSend = await this.mailService.sendMail({
-          to:foundUser.email,
-          subject:"Login successful",
-          text:"Login successful",
-          template:'reset-password',
-          context:{
-            verificationCode:foundUser.validationCode,
-            content:`Welcome back ${foundUser.firstName} ${foundUser.lastName} , thanks for joining us`,
-            year:new Date().getFullYear()
-          }
+        await this.notificationJob.add("login",{
+          email:foundUser.email,
+          firstName:foundUser.firstName,
+          lastName:foundUser.lastName,
+          validationCode:foundUser.validationCode
         })
         return {
           message:"we have sent you a validation code to your email address please check your inbox",
@@ -88,14 +86,23 @@ export class UserController {
           await foundUser.save();
           return {token};
         }else{
-          throw new UnauthorizedException({
+          await this.notificationJob.add("access-failure",{
+            email:foundUser.email,
+            subject:"Login failed",
+            text:"Login failed",
+            template:'access-failure',
+            verificationCode:foundUser.validationCode,
+            content:`Dear ${foundUser.firstName} ${foundUser.lastName} , your login attempt has failed ,please try again or mark this action as spam`,
+            year:new Date().getFullYear()
+          })
+          return new UnauthorizedException({
             message:"invalid code"
           });
         }
       }
     }
     else{
-      throw new UnauthorizedException({
+      return new UnauthorizedException({
         message:"user not found"
       });
     }

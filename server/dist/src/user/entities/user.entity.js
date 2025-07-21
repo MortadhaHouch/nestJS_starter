@@ -27,6 +27,7 @@ let User = class User {
     friends;
     notes;
     discussions;
+    notifications;
 };
 exports.User = User;
 __decorate([
@@ -102,6 +103,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Discussion" }], default: [], required: false }),
     __metadata("design:type", Array)
 ], User.prototype, "discussions", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Notification" }], default: [], required: false }),
+    __metadata("design:type", Array)
+], User.prototype, "notifications", void 0);
 exports.User = User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

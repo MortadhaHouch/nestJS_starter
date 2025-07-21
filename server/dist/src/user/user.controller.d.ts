@@ -7,11 +7,13 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { OPTCode } from './dto/otp-user.dto';
 import { AuthenticatedRequest } from 'utils/types';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Queue } from 'bullmq';
 export declare class UserController {
     private readonly userService;
     private readonly jwtService;
     private readonly mailService;
-    constructor(userService: UserService, jwtService: JwtService, mailService: MailerService);
+    private readonly notificationJob;
+    constructor(userService: UserService, jwtService: JwtService, mailService: MailerService, notificationJob: Queue);
     login(user: LoginUserDto, ip: string): Promise<UnauthorizedException | {
         message: string;
     }>;

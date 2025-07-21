@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = void 0;
+exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = exports.NotificationType = void 0;
 var TaskStatus;
 (function (TaskStatus) {
     TaskStatus["DONE"] = "DONE";
@@ -31,4 +31,11 @@ var WorkSpaceStatus;
     WorkSpaceStatus["INACTIVE"] = "INACTIVE";
     WorkSpaceStatus["DELETED"] = "DELETED";
 })(WorkSpaceStatus || (exports.WorkSpaceStatus = WorkSpaceStatus = {}));
+var NotificationType;
+(function (NotificationType) {
+    NotificationType["TASK"] = "TASK";
+    NotificationType["REQUEST"] = "REQUEST";
+    NotificationType["WORKSPACE"] = "WORKSPACE";
+    NotificationType["SOCIAL_MEDIA"] = "SOCIAL_MEDIA";
+})(NotificationType || (exports.NotificationType = NotificationType = {}));
 //# sourceMappingURL=types.js.map

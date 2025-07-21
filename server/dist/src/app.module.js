@@ -24,6 +24,7 @@ const notification_module_1 = require("./notification/notification.module");
 const workspace_module_1 = require("./workspace/workspace.module");
 const discussion_module_1 = require("./discussion/discussion.module");
 const message_module_1 = require("./message/message.module");
+const auth_processes_module_1 = require("./processes/auth_processes/auth_processes.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -66,6 +67,7 @@ exports.AppModule = AppModule = __decorate([
                     port: 6379,
                 },
             }),
+            auth_processes_module_1.AuthProcessesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, logger_middleware_service_1.LoggerMiddlewareService]

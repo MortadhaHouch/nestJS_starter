@@ -11,6 +11,7 @@ import { FriendRequest, FriendRequestSchema } from './entities/request.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
+import { BullModule } from '@nestjs/bullmq';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -49,7 +50,10 @@ import { join } from 'path';
         adapter: new HandlebarsAdapter(),
         options: { strict: true },
       },
-    })
+    }),
+    BullModule.registerQueue({
+      name: 'auth-processes',
+    }),
   ],
   controllers: [UserController],
   providers: [UserService],

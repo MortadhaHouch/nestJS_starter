@@ -18,6 +18,7 @@ const request_entity_1 = require("./entities/request.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const path_1 = require("path");
+const bullmq_1 = require("@nestjs/bullmq");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -60,7 +61,10 @@ exports.UserModule = UserModule = __decorate([
                     adapter: new handlebars_adapter_1.HandlebarsAdapter(),
                     options: { strict: true },
                 },
-            })
+            }),
+            bullmq_1.BullModule.registerQueue({
+                name: 'auth-processes',
+            }),
         ],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService],

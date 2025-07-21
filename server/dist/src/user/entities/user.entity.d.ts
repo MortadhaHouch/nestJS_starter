@@ -14,6 +14,7 @@ export declare class User {
     friends: MongooseSchema.Types.ObjectId[];
     notes: MongooseSchema.Types.ObjectId[];
     discussions: MongooseSchema.Types.ObjectId[];
+    notifications: MongooseSchema.Types.ObjectId[];
 }
 export declare const UserSchema: MongooseSchema<User, import("mongoose").Model<User, any, any, any, import("mongoose").Document<unknown, any, User, any> & User & Required<{
     _id: MongooseSchema.Types.ObjectId;

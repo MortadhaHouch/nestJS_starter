@@ -32,4 +32,10 @@ export type CheckItem = {
     name: string;
     checked: boolean;
 };
+export declare enum NotificationType {
+    TASK = "TASK",
+    REQUEST = "REQUEST",
+    WORKSPACE = "WORKSPACE",
+    SOCIAL_MEDIA = "SOCIAL_MEDIA"
+}
 export { TaskStatus, Role, TaskPriority, WorkSpaceStatus, RequestStatus };
