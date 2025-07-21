@@ -6,21 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationProcessesModule = void 0;
+exports.TaskProcessModule = void 0;
 const common_1 = require("@nestjs/common");
-const notification_processes_1 = require("./notification_processes");
-const bullmq_1 = require("@nestjs/bullmq");
-let NotificationProcessesModule = class NotificationProcessesModule {
+const task_process_service_1 = require("./task_process.service");
+const task_process_gateway_1 = require("./task_process.gateway");
+let TaskProcessModule = class TaskProcessModule {
 };
-exports.NotificationProcessesModule = NotificationProcessesModule;
-exports.NotificationProcessesModule = NotificationProcessesModule = __decorate([
+exports.TaskProcessModule = TaskProcessModule;
+exports.TaskProcessModule = TaskProcessModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            bullmq_1.BullModule.registerQueue({
-                name: 'notification',
-            }),
-        ],
-        providers: [notification_processes_1.NotificationProcesses],
+        providers: [task_process_gateway_1.TaskProcessGateway, task_process_service_1.TaskProcessService],
     })
-], NotificationProcessesModule);
-//# sourceMappingURL=notification_processes.module.js.map
+], TaskProcessModule);
+//# sourceMappingURL=task_process.module.js.map

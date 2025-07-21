@@ -12,9 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationSchema = exports.Notification = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
+const types_1 = require("../../../utils/types");
 let Notification = class Notification {
     _id;
     content;
+    type;
 };
 exports.Notification = Notification;
 __decorate([
@@ -25,6 +27,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: String, required: true }),
     __metadata("design:type", String)
 ], Notification.prototype, "content", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, enum: Object.keys(types_1.NotificationType).map(k => k.toString()), required: false, default: types_1.NotificationType.ALL }),
+    __metadata("design:type", String)
+], Notification.prototype, "type", void 0);
 exports.Notification = Notification = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Notification);

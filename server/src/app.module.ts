@@ -17,6 +17,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
 import { DiscussionModule } from './discussion/discussion.module';
 import { MessageModule } from './message/message.module';
 import { AuthProcessesModule } from './processes/auth_processes/auth_processes.module';
+import { TaskProcessModule } from './processes/task_process/task_process.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
@@ -51,6 +52,7 @@ import { AuthProcessesModule } from './processes/auth_processes/auth_processes.m
       },
     }),
     AuthProcessesModule,
+    TaskProcessModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerMiddlewareService]

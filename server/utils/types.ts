@@ -40,5 +40,6 @@ export enum NotificationType {
   REQUEST = 'REQUEST',
   WORKSPACE = 'WORKSPACE',
   SOCIAL_MEDIA = 'SOCIAL_MEDIA',
+  ALL = 'ALL',
 }
 export { TaskStatus, Role, TaskPriority,WorkSpaceStatus,RequestStatus };

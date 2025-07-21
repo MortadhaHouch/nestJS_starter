@@ -25,6 +25,7 @@ const workspace_module_1 = require("./workspace/workspace.module");
 const discussion_module_1 = require("./discussion/discussion.module");
 const message_module_1 = require("./message/message.module");
 const auth_processes_module_1 = require("./processes/auth_processes/auth_processes.module");
+const task_process_module_1 = require("./processes/task_process/task_process.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -68,6 +69,7 @@ exports.AppModule = AppModule = __decorate([
                 },
             }),
             auth_processes_module_1.AuthProcessesModule,
+            task_process_module_1.TaskProcessModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, logger_middleware_service_1.LoggerMiddlewareService]

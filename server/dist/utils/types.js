@@ -37,5 +37,6 @@ var NotificationType;
     NotificationType["REQUEST"] = "REQUEST";
     NotificationType["WORKSPACE"] = "WORKSPACE";
     NotificationType["SOCIAL_MEDIA"] = "SOCIAL_MEDIA";
+    NotificationType["ALL"] = "ALL";
 })(NotificationType || (exports.NotificationType = NotificationType = {}));
 //# sourceMappingURL=types.js.map

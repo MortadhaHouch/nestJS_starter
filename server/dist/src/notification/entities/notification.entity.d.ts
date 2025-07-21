@@ -1,7 +1,9 @@
 import { Schema as MongooseSchema } from "mongoose";
+import { NotificationType } from "utils/types";
 export declare class Notification {
     _id: MongooseSchema.Types.ObjectId;
     content: string;
+    type?: NotificationType;
 }
 export declare const NotificationSchema: MongooseSchema<Notification, import("mongoose").Model<Notification, any, any, any, import("mongoose").Document<unknown, any, Notification, any> & Notification & Required<{
     _id: MongooseSchema.Types.ObjectId;
