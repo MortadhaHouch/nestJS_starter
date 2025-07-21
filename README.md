@@ -59,17 +59,139 @@
 ## 🎨 UI Gallery
 
 <p align="center">
-  <img src="https://cdn-icons-png.flaticon.com/512/10010/10010378.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Kanban Board Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/4320/4320337.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Task Scheduler Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/11898/11898101.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Team Collaboration Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/7630/7630501.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="AI Assistant Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Analytics Dashboard Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Notifications Center Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Settings Screenshot" />
-  <img src="https://cdn-icons-png.flaticon.com/512/9131/9131562.png" width="300" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002;" alt="Project Templates Screenshot" />
+  <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Modern Kanban Board UI" />
+  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Task Scheduler UI" />
+  <img src="https://undraw.co/api/illustrations/undraw_team_collaboration_re_ow29.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Team Collaboration Illustration" />
+  <img src="https://undraw.co/api/illustrations/undraw_artificial_intelligence_re_enpp.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="AI Assistant Illustration" />
+  <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Analytics Dashboard UI" />
+  <img src="https://undraw.co/api/illustrations/undraw_notify_re_65on.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Notifications Center Illustration" />
+  <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Settings UI" />
+  <img src="https://undraw.co/api/illustrations/undraw_project_completed_re_jr7u.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Project Templates Illustration" />
   <br/>
   <i>Gallery: Kanban Board, Task Scheduler, Team Collaboration, AI Assistant, Analytics, Notifications, Settings, Project Templates</i>
 </p>
+
+---
+
+## 🆕 Latest Updates
+
+### WebSockets Integration
+- **Real-Time Features:**
+  - WebSocket support is now available for real-time updates (e.g., notifications, chat, live task updates).
+  - The backend exposes WebSocket gateways for instant client-server communication.
+
+### BullMQ Queuing in Auth Flow
+- **Asynchronous Notification Jobs:**
+  - The authentication flow now uses BullMQ queues to handle login and verification notifications asynchronously.
+  - When a user logs in, a notification job is enqueued and processed by a dedicated worker.
+
+### Notification System
+- **Modular Notification Delivery:**
+  - Notifications are processed via BullMQ and can be delivered via email, WebSocket, or both.
+  - The notification processor is modular and can be extended for additional channels.
+
+---
+
+## 🗂️ Project Structure & API Overview
+
+### 🚦 Main Features
+
+- **User Authentication & 2-Step Verification** (BullMQ-powered async email/notification delivery)
+- **Task Management** (CRUD, caching, real-time updates via WebSocket)
+- **Team, Note, Discussion, Message, Notification, Workspace Management** (RESTful APIs)
+- **Real-Time Task Collaboration** (WebSocket gateway for tasks)
+- **Modular Notification System** (email, WebSocket, BullMQ)
+- **Rate Limiting, Caching, and Security** (Throttler, Redis, Helmet)
+- **Analytics Microservice** (FastAPI)
+- **Modern Email Templates** (table-based, inline CSS, compatible with all clients)
+
+---
+
+### 📚 Controllers & Routes
+
+| Entity        | Controller                | Main Routes (REST)                                                                                   |
+|---------------|---------------------------|------------------------------------------------------------------------------------------------------|
+| User          | `/user`                   | `POST /login`, `POST /validate`, `POST /signup`, `PATCH /update-profile`, `POST /logout`             |
+| Task          | `/task`                   | `POST /`, `GET /`, `GET /overdue`, `GET /stats`, `GET /:id`, `PATCH /:id`, `DELETE /:id`            |
+| Team          | `/team`                   | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`                                          |
+| Note          | `/note`                   | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`                                          |
+| Discussion    | `/discussion`             | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`                                          |
+| Message       | `/message`                | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`                                          |
+| Notification  | `/notification`           | `POST /`, `GET /`, `GET /:id`, `GET /status/:status`                                                |
+| Workspace     | `/workspace`              | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `PATCH /join/:id`, `DELETE /:id`                       |
+
+**WebSocket Gateway:**  
+- `/task-process` (port 3001): Real-time task collaboration (add, update, remove, find tasks, etc.)
+
+---
+
+### 🛠️ Services
+
+- **UserService**: User CRUD, password hashing, validation, friend management.
+- **TaskService**: Task CRUD, caching, statistics, overdue logic.
+- **TeamService, NoteService, DiscussionService, MessageService, NotificationService, WorkspaceService**: Standard CRUD and business logic.
+- **NotificationService**: Handles notification creation, filtering, and status updates.
+- **TaskProcessService**: Used by the WebSocket gateway for real-time task operations.
+
+---
+
+### 🔄 Real-Time & Queuing
+
+- **WebSocket Gateway**:  
+  - Located in `processes/task_process/task_process.gateway.ts`
+  - Handles real-time task events (`add-task`, `find-all`, `find-one`, `update-task`, `remove-task`).
+
+- **BullMQ Queues**:  
+  - Used in authentication and notification flows.
+  - Example: On login, a notification job is enqueued and processed asynchronously.
+
+---
+
+### 📝 Example API Usage
+
+#### User Authentication
+
+```http
+POST /user/login
+POST /user/validate
+POST /user/signup
+PATCH /user/update-profile
+POST /user/logout
+```
+
+#### Task Management
+
+```http
+POST /task
+GET /task
+GET /task/overdue
+GET /task/stats
+GET /task/:id
+PATCH /task/:id
+DELETE /task/:id
+```
+
+#### Notification
+
+```http
+POST /notification
+GET /notification
+GET /notification/:id
+GET /notification/status/:status
+```
+
+#### Real-Time Task Collaboration
+
+- Connect to WebSocket on port 3001
+- Emit events: `add-task`, `find-all`, `find-one`, `update-task`, `remove-task`
+
+---
+
+### 🧩 How to Extend
+
+- **Add new REST endpoints**: Create a new controller and service, register in the module.
+- **Add new real-time features**: Add new WebSocket events in the gateway and service.
+- **Add new notification channels**: Extend the notification processor to support SMS, push, etc.
 
 ---
 
@@ -132,6 +254,19 @@ All endpoints require authentication. Ownership and access checks are enforced f
 ---
 
 ## 📚 API Overview
+
+### Authentication & Notification Flow
+
+- **Login:**
+  - User submits credentials.
+  - On success, a verification code is generated and sent via email (using BullMQ queue for async delivery).
+  - A notification job is also enqueued for login events.
+  - WebSocket events can be emitted for real-time feedback (e.g., "new login detected").
+
+- **Notification API:**
+  - Notifications can be triggered by user actions (login, task updates, etc.).
+  - Each notification is enqueued and processed by a worker.
+  - Delivery can be via email, WebSocket, or both, depending on user settings.
 
 ### User API
 
@@ -210,10 +345,13 @@ flowchart LR
     A[React + shadcn UI + TailwindCSS] -- API Calls --> B(NestJS Backend)
     A -- Query/Cache --> Q[TanStack Query]
     A -- Forms/Validation --> F[React Hook Form & Zod]
+    A -- WebSocket --> WS[WebSocket Gateway]
   end
   B -- DB --> M(MongoDB/Mongoose)
   B -- Redis Cache --> R[Redis]
   B -- Analytics API --> C[FastAPI Microservice]
+  B -- BullMQ Queue --> Q2[BullMQ Worker]
+  B -- WebSocket Gateway --> WS
   C -- Data Science/ML --> D[Future Data Analysis]
   B -- API Docs --> S[Swagger]
   N[Nginx] -- Reverse Proxy --> A
@@ -244,41 +382,16 @@ flowchart LR
 
 ## 🧠 Service Explanations
 
-> ![Nginx](https://img.shields.io/badge/Nginx-009639?logo=nginx&logoColor=white&style=for-the-badge) **Nginx**
-> 
-> Acts as a reverse proxy, routing traffic to the correct service (frontend, backend, analytics). Handles SSL, load balancing, and static assets.
+> **WebSocket Gateway**
+> - Enables real-time communication between backend and frontend for notifications, chat, and live updates.
 >
-> ![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white&style=for-the-badge) **Redis**
-> 
-> In-memory data store for caching, session management, and pub/sub. Greatly improves performance and scalability.
+> **BullMQ**
+> - Used for queuing notification jobs, especially in the authentication flow (e.g., login notifications).
+> - Ensures reliable, scalable, and asynchronous processing of background tasks.
 >
-> ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=for-the-badge) **FastAPI**
-> 
-> Python microservice for analytics, ML, and data science. Fast, async, and easy to extend.
->
-> ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge) **MongoDB/Mongoose**
-> 
-> Flexible NoSQL database, perfect for rapid development and scaling. Mongoose provides schema and validation for MongoDB in Node.js.
->
-> ![Zod](https://img.shields.io/badge/Zod-3E77E6?logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjM0U3N0U2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTUgMTBoMTR2Mkg1eiIvPjxwYXRoIGQ9Ik0xMiA0bDcgMTJoLTd6Ii8+PC9zdmc+&logoColor=white&style=for-the-badge) **Zod**
-> 
-> TypeScript-first schema validation for frontend and backend. Ensures data safety and developer happiness.
->
-> ![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990?logo=reacthookform&logoColor=white&style=for-the-badge) **React Hook Form**
-> 
-> Lightweight, performant form state management for React. Works beautifully with Zod.
->
-> ![shadcn UI](https://img.shields.io/badge/shadcn_UI-111827?logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTEyIDJhMTAgMTAgMCAxIDAgMCAyMCAxMCAxMCAwIDAgMCAwLTIweiIvPjwvc3ZnPg==&logoColor=white&style=for-the-badge) **shadcn UI**
-> 
-> Accessible, beautiful React UI components. Built on top of Radix UI and TailwindCSS.
->
-> ![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?logo=reactquery&logoColor=white&style=for-the-badge) **TanStack Query**
-> 
-> Powerful data fetching, caching, and sync for React apps.
->
-> ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwindcss&logoColor=white&style=for-the-badge) **TailwindCSS**
-> 
-> Utility-first CSS framework for rapid, responsive design.
+> **Notification System**
+> - Modular, supports both email and WebSocket delivery.
+> - Easily extendable for SMS, push, or other channels.
 
 ---
 
