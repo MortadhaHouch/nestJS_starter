@@ -1,25 +1,24 @@
+import {type Dispatch} from "react"
 import {
-    InputOTP as InputOTPPrimitive,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
-  } from "@/components/ui/input-otp"
-  
-  export function InputOTP() {
-    return (
-      <InputOTPPrimitive maxLength={6}>
+  InputOTP as InputOTPRoot,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
+export function InputOTP({optValue,setOptValue}:{optValue:string,setOptValue:Dispatch<React.SetStateAction<string>>}) {
+  return (
+    <div className="space-y-2">
+      <InputOTPRoot
+        maxLength={6}
+        value={optValue}
+        onChange={(value) => setOptValue(value)}
+      >
         <InputOTPGroup>
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
           <InputOTPSlot index={2} />
-        </InputOTPGroup>
-        <InputOTPSeparator />
-        <InputOTPGroup>
           <InputOTPSlot index={3} />
-          <InputOTPSlot index={4} />
-          <InputOTPSlot index={5} />
         </InputOTPGroup>
-      </InputOTPPrimitive>
-    )
-  }
-  
+      </InputOTPRoot>
+    </div>
+  )
+}

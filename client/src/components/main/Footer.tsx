@@ -1,13 +1,15 @@
+import { NavLink } from "react-router-dom";
+
 export default function Footer() {
   return (
-    <footer className="overflow-hidden relative z-10 pt-16 pb-8 mt-8 w-full bg-slate-900 md:pt-24 md:pb-12 md:mt-0">
+    <footer className="overflow-hidden relative z-10 pt-16 pb-8 mt-8 w-full bg-slate-500 dark:bg-slate-900 md:pt-24 md:pb-12 md:mt-0">
       <div className="absolute top-0 left-1/2 z-0 w-full h-full -translate-x-1/2 pointer-events-none select-none">
-        <div className="absolute -top-32 left-1/4 w-72 h-72 rounded-full blur-3xl bg-purple-600/20"></div>
-        <div className="absolute -bottom-24 right-1/4 w-80 h-80 rounded-full blur-3xl bg-purple-600/20"></div>
+        <div className="absolute -top-32 left-1/4 w-72 h-72 rounded-full blur-3xl bg-purple-400/20 dark:bg-purple-600/20"></div>
+        <div className="absolute -bottom-24 right-1/4 w-80 h-80 rounded-full blur-3xl bg-purple-400/20 dark:bg-purple-600/20"></div>
       </div>
       <div className="flex relative flex-col gap-8 items-center px-6 py-10 mx-auto max-w-6xl rounded-2xl glass md:flex-row md:items-start md:justify-between md:gap-12">
         <div className="flex flex-col items-center md:items-start">
-          <a href="#" className="flex gap-2 items-center mb-4">
+          <NavLink to="/" className="flex gap-2 items-center mb-4">
             <span className="flex justify-center items-center w-9 h-9 text-2xl font-extrabold text-white bg-gradient-to-br from-purple-400 to-purple-700 rounded-full shadow-md">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +29,7 @@ export default function Footer() {
             <span className="text-xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-purple-200 to-purple-500">
               Task Vortex
             </span>
-          </a>
+          </NavLink>
           <p className="mb-6 max-w-xs text-sm text-center text-foreground md:text-left">
             Task Vortex is a task management platform that helps you stay
             organized and on top of your to-dos.
@@ -43,7 +45,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="#"
+              href="https://github.com/MortadhaHouch"
               aria-label="GitHub"
               className="transition hover:text-foreground"
             >
@@ -52,7 +54,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/mortadha-houch-73b232225/"
               aria-label="LinkedIn"
               className="transition hover:text-foreground"
             >
@@ -69,24 +71,24 @@ export default function Footer() {
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="#" className="text-foreground/70">
                   Features
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="#" className="text-foreground/70">
                   Pricing
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="#" className="text-foreground/70">
                   Integrations
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="#" className="text-foreground/70">
                   Updates
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -96,24 +98,19 @@ export default function Footer() {
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="/about" className="text-foreground/70">
                   About
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="/blog" className="text-foreground/70">
                   Blog
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="/contact" className="text-foreground/70">
                   Contact
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -123,24 +120,19 @@ export default function Footer() {
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="#" className="text-foreground/70">
                   Docs
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="/community" className="text-foreground/70">
                   Community
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="#" className="text-foreground/70">
+                <NavLink to="/support" className="text-foreground/70">
                   Support
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-foreground/70">
-                  Security
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>

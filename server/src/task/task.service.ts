@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -92,7 +93,29 @@ export class TaskService {
     const tasks = await Promise.all(taskSearchP);
     return tasks.flat();
   }
-
+  async getTasksByDateRange(userId: ObjectId,createdAt?:Date,dateRange?:{from?:Date,to?:Date}){
+    if(createdAt){
+      const tasks = await this.taskModel.aggregate([
+        { $match: { createdAt: { $gte: createdAt },userId } },
+        { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
+      ])
+      return tasks;
+    }
+    if(dateRange){
+      const dateQuery:Record<string,Date> = {}
+      if(dateRange.from){
+        dateQuery.$gte = dateRange.from;
+      }
+      if(dateRange.to){
+        dateQuery.$lte = dateRange.to;
+      }
+      const tasks = await this.taskModel.aggregate([
+        { $match: { createdAt: dateQuery,userId } },
+        { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
+      ])
+      return tasks;
+    }
+  }
   async findOverdueTasks(userId: ObjectId) {
     const query: RootFilterQuery<Task> = {
       overdue: { $lt: new Date() },

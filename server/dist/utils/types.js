@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = exports.NotificationType = void 0;
+exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = exports.ProcessName = exports.NotificationType = void 0;
 var TaskStatus;
 (function (TaskStatus) {
     TaskStatus["DONE"] = "DONE";
@@ -39,4 +39,13 @@ var NotificationType;
     NotificationType["SOCIAL_MEDIA"] = "SOCIAL_MEDIA";
     NotificationType["ALL"] = "ALL";
 })(NotificationType || (exports.NotificationType = NotificationType = {}));
+var ProcessName;
+(function (ProcessName) {
+    ProcessName["TASK"] = "TASK";
+    ProcessName["REQUEST"] = "REQUEST";
+    ProcessName["WORKSPACE"] = "WORKSPACE";
+    ProcessName["SOCIAL_MEDIA"] = "SOCIAL_MEDIA";
+    ProcessName["ALL"] = "ALL";
+    ProcessName["GMAIL"] = "GMAIL";
+})(ProcessName || (exports.ProcessName = ProcessName = {}));
 //# sourceMappingURL=types.js.map

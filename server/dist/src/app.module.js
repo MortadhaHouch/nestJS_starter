@@ -26,11 +26,25 @@ const discussion_module_1 = require("./discussion/discussion.module");
 const message_module_1 = require("./message/message.module");
 const auth_processes_module_1 = require("./processes/auth_processes/auth_processes.module");
 const task_process_module_1 = require("./processes/task_process/task_process.module");
+const blog_module_1 = require("./blog/blog.module");
+const comment_module_1 = require("./comment/comment.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
             .apply(logger_middleware_service_1.LoggerMiddlewareService)
-            .forRoutes('task', 'team', 'workspace', 'discussion', 'message', 'note', 'notification');
+            .forRoutes('task', 'team', 'workspace', 'discussion', 'message', 'note', 'notification', {
+            path: 'blog',
+            method: common_1.RequestMethod.POST
+        }, {
+            path: 'blog',
+            method: common_1.RequestMethod.PATCH
+        }, {
+            path: 'blog',
+            method: common_1.RequestMethod.PUT
+        }, {
+            path: 'blog',
+            method: common_1.RequestMethod.DELETE
+        });
     }
 };
 exports.AppModule = AppModule;
@@ -53,7 +67,7 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
             }),
             cache_manager_1.CacheModule.register({
-                ttl: 900 * 1000,
+                ttl: 60 * 1000,
                 isGlobal: true,
             }),
             team_module_1.TeamModule,
@@ -70,6 +84,8 @@ exports.AppModule = AppModule = __decorate([
             }),
             auth_processes_module_1.AuthProcessesModule,
             task_process_module_1.TaskProcessModule,
+            blog_module_1.BlogModule,
+            comment_module_1.CommentModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, logger_middleware_service_1.LoggerMiddlewareService]

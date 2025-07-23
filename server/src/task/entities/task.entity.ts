@@ -2,7 +2,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { CheckItem, TaskPriority, TaskStatus } from "utils/types";
 import { Schema as MongooseSchema } from "mongoose";
-import { User } from "src/user/entities/user.entity";
 
 @Schema({timestamps: true})
 export class Task {

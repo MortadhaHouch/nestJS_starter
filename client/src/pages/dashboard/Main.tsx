@@ -1,40 +1,38 @@
 import { AreaChart } from '@/components/charts/AreaChart'
 import StatsCard from '@/components/main/StatsCard'
 import { DataTable } from '@/components/main/Table'
-import { ListCheck, Users } from 'lucide-react'
-import React from 'react'
-import { FaBlog } from 'react-icons/fa'
+import { Briefcase, CircleCheckBig, StickyNote, Users } from 'lucide-react'
 
 export default function Main() {
   return (
-    <main className="flex flex-col justify-start items-center w-full min-h-screen pt-15 gap-4 overflow-x-hidden">
-        <section className='flex flex-row flex-wrap gap-2 justify-center items-center w-full max-w-7xl px-4'>
+    <main className="flex overflow-x-hidden flex-col gap-4 justify-start items-center w-full min-h-screen pt-15">
+        <section className='flex flex-row flex-wrap gap-2 justify-center items-center px-4 w-full max-w-7xl'>
             <StatsCard 
-                title="Tasks" 
-                icon={<ListCheck/>} 
+                title="Teams"
+                icon={<Users />} 
                 value={'0'} 
                 extra=''
             />
             <StatsCard 
-                title="Teams" 
-                icon={<Users/>} 
+                title="Workspaces" 
+                icon={<Briefcase />} 
+                value={'0'} 
+                extra=''
+            />
+            <StatsCard 
+                title="Tasks"
+                icon={<CircleCheckBig />} 
                 value={'0'} 
                 extra=''
             />
             <StatsCard 
                 title="Blogs" 
-                icon={<FaBlog/>} 
-                value={'0'} 
-                extra=''
-            />
-            <StatsCard 
-                title="Blogs" 
-                icon={<FaBlog/>} 
+                icon={<StickyNote />} 
                 value={'0'} 
                 extra=''
             />
         </section>
-        <section className='flex flex-row flex-wrap gap-4 justify-center items-center w-full max-w-7xl px-4'>
+        <section className='flex flex-row flex-wrap gap-4 justify-center items-center px-4 w-full max-w-7xl'>
             <AreaChart 
                 title="Monthly Revenue"
                 description="Revenue trends over the past 12 months"
@@ -105,7 +103,7 @@ export default function Main() {
                 className="flex-1 min-w-[300px]"
             />
         </section>
-        <section className='flex flex-row flex-wrap gap-4 justify-center items-center w-full max-w-7xl px-4'>
+        <section className='flex flex-row flex-wrap gap-4 justify-center items-center px-4 w-full max-w-7xl'>
             <AreaChart 
                 title="Website Traffic"
                 description="Daily page views and visitors"
@@ -163,7 +161,7 @@ export default function Main() {
                 className="flex-1 min-w-[300px]"
             />
         </section>
-        <section className='flex flex-row flex-wrap gap-2 justify-center items-center w-full max-w-7xl px-4'>
+        <section className='flex flex-row flex-wrap gap-2 justify-center items-center px-4 w-full max-w-7xl'>
             <DataTable/>
         </section>
     </main>

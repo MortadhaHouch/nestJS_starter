@@ -3,8 +3,9 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Processor, WorkerHost } from "@nestjs/bullmq";
 import { Inject } from '@nestjs/common';
 import { Job } from "bullmq";
+import { ProcessName } from 'utils/types';
 
-@Processor("auth-processes")
+@Processor(ProcessName.GMAIL)
 export class NotificationProcesses extends WorkerHost {
     constructor(@Inject() private readonly mailService: MailerService) {
         super();

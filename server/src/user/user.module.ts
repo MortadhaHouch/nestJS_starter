@@ -12,6 +12,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { BullModule } from '@nestjs/bullmq';
+import { ProcessName } from 'utils/types';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -52,7 +53,7 @@ import { BullModule } from '@nestjs/bullmq';
       },
     }),
     BullModule.registerQueue({
-      name: 'auth-processes',
+      name: ProcessName.GMAIL,
     }),
   ],
   controllers: [UserController],

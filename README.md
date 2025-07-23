@@ -1,57 +1,185 @@
-<!-- HERO BANNER -->
-<p align="center">
-  <img src="https://nestjs.com/img/logo-small.svg" width="70" alt="NestJS"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="70" alt="React"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="70" alt="TypeScript"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="70" alt="MongoDB"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="70" alt="Python"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="70" alt="FastAPI"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="70" alt="Redis"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="70" alt="Nginx"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="70" alt="Docker"/>
-  <img src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="70" alt="TailwindCSS"/>
-  <img src="https://raw.githubusercontent.com/TanStack/query/main/media/logo.svg" width="70" alt="TanStack Query"/>
-  <img src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="70" alt="shadcn UI"/>
-  <img src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="70" alt="React Hook Form"/>
-  <img src="https://raw.githubusercontent.com/colinhacks/zod/master/logo.svg" width="70" alt="Zod"/>
-</p>
+<div align="center">
+  <h1>🚀 NestJS + React + FastAPI Full-Stack Starter</h1>
+  <h3>Enterprise-Grade Full Stack Application Boilerplate with Real-time Features</h3>
+  
+  <p align="center">
+    <img src="https://img.shields.io/github/last-commit/yourusername/nest-starter?style=flat-square" alt="Last commit" />
+    <img src="https://img.shields.io/github/contributors/yourusername/nest-starter?style=flat-square" alt="Contributors" />
+    <img src="https://img.shields.io/github/license/yourusername/nest-starter?style=flat-square" alt="License" />
+    <img src="https://img.shields.io/github/stars/yourusername/nest-starter?style=social" alt="GitHub stars" />
+  </p>
 
-<h1 align="center">NestJS + React + Analytics Full-Stack Starter</h1>
+  <p align="center">
+    <img src="https://nestjs.com/img/logo-small.svg" width="60" alt="NestJS" title="NestJS" />
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="60" alt="React" title="React" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="60" alt="TypeScript" title="TypeScript" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="60" alt="MongoDB" title="MongoDB" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="60" alt="Python" title="Python" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="60" alt="FastAPI" title="FastAPI" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="60" alt="Redis" title="Redis" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="60" alt="Nginx" title="Nginx" />
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="60" alt="Docker" title="Docker" />
+    <img src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="60" alt="TailwindCSS" title="Tailwind CSS" />
+    <img src="https://raw.githubusercontent.com/TanStack/query/main/media/logo.svg" width="60" alt="TanStack Query" title="TanStack Query" />
+    <img src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="60" alt="shadcn UI" title="shadcn/ui" />
+    <img src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="60" alt="React Hook Form" title="React Hook Form" />
+    <img src="https://raw.githubusercontent.com/colinhacks/zod/master/logo.svg" width="60" alt="Zod" title="Zod" />
+  </p>
+</div>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Build-Passing-brightgreen" />
-  <img src="https://img.shields.io/badge/License-MIT-blue" />
-  <img src="https://img.shields.io/badge/Contributors-Welcome-orange" />
-  <img src="https://img.shields.io/badge/PRs-Welcome-blueviolet" />
-  <img src="https://img.shields.io/badge/Database-MongoDB-green?logo=mongodb" />
-  <img src="https://img.shields.io/badge/Frontend-React-blue?logo=react" />
-  <img src="https://img.shields.io/badge/Backend-NestJS-red?logo=nestjs" />
-  <img src="https://img.shields.io/badge/Analytics-FastAPI-009688?logo=fastapi" />
-  <img src="https://img.shields.io/badge/Cache-Redis-DC382D?logo=redis" />
-  <img src="https://img.shields.io/badge/Proxy-Nginx-009639?logo=nginx" />
-  <img src="https://img.shields.io/badge/Styling-TailwindCSS-06B6D4?logo=tailwindcss" />
-  <img src="https://img.shields.io/badge/Forms-React_Hook_Form-EC5990?logo=reacthookform" />
-  <img src="https://img.shields.io/badge/Validation-Zod-3E77E6?logo=zod" />
-  <img src="https://img.shields.io/badge/UI-shadcn_UI-111827?logo=shadcnui" />
-  <img src="https://img.shields.io/badge/Query-TanStack_Query-FF4154?logo=reactquery" />
-</p>
+<div align="center">
+  <p>
+    <a href="#features">Features</a> •
+    <a href="#tech-stack">Tech Stack</a> •
+    <a href="#getting-started">Getting Started</a> •
+    <a href="#api-documentation">API Docs</a> •
+    <a href="#deployment">Deployment</a>
+  </p>
+  
+  <p>
+    <a href="https://github.com/yourusername/nest-starter/actions/workflows/ci.yml">
+      <img src="https://img.shields.io/github/workflow/status/yourusername/nest-starter/CI/main?label=Build&logo=github" alt="CI Status" />
+    </a>
+    <a href="https://codecov.io/gh/yourusername/nest-starter">
+      <img src="https://img.shields.io/codecov/c/github/yourusername/nest-starter?logo=codecov" alt="Code Coverage" />
+    </a>
+    <a href="https://github.com/yourusername/nest-starter/issues">
+      <img src="https://img.shields.io/github/issues/yourusername/nest-starter?logo=github" alt="Open Issues" />
+    </a>
+    <a href="https://discord.gg/your-invite">
+      <img src="https://img.shields.io/discord/your-discord-id?label=Discord&logo=discord" alt="Discord" />
+    </a>
+  </p>
+</div>
 
----
+## 🚀 Quick Start
 
-<details>
-<summary><b>Table of Contents</b></summary>
+Get up and running in minutes with our one-command setup:
 
-- [UI Gallery](#ui-gallery)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Service Explanations](#service-explanations)
-- [Development & Production](#development--production)
-- [Testing & Linting](#testing--linting)
-- [Contribution Guide](#contribution-guide)
-- [FAQ](#faq)
-- [Troubleshooting](#troubleshooting)
-- [Credits & Inspiration](#credits--inspiration)
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/nest-starter.git
+cd nest-starter
+
+# Start the development environment
+docker-compose up -d
+```
+
+Visit `http://localhost:3000` to see the application in action!
+
+## ✨ Key Features
+
+### 🎯 Core Functionality
+- **Authentication & Authorization**
+  - JWT-based authentication with refresh tokens
+  - Role-based access control (RBAC)
+  - Social login integration (Google, GitHub)
+  - Two-factor authentication (2FA)
+  - Session management with Redis
+
+- **User Management**
+  - Profile management with avatar uploads
+  - Email verification flow
+  - Password reset functionality
+  - User activity tracking
+  - Account settings and preferences
+
+- **Task Management**
+  - Create, read, update, delete tasks
+  - Task assignments and due dates
+  - Priority levels and status tracking
+  - Task comments and attachments
+  - Task history and audit trail
+
+- **Team Collaboration**
+  - Create and manage teams
+  - Team roles and permissions
+  - Team discussions
+  - File sharing and versioning
+  - Team analytics and insights
+
+### 🚀 Advanced Features
+- **Real-time Updates**
+  - WebSocket integration for live updates
+  - Real-time notifications
+  - Live chat functionality
+  - Collaborative editing
+  - Presence indicators
+
+- **Analytics Dashboard**
+  - User activity tracking
+  - Performance metrics
+  - Custom report generation
+  - Data visualization
+  - Export capabilities (CSV, PDF)
+
+- **Developer Experience**
+  - Comprehensive API documentation
+  - TypeScript support throughout
+  - Testing utilities
+  - Development tools
+  - Debugging helpers
+
+## 🛠 Tech Stack
+
+### Frontend
+- **Framework**: React 18 with TypeScript
+- **State Management**: React Query, Zustand
+- **Styling**: Tailwind CSS with shadcn/ui
+- **Form Handling**: React Hook Form with Zod validation
+- **Routing**: React Router v6
+- **Real-time**: Socket.IO Client
+- **UI Components**: Radix UI Primitives, shadcn/ui
+- **Icons**: Lucide React
+- **Testing**: Jest, React Testing Library, Cypress
+
+### Backend (NestJS)
+- **Runtime**: Node.js 18+
+- **Framework**: NestJS 10+
+- **Database**: MongoDB with Mongoose
+- **Cache**: Redis
+- **Authentication**: JWT, Passport.js
+- **Real-time**: WebSockets with Socket.IO
+- **Queue**: BullMQ
+- **Validation**: Class Validator, Class Transformer
+- **API Documentation**: Swagger/OpenAPI
+- **Testing**: Jest, Supertest
+
+### Analytics (FastAPI)
+- **Language**: Python 3.10+
+- **Framework**: FastAPI
+- **Data Processing**: Pandas, NumPy
+- **Machine Learning**: scikit-learn (optional)
+- **Visualization**: Matplotlib, Plotly
+- **API Documentation**: Swagger UI, ReDoc
+
+### DevOps
+- **Containerization**: Docker, Docker Compose
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Prometheus, Grafana
+- **Logging**: Winston, ELK Stack (optional)
+- **Error Tracking**: Sentry
+- **Performance**: New Relic (optional)
+
+## 📋 Table of Contents
+
+<details open>
+<summary>Click to expand/collapse</summary>
+
+- [✨ Features](#-features)
+- [🛠 Tech Stack](#-tech-stack)
+- [🚀 Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+- [🏗 Project Structure](#-project-structure)
+- [📚 API Documentation](#-api-documentation)
+- [🧪 Testing](#-testing)
+- [🔒 Security](#-security)
+- [🧩 Extending the Project](#-extending-the-project)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
 </details>
 
 ---

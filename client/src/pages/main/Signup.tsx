@@ -1,13 +1,21 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {Input} from '@/components/ui/input';
 import { LucideEye, LucideEyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, type FieldValues } from 'react-hook-form';
 import Img from "../../../src/assets/Sign-up.svg"
 import {motion} from "framer-motion"
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 export default function Signup() {
     const [isPasswordVisible,setIsPasswordVisible]=useState(false)
+    const [cookie,,] = useCookies(['auth_token'])
+    const navigate=useNavigate()
+    useEffect(()=>{
+        if(cookie.auth_token){
+            navigate('/')
+        }
+    },[])
     const {
         register,
         reset,
@@ -48,7 +56,10 @@ export default function Signup() {
                         type="text"
                         {
                             ...register("firstName",{
-                                required:"firstName is required",
+                                required:{
+                                    value:true,
+                                    message:"firstName is required"
+                                },
                                 minLength: {
                                     value: 3,
                                     message: "firstName must be at least 3 characters long"
@@ -70,7 +81,10 @@ export default function Signup() {
                         type="text"
                         {
                             ...register("lastName",{
-                                required:"lastName is required",
+                                required:{
+                                    value:true,
+                                    message:"lastName is required"
+                                },
                                 minLength: {
                                     value: 3,
                                     message: "lastName must be at least 3 characters long"
@@ -92,7 +106,10 @@ export default function Signup() {
                         type="email"
                         {
                             ...register("email",{
-                                required:"email is required",
+                                required:{
+                                    value:true,
+                                    message:"email is required"
+                                },
                                 pattern: {
                                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                     message: "invalid email address"
@@ -127,7 +144,10 @@ export default function Signup() {
                         type={isPasswordVisible?"text":"password"}
                         {
                             ...register("password",{
-                                required:"password is required",
+                                required:{
+                                    value:true,
+                                    message:"password is required"
+                                },
                                 minLength: {
                                     value: 8,
                                     message: "password must be at least 8 characters long"

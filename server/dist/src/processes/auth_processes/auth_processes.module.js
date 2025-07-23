@@ -10,6 +10,7 @@ exports.AuthProcessesModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_processes_1 = require("./auth_processes");
 const bullmq_1 = require("@nestjs/bullmq");
+const types_1 = require("../../../utils/types");
 let AuthProcessesModule = class AuthProcessesModule {
 };
 exports.AuthProcessesModule = AuthProcessesModule;
@@ -17,7 +18,7 @@ exports.AuthProcessesModule = AuthProcessesModule = __decorate([
     (0, common_1.Module)({
         imports: [
             bullmq_1.BullModule.registerQueue({
-                name: 'auth-processes',
+                name: types_1.ProcessName.GMAIL,
             }),
         ],
         providers: [auth_processes_1.NotificationProcesses],

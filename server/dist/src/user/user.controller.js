@@ -19,23 +19,31 @@ const user_service_1 = require("./user.service");
 const jwt_1 = require("@nestjs/jwt");
 const login_user_dto_1 = require("./dto/login-user.dto");
 const signup_user_dto_1 = require("./dto/signup-user.dto");
-const mailer_1 = require("@nestjs-modules/mailer");
 const otp_user_dto_1 = require("./dto/otp-user.dto");
 const constants_1 = require("../../utils/constants");
 const nestjs_real_ip_1 = require("nestjs-real-ip");
+const types_1 = require("../../utils/types");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const bullmq_1 = require("@nestjs/bullmq");
 const bullmq_2 = require("bullmq");
+const cache_manager_1 = require("@nestjs/cache-manager");
 let UserController = class UserController {
     userService;
     jwtService;
-    mailService;
     notificationJob;
-    constructor(userService, jwtService, mailService, notificationJob) {
+    cacheManager;
+    constructor(userService, jwtService, notificationJob, cacheManager) {
         this.userService = userService;
         this.jwtService = jwtService;
-        this.mailService = mailService;
         this.notificationJob = notificationJob;
+        this.cacheManager = cacheManager;
+    }
+    async getData(req) {
+        const statsSearchQuery = `user:${req.user.email}`;
+        const stats = await this.cacheManager.get(statsSearchQuery);
+        if (stats) {
+            return stats;
+        }
     }
     async login(user, ip) {
         const foundUser = await this.userService.findUserByEmail(user.email);
@@ -80,14 +88,24 @@ let UserController = class UserController {
             }
             else {
                 if (foundUser.validationCode === opt.code) {
-                    const token = this.jwtService.sign({ email: foundUser.email }, {
+                    const token = this.jwtService.sign({
+                        email: foundUser.email,
+                        id: foundUser._id
+                    }, {
                         secret: process.env.SECRET_KEY,
                         expiresIn: "7d"
                     });
                     foundUser.isLoggedIn = true;
                     foundUser.validationCode = 0;
                     await foundUser.save();
-                    return { token };
+                    return {
+                        token,
+                        data: {
+                            email: foundUser.email,
+                            firstName: foundUser.firstName,
+                            lastName: foundUser.lastName
+                        }
+                    };
                 }
                 else {
                     await this.notificationJob.add("access-failure", {
@@ -161,6 +179,13 @@ let UserController = class UserController {
 };
 exports.UserController = UserController;
 __decorate([
+    (0, common_1.Get)("data"),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getData", null);
+__decorate([
     (0, common_1.Post)("login"),
     __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
     __param(1, (0, nestjs_real_ip_1.RealIP)()),
@@ -199,10 +224,10 @@ __decorate([
 ], UserController.prototype, "logout", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
-    __param(3, (0, bullmq_1.InjectQueue)("auth-processes")),
+    __param(2, (0, bullmq_1.InjectQueue)(types_1.ProcessName.GMAIL)),
+    __param(3, (0, common_1.Inject)(cache_manager_1.CACHE_MANAGER)),
     __metadata("design:paramtypes", [user_service_1.UserService,
         jwt_1.JwtService,
-        mailer_1.MailerService,
-        bullmq_2.Queue])
+        bullmq_2.Queue, Object])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

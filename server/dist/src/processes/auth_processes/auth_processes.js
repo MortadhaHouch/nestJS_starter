@@ -16,6 +16,7 @@ exports.NotificationProcesses = void 0;
 const mailer_1 = require("@nestjs-modules/mailer");
 const bullmq_1 = require("@nestjs/bullmq");
 const common_1 = require("@nestjs/common");
+const types_1 = require("../../../utils/types");
 let NotificationProcesses = class NotificationProcesses extends bullmq_1.WorkerHost {
     mailService;
     constructor(mailService) {
@@ -55,7 +56,7 @@ let NotificationProcesses = class NotificationProcesses extends bullmq_1.WorkerH
 };
 exports.NotificationProcesses = NotificationProcesses;
 exports.NotificationProcesses = NotificationProcesses = __decorate([
-    (0, bullmq_1.Processor)("auth-processes"),
+    (0, bullmq_1.Processor)(types_1.ProcessName.GMAIL),
     __param(0, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [mailer_1.MailerService])
 ], NotificationProcesses);

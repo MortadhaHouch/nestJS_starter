@@ -9,28 +9,39 @@ import {
   UnauthorizedException,
   ConflictException,
   Patch,
+  Get,
+  Inject,
 } from '@nestjs/common';
 import * as requestIp from 'request-ip';
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { SignupUserDto } from './dto/signup-user.dto';
-import { MailerService } from '@nestjs-modules/mailer';
 import { OPTCode } from './dto/otp-user.dto';
 import { utils } from 'utils/constants';
 import { RealIP } from 'nestjs-real-ip';
-import { AuthenticatedRequest } from 'utils/types';
+import { AuthenticatedRequest, ProcessName } from 'utils/types';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly mailService:MailerService,
-    @InjectQueue("auth-processes") private readonly notificationJob: Queue
+    @InjectQueue(ProcessName.GMAIL) private readonly notificationJob: Queue,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
+  @Get("data")
+  public async getData(@Req() req:AuthenticatedRequest){
+    const statsSearchQuery = `user:${req.user.email}`;
+    const stats = await this.cacheManager.get(statsSearchQuery);
+    if(stats){
+      return stats;
+    }
+  }
   @Post("login")
   public async login(@Body(ValidationPipe) user:LoginUserDto,@RealIP() ip: string){
     const foundUser = await this.userService.findUserByEmail(user.email);
@@ -75,7 +86,10 @@ export class UserController {
       }else{
         if(foundUser.validationCode === opt.code){
           const token = this.jwtService.sign(
-            {email:foundUser.email},
+            {
+              email:foundUser.email,
+              id:foundUser._id
+            },
             {
               secret:process.env.SECRET_KEY as string,
               expiresIn:"7d"
@@ -84,7 +98,14 @@ export class UserController {
           foundUser.isLoggedIn = true;
           foundUser.validationCode = 0;
           await foundUser.save();
-          return {token};
+          return {
+            token,
+            data:{
+              email:foundUser.email,
+              firstName:foundUser.firstName,
+              lastName:foundUser.lastName
+            }
+          };
         }else{
           await this.notificationJob.add("access-failure",{
             email:foundUser.email,

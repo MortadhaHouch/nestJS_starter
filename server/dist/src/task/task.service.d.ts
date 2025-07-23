@@ -40,6 +40,10 @@ export declare class TaskService {
     }> & {
         __v: number;
     }) | null)[]>;
+    getTasksByDateRange(userId: ObjectId, createdAt?: Date, dateRange?: {
+        from?: Date;
+        to?: Date;
+    }): Promise<any[] | undefined>;
     findOverdueTasks(userId: ObjectId): Promise<(import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {

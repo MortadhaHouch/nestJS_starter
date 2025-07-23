@@ -1,3 +1,5 @@
+import { BlogCreatorValidator, BlogResponseValidator, BlogValidator, TaskOverviewValidator } from './validators';
+import { z } from "zod"
 export const TaskStatus = {
   DONE: 'DONE',
   PENDING: 'PENDING',
@@ -11,14 +13,7 @@ export const TaskPriority = {
   HIGH: 'HIGH',
 } as const;
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
-
-export type TaskOverview = {
-  id: string;
-  title: string;
-  description: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  dueDate?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-};
+export type TaskOverview = z.infer<typeof TaskOverviewValidator>
+export type Blog = z.infer<typeof BlogValidator>
+export type BlogResponse = z.infer<typeof BlogResponseValidator>;
+export type BlogCreator = z.infer<typeof BlogCreatorValidator>

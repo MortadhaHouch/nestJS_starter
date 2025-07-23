@@ -39,4 +39,12 @@ export declare enum NotificationType {
     SOCIAL_MEDIA = "SOCIAL_MEDIA",
     ALL = "ALL"
 }
+export declare enum ProcessName {
+    TASK = "TASK",
+    REQUEST = "REQUEST",
+    WORKSPACE = "WORKSPACE",
+    SOCIAL_MEDIA = "SOCIAL_MEDIA",
+    ALL = "ALL",
+    GMAIL = "GMAIL"
+}
 export { TaskStatus, Role, TaskPriority, WorkSpaceStatus, RequestStatus };

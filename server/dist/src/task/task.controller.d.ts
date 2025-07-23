@@ -19,7 +19,7 @@ export declare class TaskController {
     }> & {
         __v: number;
     })[]>;
-    getStats(req: AuthenticatedRequest): Promise<{}>;
+    getStats(req: AuthenticatedRequest, createdAt?: Date, from?: Date, to?: Date): Promise<{} | undefined>;
     findOne(req: AuthenticatedRequest, id: ObjectId): Promise<{} | null>;
     update(req: AuthenticatedRequest, id: ObjectId, updateTaskDto: UpdateTaskDto): Promise<(import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;

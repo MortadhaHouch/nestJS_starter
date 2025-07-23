@@ -57,13 +57,13 @@ let TaskController = class TaskController {
     findOverdue(req) {
         return this.taskService.findOverdueTasks(req.user._id);
     }
-    async getStats(req) {
+    async getStats(req, createdAt, from, to) {
         const cacheKey = `${req.user.firstName}_${req.user.lastName}_stats`;
         const cachedTasks = await this.cacheManager.get(cacheKey);
         if (cachedTasks) {
             return cachedTasks;
         }
-        const tasks = await this.taskService.getTaskStats(req.user._id);
+        const tasks = await this.taskService.getTasksByDateRange(req.user._id, createdAt, { from, to });
         await this.cacheManager.set(cacheKey, tasks);
         return tasks;
     }
@@ -135,8 +135,13 @@ __decorate([
 __decorate([
     (0, common_1.Get)('stats'),
     __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)("createdAt")),
+    __param(2, (0, common_1.Query)("from")),
+    __param(3, (0, common_1.Query)("to")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Date,
+        Date,
+        Date]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "getStats", null);
 __decorate([

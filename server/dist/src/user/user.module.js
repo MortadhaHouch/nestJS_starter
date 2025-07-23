@@ -19,6 +19,7 @@ const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const path_1 = require("path");
 const bullmq_1 = require("@nestjs/bullmq");
+const types_1 = require("../../utils/types");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -63,7 +64,7 @@ exports.UserModule = UserModule = __decorate([
                 },
             }),
             bullmq_1.BullModule.registerQueue({
-                name: 'auth-processes',
+                name: types_1.ProcessName.GMAIL,
             }),
         ],
         controllers: [user_controller_1.UserController],

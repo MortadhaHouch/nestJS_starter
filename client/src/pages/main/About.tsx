@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function About() {
   return (
-    <main className='flex flex-col justify-center items-center w-screen min-h-screen'>
+    <main className='flex flex-col justify-center items-center w-full min-h-screen'>
       <Spotlight/>
       <Team/>
     </main>

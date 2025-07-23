@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { BullModule } from '@nestjs/bullmq';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -18,6 +18,8 @@ import { DiscussionModule } from './discussion/discussion.module';
 import { MessageModule } from './message/message.module';
 import { AuthProcessesModule } from './processes/auth_processes/auth_processes.module';
 import { TaskProcessModule } from './processes/task_process/task_process.module';
+import { BlogModule } from './blog/blog.module';
+import { CommentModule } from './comment/comment.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
@@ -36,7 +38,7 @@ import { TaskProcessModule } from './processes/task_process/task_process.module'
       isGlobal: true,
     }),
     CacheModule.register({
-      ttl:900*1000,
+      ttl:60*1000,
       isGlobal:true,
     }),
     TeamModule,
@@ -53,6 +55,8 @@ import { TaskProcessModule } from './processes/task_process/task_process.module'
     }),
     AuthProcessesModule,
     TaskProcessModule,
+    BlogModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerMiddlewareService]
@@ -61,6 +65,18 @@ export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddlewareService)
-      .forRoutes('task','team','workspace','discussion','message','note','notification');
+      .forRoutes('task','team','workspace','discussion','message','note','notification',{
+        path: 'blog',
+        method: RequestMethod.POST
+      },{
+        path: 'blog',
+        method: RequestMethod.PATCH
+      },{
+        path: 'blog',
+        method: RequestMethod.PUT
+      },{
+        path: 'blog',
+        method: RequestMethod.DELETE
+      });
   }
 }

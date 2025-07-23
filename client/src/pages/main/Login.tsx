@@ -1,13 +1,22 @@
-import { Input } from "@/components/ui/input";
+import {Input} from "@/components/ui/input";
 import {useForm, type FieldValues} from "react-hook-form"
 import { LucideEye, LucideEyeOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Img from "../../../src/assets/Login.svg"
 import {motion} from "framer-motion"
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import {fetchData} from "../../../utils/fetchData"
 export default function Login() {
-    const [isPasswordVisible,setIsPasswordVisible]=useState(false)
+    const [isPasswordVisible,setIsPasswordVisible]=useState(false);
+    const [cookie,,] = useCookies(['auth_token'])
+    const navigate=useNavigate()
+    useEffect(()=>{
+        if(cookie.auth_token){
+            navigate('/')
+        }
+    },[])
     const {
         register,
         reset,
@@ -16,14 +25,18 @@ export default function Login() {
     } = useForm();
     const handleSignup=async(v:FieldValues)=>{
         try {
-            console.log(v);
+            const request = await fetchData("/user/login","POST","",{
+                email:v.email,
+                password:v.password
+            })
+            console.log(request);
             reset();
         } catch (error) {
             console.log(error);
         }
     }
     return (
-        <main className='flex flex-row flex-wrap gap-4 justify-center items-center w-screen min-h-screen'>
+        <main className='flex flex-row flex-wrap gap-4 justify-center items-center w-full min-h-screen'>
             <motion.img 
                 src={Img} 
                 className="w-[clamp(300px, 45%, 500px)] object-cover aspect-square" 
@@ -48,7 +61,10 @@ export default function Login() {
                         type="email"
                         {
                             ...register("email",{
-                                required:"email is required",
+                                required:{
+                                    value:true,
+                                    message:"email is required"
+                                },
                                 pattern: {
                                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                     message: "invalid email address"
@@ -83,7 +99,10 @@ export default function Login() {
                         type={isPasswordVisible?"text":"password"}
                         {
                             ...register("password",{
-                                required:"password is required",
+                                required:{
+                                    value:true,
+                                    message:"password is required"
+                                },
                                 minLength: {
                                     value: 8,
                                     message: "password must be at least 8 characters long"
@@ -99,7 +118,7 @@ export default function Login() {
                         errors.password && <p className='text-red-500'>{errors.password.message?.toString()}</p>
                     }
                 </div>
-                <Button variant="default" className={`${isLoading&&"cursor-not-allowed"}`} disabled={isLoading}>signup</Button>
+                <Button variant="default" className={`${isLoading&&"cursor-not-allowed"}`} disabled={isLoading}>Login</Button>
                 <p>Don&apos;t have an account?</p>
                 <NavLink to="/signup">
                     <Button className="w-full" variant="outline">signup</Button>

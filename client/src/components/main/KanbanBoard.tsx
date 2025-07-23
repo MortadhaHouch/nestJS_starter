@@ -89,7 +89,7 @@ export default function KanbanBoard() {
     }
   };
   return (
-    <div className="flex flex-wrap items-start justify-center min-h-screen gap-4 p-4 bg-gray-100 dark:bg-gray-900">
+    <section className="flex flex-wrap gap-4 justify-center items-start p-4 w-full min-h-screen bg-gray-100 dark:bg-gray-900">
       <DndContext onDragEnd={handleDragEnd}>
         {columns.map(col => (
           <Droppable key={col.id} id={col.id}>
@@ -118,6 +118,6 @@ export default function KanbanBoard() {
       <Dialog actionTitle="Add Task" title="New Task" description="Create a new task" action={() => addtask("New Task", "Task Description", "PENDING", "MEDIUM")} >
         <AddTaskForm />
       </Dialog>
-    </div>
+    </section>
   )
 }

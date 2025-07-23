@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query, Inject, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query, Inject, UseInterceptors, ParseDatePipe } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -61,13 +61,18 @@ export class TaskController {
   }
 
   @Get('stats')
-  async getStats(@Req() req: AuthenticatedRequest) {
+  async getStats(
+    @Req() req: AuthenticatedRequest,
+    @Query("createdAt") createdAt?: Date,
+    @Query("from") from?: Date,
+    @Query("to") to?: Date,
+  ) {
     const cacheKey = `${req.user.firstName}_${req.user.lastName}_stats`;
     const cachedTasks = await this.cacheManager.get(cacheKey);
     if(cachedTasks){
       return cachedTasks;
     }
-    const tasks = await this.taskService.getTaskStats((req.user as any)._id);
+    const tasks = await this.taskService.getTasksByDateRange((req.user as any)._id,createdAt,{from,to});
     await this.cacheManager.set(cacheKey,tasks);
     return tasks;
   }

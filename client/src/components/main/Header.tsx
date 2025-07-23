@@ -59,7 +59,7 @@ const features = [
 ];
 
 export default function Header() {
-  const [cookies,,removeCookie] = useCookies(["auth_token"]);
+  const [cookies,,] = useCookies(["auth_token"]);
   return (
     <header className="flex fixed top-0 left-0 z-50 flex-row justify-between items-center px-2 py-1 w-full backdrop-blur-3xl backdrop-opacity-60 sm:px-4 lg:px-6 lg:py-2">
       <h1>
@@ -123,7 +123,7 @@ export default function Header() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <NavLink to="/about" className="flex flex-row gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+              <NavLink to="/about" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
                 <FaInfo className="w-4 h-4" /> <span>About</span>
               </NavLink>
             </NavigationMenuLink>
@@ -142,23 +142,38 @@ export default function Header() {
             </NavigationMenuContent>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink href="/dashboard" className="flex flex-row gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
-              <LucideLayoutDashboard className="w-4 h-4" /> <span>Dashboard</span>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+          {
+            cookies.auth_token && (
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/dashboard" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                  <LucideLayoutDashboard className="w-4 h-4" /> <span>Dashboard</span>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            )
+          }
 
-          <NavigationMenuItem>
-            <NavigationMenuLink href="/login" className="flex flex-row gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
-              <IoMdLogIn className="w-4 h-4" /> <span>Login</span>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink href="/signup" className="flex flex-row gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
-              <LogInIcon className="w-4 h-4" /> <span>Signup</span>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+          {
+            !cookies.auth_token ? (
+              <>
+                <NavigationMenuItem>
+                  <NavigationMenuLink href="/login" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                    <IoMdLogIn className="w-4 h-4" /> <span>Login</span>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink href="/signup" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                      <LogInIcon className="w-4 h-4" /> <span>Signup</span>
+                    </NavigationMenuLink>
+                </NavigationMenuItem>
+              </>
+            ) : (
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/login" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                  <IoMdLogIn className="w-4 h-4" /> <span>Login</span>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            )
+          }
         </NavigationMenuList>
       </NavigationMenu>
       <ModeToggle />

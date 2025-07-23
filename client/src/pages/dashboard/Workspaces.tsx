@@ -1,7 +1,9 @@
-import React from 'react'
+import { Outlet } from "react-router";
 
 export default function Workspaces() {
   return (
-    <div>Workspaces</div>
+    <main className="flex flex-col justify-center items-center w-full min-h-screen pt-20">
+      <Outlet/>
+    </main>
   )
 }

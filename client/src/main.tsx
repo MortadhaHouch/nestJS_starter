@@ -28,6 +28,12 @@ import Settings from './pages/dashboard/Settings.tsx'
 import Tasks from './pages/dashboard/Tasks.tsx'
 import Teams from './pages/dashboard/Teams.tsx'
 import Workspaces from './pages/dashboard/Workspaces.tsx'
+import KanbanBoard from './components/main/KanbanBoard.tsx'
+import ValidateOPT from './pages/main/ValidateOPT.tsx'
+import Community from './pages/main/Community.tsx'
+import Blog from './pages/main/Blog.tsx'
+import BlogView from './pages/main/BlogView.tsx'
+import BlogOutlet from './pages/main/BlogOutlet.tsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +42,11 @@ const router = createBrowserRouter(
       <Route path='about' element={<About />} />
       <Route path='faq' element={<Faqs />} />
       <Route path='pricing' element={<Pricing />} />
+      <Route path='community' element={<Community />} />
+      <Route path='blog' element={<BlogOutlet />} >
+        <Route index element={<Blog />} />
+        <Route path=':id' element={<BlogView />} />
+      </Route>
       <Route path='dashboard' element={<Dashboard />}>
         <Route index element={<Main/>}/>
         <Route path='assistant' element={<AIAssistant/>}/>
@@ -50,10 +61,13 @@ const router = createBrowserRouter(
         <Route path='settings' element={<Settings/>}/>
         <Route path='tasks' element={<Tasks/>}/>
         <Route path='teams' element={<Teams/>}/>
-        <Route path='workspaces' element={<Workspaces/>}/>        
+        <Route path='workspaces' element={<Workspaces/>}>
+          <Route index element={<KanbanBoard/>}/>
+        </Route>
       </Route>
       <Route path='contact' element={<Contact />} />
       <Route path='login' element={<Login />} />
+      <Route path='validate' element={<ValidateOPT />} />
       <Route path='signup' element={<Signup />} />
     </Route>
   )
