@@ -3,27 +3,27 @@
   <h3>Enterprise-Grade Full Stack Application Boilerplate with Real-time Features</h3>
   
   <p align="center">
-    <img src="https://img.shields.io/github/last-commit/yourusername/nest-starter?style=flat-square" alt="Last commit" />
-    <img src="https://img.shields.io/github/contributors/yourusername/nest-starter?style=flat-square" alt="Contributors" />
-    <img src="https://img.shields.io/github/license/yourusername/nest-starter?style=flat-square" alt="License" />
-    <img src="https://img.shields.io/github/stars/yourusername/nest-starter?style=social" alt="GitHub stars" />
+    <img loading="lazy" src="https://img.shields.io/github/last-commit/yourusername/nest-starter?style=flat-square" alt="Last commit" />
+    <img loading="lazy" src="https://img.shields.io/github/contributors/yourusername/nest-starter?style=flat-square" alt="Contributors" />
+    <img loading="lazy" src="https://img.shields.io/github/license/yourusername/nest-starter?style=flat-square" alt="License" />
+    <img loading="lazy" src="https://img.shields.io/github/stars/yourusername/nest-starter?style=social" alt="GitHub stars" />
   </p>
 
   <p align="center">
-    <img src="https://nestjs.com/img/logo-small.svg" width="60" alt="NestJS" title="NestJS" />
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="60" alt="React" title="React" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="60" alt="TypeScript" title="TypeScript" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="60" alt="MongoDB" title="MongoDB" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="60" alt="Python" title="Python" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="60" alt="FastAPI" title="FastAPI" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="60" alt="Redis" title="Redis" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="60" alt="Nginx" title="Nginx" />
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="60" alt="Docker" title="Docker" />
-    <img src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="60" alt="TailwindCSS" title="Tailwind CSS" />
-    <img src="https://raw.githubusercontent.com/TanStack/query/main/media/logo.svg" width="60" alt="TanStack Query" title="TanStack Query" />
-    <img src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="60" alt="shadcn UI" title="shadcn/ui" />
-    <img src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="60" alt="React Hook Form" title="React Hook Form" />
-    <img src="https://raw.githubusercontent.com/colinhacks/zod/master/logo.svg" width="60" alt="Zod" title="Zod" />
+    <img loading="lazy" src="https://nestjs.com/img/logo-small.svg" width="60" alt="NestJS" title="NestJS" />
+    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="60" alt="React" title="React" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="60" alt="TypeScript" title="TypeScript" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="60" alt="MongoDB" title="MongoDB" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="60" alt="Python" title="Python" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="60" alt="FastAPI" title="FastAPI" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="60" alt="Redis" title="Redis" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="60" alt="Nginx" title="Nginx" />
+    <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="60" alt="Docker" title="Docker" />
+    <img loading="lazy" src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="60" alt="TailwindCSS" title="Tailwind CSS" />
+    <img loading="lazy" src="https://raw.githubusercontent.com/TanStack/query/main/media/logo.svg" width="60" alt="TanStack Query" title="TanStack Query" />
+    <img loading="lazy" src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="60" alt="shadcn UI" title="shadcn/ui" />
+    <img loading="lazy" src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="60" alt="React Hook Form" title="React Hook Form" />
+    <img loading="lazy" src="https://raw.githubusercontent.com/colinhacks/zod/master/logo.svg" width="60" alt="Zod" title="Zod" />
   </p>
 </div>
 
@@ -38,16 +38,16 @@
   
   <p>
     <a href="https://github.com/yourusername/nest-starter/actions/workflows/ci.yml">
-      <img src="https://img.shields.io/github/workflow/status/yourusername/nest-starter/CI/main?label=Build&logo=github" alt="CI Status" />
+      <img loading="lazy" src="https://img.shields.io/github/workflow/status/yourusername/nest-starter/CI/main?label=Build&logo=github" alt="CI Status" />
     </a>
     <a href="https://codecov.io/gh/yourusername/nest-starter">
-      <img src="https://img.shields.io/codecov/c/github/yourusername/nest-starter?logo=codecov" alt="Code Coverage" />
+      <img loading="lazy" src="https://img.shields.io/codecov/c/github/yourusername/nest-starter?logo=codecov" alt="Code Coverage" />
     </a>
     <a href="https://github.com/yourusername/nest-starter/issues">
-      <img src="https://img.shields.io/github/issues/yourusername/nest-starter?logo=github" alt="Open Issues" />
+      <img loading="lazy" src="https://img.shields.io/github/issues/yourusername/nest-starter?logo=github" alt="Open Issues" />
     </a>
     <a href="https://discord.gg/your-invite">
-      <img src="https://img.shields.io/discord/your-discord-id?label=Discord&logo=discord" alt="Discord" />
+      <img loading="lazy" src="https://img.shields.io/discord/your-discord-id?label=Discord&logo=discord" alt="Discord" />
     </a>
   </p>
 </div>
@@ -187,14 +187,14 @@ Visit `http://localhost:3000` to see the application in action!
 ## 🎨 UI Gallery
 
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Modern Kanban Board UI" />
-  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Task Scheduler UI" />
-  <img src="https://undraw.co/api/illustrations/undraw_team_collaboration_re_ow29.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Team Collaboration Illustration" />
-  <img src="https://undraw.co/api/illustrations/undraw_artificial_intelligence_re_enpp.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="AI Assistant Illustration" />
-  <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Analytics Dashboard UI" />
-  <img src="https://undraw.co/api/illustrations/undraw_notify_re_65on.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Notifications Center Illustration" />
-  <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Settings UI" />
-  <img src="https://undraw.co/api/illustrations/undraw_project_completed_re_jr7u.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Project Templates Illustration" />
+  <img loading="lazy" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Modern Kanban Board UI" />
+  <img loading="lazy" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Task Scheduler UI" />
+  <img loading="lazy" src="https://undraw.co/api/illustrations/undraw_team_collaboration_re_ow29.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Team Collaboration Illustration" />
+  <img loading="lazy" src="https://undraw.co/api/illustrations/undraw_artificial_intelligence_re_enpp.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="AI Assistant Illustration" />
+  <img loading="lazy" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Analytics Dashboard UI" />
+  <img loading="lazy" src="https://undraw.co/api/illustrations/undraw_notify_re_65on.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Notifications Center Illustration" />
+  <img loading="lazy" src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Settings UI" />
+  <img loading="lazy" src="https://undraw.co/api/illustrations/undraw_project_completed_re_jr7u.svg" width="340" style="border:2px solid #e5e7eb; border-radius:12px; box-shadow:0 2px 8px #0002; margin:8px;" alt="Project Templates Illustration" />
   <br/>
   <i>Gallery: Kanban Board, Task Scheduler, Team Collaboration, AI Assistant, Analytics, Notifications, Settings, Project Templates</i>
 </p>
@@ -328,21 +328,21 @@ GET /notification/status/:status
 <!-- Responsive feature cards: 5 per row, will wrap on mobile -->
 <table>
   <tr>
-    <td align="center"><img src="https://nestjs.com/img/logo-small.svg" width="32"/><br/><b>NestJS Backend</b></td>
-    <td align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="32"/><br/><b>React Frontend</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="32"/><br/><b>MongoDB/Mongoose</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="32"/><br/><b>FastAPI Analytics</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="32"/><br/><b>Redis Cache</b></td>
+    <td align="center"><img loading="lazy" src="https://nestjs.com/img/logo-small.svg" width="32"/><br/><b>NestJS Backend</b></td>
+    <td align="center"><img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="32"/><br/><b>React Frontend</b></td>
+    <td align="center"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="32"/><br/><b>MongoDB/Mongoose</b></td>
+    <td align="center"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="32"/><br/><b>FastAPI Analytics</b></td>
+    <td align="center"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="32"/><br/><b>Redis Cache</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="32"/><br/><b>Nginx Proxy</b></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="32"/><br/><b>TailwindCSS</b></td>
-    <td align="center"><img src="https://ragavkumarv.com/services/tanstack-query-course" width="32"/><br/><b>TanStack Query</b></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="32"/><br/><b>shadcn UI</b></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="32"/><br/><b>React Hook Form</b></td>
+    <td align="center"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="32"/><br/><b>Nginx Proxy</b></td>
+    <td align="center"><img loading="lazy" src="https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg" width="32"/><br/><b>TailwindCSS</b></td>
+    <td align="center"><img loading="lazy" src="https://ragavkumarv.com/services/tanstack-query-course" width="32"/><br/><b>TanStack Query</b></td>
+    <td align="center"><img loading="lazy" src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/favicon.ico" width="32"/><br/><b>shadcn UI</b></td>
+    <td align="center"><img loading="lazy" src="https://raw.githubusercontent.com/react-hook-form/react-hook-form/master/docs/logo.png" width="32"/><br/><b>React Hook Form</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="https://raw.githubusercontent.com/colinhacks/zod/master/logo.svg" width="32"/><br/><b>Zod Validation</b></td>
+    <td align="center"><img loading="lazy" src="https://raw.githubusercontent.com/colinhacks/zod/master/logo.svg" width="32"/><br/><b>Zod Validation</b></td>
     <td colspan="4"></td>
   </tr>
 </table>

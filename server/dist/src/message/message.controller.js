@@ -29,13 +29,13 @@ let MessageController = class MessageController {
         return this.messageService.findAll();
     }
     findOne(id) {
-        return this.messageService.findOne(+id);
+        return this.messageService.findOne(id);
     }
     update(id, updateMessageDto) {
-        return this.messageService.update(+id, updateMessageDto);
+        return this.messageService.update(id, updateMessageDto);
     }
     remove(id) {
-        return this.messageService.remove(+id);
+        return this.messageService.remove(id);
     }
 };
 exports.MessageController = MessageController;

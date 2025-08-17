@@ -13,7 +13,7 @@ export declare class TaskController {
     }> & {
         __v: number;
     }>;
-    findAll(req: AuthenticatedRequest, page?: string, limit?: string, status?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', search?: string): Promise<{}>;
+    findAll(req: AuthenticatedRequest, page?: number): Promise<{}>;
     findOverdue(req: AuthenticatedRequest): Promise<(import("mongoose").Document<unknown, {}, import("./entities/task.entity").Task, {}> & import("./entities/task.entity").Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {

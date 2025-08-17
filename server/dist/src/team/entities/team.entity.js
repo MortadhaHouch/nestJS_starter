@@ -13,8 +13,11 @@ exports.TeamSchema = exports.Team = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let Team = class Team {
+    _id;
     creator;
-    workspace;
+    name;
+    description;
+    workspaces;
     members;
     discussions;
 };
@@ -24,15 +27,23 @@ __decorate([
     __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
 ], Team.prototype, "creator", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "Workspace", required: true }),
-    __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
-], Team.prototype, "workspace", void 0);
+    (0, mongoose_1.Prop)({ type: String, required: true }),
+    __metadata("design:type", String)
+], Team.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User", required: true }),
+    (0, mongoose_1.Prop)({ type: String, required: true }),
+    __metadata("design:type", String)
+], Team.prototype, "description", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Workspace" }], required: true }),
+    __metadata("design:type", Array)
+], Team.prototype, "workspaces", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "User" }], required: true }),
     __metadata("design:type", Array)
 ], Team.prototype, "members", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "Discussion", required: true }),
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Discussion" }], required: true }),
     __metadata("design:type", Array)
 ], Team.prototype, "discussions", void 0);
 exports.Team = Team = __decorate([

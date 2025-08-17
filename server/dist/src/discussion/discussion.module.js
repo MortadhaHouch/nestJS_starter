@@ -24,6 +24,7 @@ exports.DiscussionModule = DiscussionModule = __decorate([
                 { name: 'Discussion', schema: discussion_entity_1.DiscussionSchema },
             ]),
         ],
+        exports: [discussion_service_1.DiscussionService],
     })
 ], DiscussionModule);
 //# sourceMappingURL=discussion.module.js.map

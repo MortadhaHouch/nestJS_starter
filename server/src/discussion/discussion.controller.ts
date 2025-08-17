@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DiscussionService } from './discussion.service';
 import { CreateDiscussionDto } from './dto/create-discussion.dto';
 import { UpdateDiscussionDto } from './dto/update-discussion.dto';
@@ -19,16 +28,16 @@ export class DiscussionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.discussionService.findOne(+id);
+    return this.discussionService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDiscussionDto: UpdateDiscussionDto) {
-    return this.discussionService.update(+id, updateDiscussionDto);
+    return this.discussionService.update(id, updateDiscussionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.discussionService.remove(+id);
+    return this.discussionService.remove(id);
   }
 }

@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   providers: [NoteService],
   imports:[
     MongooseModule.forFeature([{ name: 'Note', schema: NoteSchema }])
-  ]
+  ],
+  exports:[NoteService]
 })
 export class NoteModule {}

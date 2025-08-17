@@ -29,20 +29,11 @@ let TaskController = class TaskController {
     create(createTaskDto, req) {
         const taskData = {
             ...createTaskDto,
-            userId: req.user._id
+            creator: req.user._id
         };
         return this.taskService.create(taskData);
     }
-    async findAll(req, page, limit, status, sortBy, sortOrder, search) {
-        const options = {
-            page: page ? parseInt(page) : 1,
-            limit: limit ? parseInt(limit) : 10,
-            status: status,
-            userId: req.user._id,
-            sortBy,
-            sortOrder,
-            search
-        };
+    async findAll(req, page) {
         const cacheKey = `${req.user.firstName}_${req.user.lastName}_all_tasks`;
         const cachedTasks = await this.cacheManager.get(cacheKey);
         if (cachedTasks) {
@@ -50,7 +41,7 @@ let TaskController = class TaskController {
             return cachedTasks;
         }
         console.log("cache miss");
-        const tasks = await this.taskService.findAll(options);
+        const tasks = await this.taskService.findAll(req.user._id, page);
         await this.cacheManager.set(cacheKey, tasks);
         return tasks;
     }
@@ -88,8 +79,8 @@ let TaskController = class TaskController {
     }
     async remove(req, id) {
         const promises = await Promise.allSettled([
-            await this.taskService.remove(req.user._id, id),
-            await this.cacheManager.del(`${req.user.firstName}_${req.user.lastName}_${id}`)
+            this.taskService.remove(req.user._id, id),
+            this.cacheManager.del(`${req.user.firstName}_${req.user.lastName}_${id}`)
         ]);
         if (promises.every((p) => p.status == "fulfilled")) {
             return {
@@ -116,13 +107,8 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Query)("page")),
-    __param(2, (0, common_1.Query)("limit")),
-    __param(3, (0, common_1.Query)("status")),
-    __param(4, (0, common_1.Query)("sortBy")),
-    __param(5, (0, common_1.Query)("sortOrder")),
-    __param(6, (0, common_1.Query)("search")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String, String, String, String, String]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "findAll", null);
 __decorate([

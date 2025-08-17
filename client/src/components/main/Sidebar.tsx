@@ -74,15 +74,16 @@ const items = [
 ]
 
 export function Sidebar() {
+  const userName = `${localStorage.getItem("firstName")||""} ${localStorage.getItem("lastName")||""}`
   return (
     <SidebarRoot className="fixed top-0 left-0 z-40 h-screen bg-gray-900">
-      <SidebarTrigger className="absolute -right-5 top-20 z-10 p-2 rounded-md shadow-md border-1"/>
-      <SidebarContent className="flex flex-col justify-center items-center p-2">
-        <SidebarHeader className="flex flex-col gap-2 justify-center items-center">
+      <SidebarTrigger className="absolute z-10 p-2 rounded-md shadow-md -right-5 top-20 border-1"/>
+      <SidebarContent className="flex flex-col items-center justify-center p-2">
+        <SidebarHeader className="flex flex-col items-center justify-center gap-2">
           <div className="p-2 text-xl font-bold text-white bg-purple-800 rounded-full">
-            MH
+            {userName.split(" ")[0][0].toUpperCase()}{userName.split(" ")[1][0].toUpperCase()}
           </div>
-          <h2>Mortadha Houch</h2>
+          <h2>{userName}</h2>
         </SidebarHeader>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -105,7 +106,7 @@ export function Sidebar() {
         </SidebarGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex flex-row gap-2 items-center w-full">
+            <div className="flex flex-row items-center w-full gap-2">
               <User2 /> Account info
               <ChevronUp className="ml-auto" />
             </div>

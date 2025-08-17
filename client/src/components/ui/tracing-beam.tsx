@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import {
   motion,
@@ -48,7 +47,7 @@ export const TracingBeam = ({
   return (
     <motion.div
       ref={ref}
-      className={cn("relative mx-auto w-full max-w-4xl h-full", className)}
+      className={cn("relative mx-auto h-full w-full", className)}
     >
       <div className="absolute top-3 -left-4 md:-left-20">
         <motion.div
@@ -62,7 +61,7 @@ export const TracingBeam = ({
                 ? "none"
                 : "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
-          className="border-netural-200 ml-[27px] flex h-4 w-4 items-center justify-center rounded-full border shadow-sm"
+          className="border-neutral-200 ml-[27px] flex h-4 w-4 items-center justify-center rounded-full border shadow-sm"
         >
           <motion.div
             transition={{
@@ -73,7 +72,7 @@ export const TracingBeam = ({
               backgroundColor: scrollYProgress.get() > 0 ? "white" : "#10b981",
               borderColor: scrollYProgress.get() > 0 ? "white" : "#059669",
             }}
-            className="w-2 h-2 bg-white rounded-full border border-neutral-300"
+            className="w-2 h-2 bg-white border rounded-full border-neutral-300"
           />
         </motion.div>
         <svg

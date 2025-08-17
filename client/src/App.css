@@ -113,9 +113,9 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.541 0.281 293.009);
   /* Spotlight theme variables for dark mode */
-  --spotlight-primary: hsla(210, 100%, 85%, 0.12);
-  --spotlight-secondary: hsla(210, 100%, 75%, 0.04);
-  --spotlight-tertiary: hsla(210, 100%, 85%, 0.06);
+  --spotlight-primary: hsla(210, 100%, 55%, 0.18);   /* deeper blue with moderate opacity */
+  --spotlight-secondary: hsla(210, 100%, 35%, 0.08); /* very dark blue for subtle fading */
+  --spotlight-tertiary: hsla(210, 100%, 45%, 0.12);  /* in between, used for glowy accents */
 }
 
 
@@ -163,4 +163,21 @@
   border-radius: 16px !important;
   justify-content: center !important;
   align-items: center !important;
+}
+@theme inline {
+  --animate-meteor-effect: meteor 5s linear infinite;
+  
+  @keyframes meteor {
+    0% {
+      transform: rotate(215deg) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(215deg) translateX(-500px);
+      opacity: 0;
+    }
+  }
 }

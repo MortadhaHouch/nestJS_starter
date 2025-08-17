@@ -1,0 +1,125 @@
+erDiagram
+    %% USER ||--o{ TASK : creates
+    %% USER ||--o{ WORKSPACE : creates
+    %% USER ||--o{ TEAM : creates
+    %% USER ||--o{ BLOG : creates
+    %% USER ||--o{ COMMENT : writes
+    %% USER ||--o{ NOTE : creates
+    %% USER ||--o{ MESSAGE : sends/receives
+    %% USER ||--o{ FRIEND_REQUEST : sends/receives
+    %% USER ||--o{ NOTIFICATION : receives
+    
+    USER {
+        ObjectId _id
+        string firstName
+        string lastName
+        string email
+        string password
+        string avatar
+        string[] roles
+        string[] skills
+        string bio
+        string location
+        string[] socialMediaLinks
+        string website
+        Date birthDate
+        number phoneNumber
+    }
+    
+    TASK ||--o{ USER : assigned_to
+    TASK {
+        ObjectId _id
+        string title
+        string description
+        string status
+        Date overdue
+        ObjectId creator
+        string priority
+        ObjectId[] assignees
+        string[] comments
+        string[] attachments
+        object[] checklist
+        string color
+        string notes
+    }
+    
+    WORKSPACE ||--o{ TASK : contains
+    WORKSPACE ||--o{ USER : has_members
+    WORKSPACE {
+        ObjectId _id
+        string title
+        string description
+        ObjectId creator
+        ObjectId[] members
+        ObjectId[] tasks
+        string status
+        string[] tags
+    }
+    
+    TEAM ||--o{ WORKSPACE : contains
+    TEAM ||--o{ USER : has_members
+    TEAM ||--o{ DISCUSSION : contains
+    TEAM {
+        ObjectId _id
+        string name
+        string description
+        ObjectId creator
+        ObjectId[] workspaces
+        ObjectId[] members
+        ObjectId[] discussions
+    }
+    
+    BLOG ||--o{ COMMENT : has
+    BLOG {
+        ObjectId _id
+        string title
+        string content
+        ObjectId creator
+        string[] tags
+        ObjectId[] comments
+        ObjectId[] likers
+        ObjectId[] dislikers
+        number views
+        ObjectId[] bookmarks
+        boolean isPinned
+    }
+    
+    COMMENT {
+        ObjectId _id
+        ObjectId blogId
+        string content
+        ObjectId creatorId
+    }
+    
+    NOTE {
+        ObjectId _id
+        string title
+        string content
+        ObjectId creator
+    }
+    
+    MESSAGE {
+        ObjectId _id
+        ObjectId sender
+        ObjectId receiver
+        string message
+    }
+    
+    FRIEND_REQUEST {
+        ObjectId _id
+        ObjectId sender
+        ObjectId receiver
+        string status
+    }
+    
+    NOTIFICATION {
+        ObjectId _id
+        string content
+        string type
+    }
+    
+    DISCUSSION {
+        ObjectId _id
+        ObjectId[] members
+        ObjectId[] messages
+    }

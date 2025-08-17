@@ -11,6 +11,9 @@ import {
   Patch,
   Get,
   Inject,
+  Param,
+  Query,
+  NotFoundException,
 } from '@nestjs/common';
 import * as requestIp from 'request-ip';
 import { UserService } from './user.service';
@@ -26,6 +29,8 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { IsObjectIdPipe } from '@nestjs/mongoose';
+import {ObjectId} from "mongoose"
 @Controller('user')
 export class UserController {
   constructor(
@@ -34,13 +39,44 @@ export class UserController {
     @InjectQueue(ProcessName.GMAIL) private readonly notificationJob: Queue,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
-  @Get("data")
-  public async getData(@Req() req:AuthenticatedRequest){
+  @Get("find")
+  public async findUsers(
+    @Req() req:AuthenticatedRequest,
+    @Query("email") email?:string,
+    @Query("firstName")firstName?:string,
+    @Query("lastName")lastName?:string
+  ){
+    return this.userService.findUserByNameOrEmail(req.user._id,{email,firstName,lastName});
+  }
+  @Get("dashboard")
+  public async getDashboardData(@Req() req:AuthenticatedRequest){
     const statsSearchQuery = `user:${req.user.email}`;
     const stats = await this.cacheManager.get(statsSearchQuery);
     if(stats){
       return stats;
     }
+    const userStats = await this.userService.getUserProfile(req.user._id);
+    await this.cacheManager.set(statsSearchQuery,userStats);
+    return {
+      ...userStats,
+      teams:userStats.teams
+    }
+  }
+  @Get("profile/:id")
+  public async getProfile(@Param("id",IsObjectIdPipe) id:ObjectId){
+    return await this.userService.getUserProfile(id);
+  }
+  @Get("my-profile")
+  public async getMyProfile(@Req() req:AuthenticatedRequest){
+    const foundUser = await this.userService.getMyProfile(req.user._id);
+    return {
+      user:foundUser
+    }
+  }
+  @Get("friends")
+  public async getFriends(@Req() req:AuthenticatedRequest){
+    const userData = await this.userService.getFriends(req.user._id);
+    return userData?userData.friends:[];
   }
   @Post("login")
   public async login(@Body(ValidationPipe) user:LoginUserDto,@RealIP() ip: string){
@@ -60,17 +96,17 @@ export class UserController {
           validationCode:foundUser.validationCode
         })
         return {
-          message:"we have sent you a validation code to your email address please check your inbox",
+          success:"we have sent you a validation code to your email address please check your inbox",
         }
       }
       else{
         throw new UnauthorizedException({
-          message:"invalid password"
+          password_error:"invalid password"
         });
       }
     }else{
-      return new UnauthorizedException({
-        message:"user not found"
+      throw new NotFoundException({
+        email_error:"user not found"
       });
     }
   }
@@ -97,8 +133,11 @@ export class UserController {
           );
           foundUser.isLoggedIn = true;
           foundUser.validationCode = 0;
+          foundUser.otpTrialCount = 0;
+          foundUser.firstOPTTrial = new Date();
           await foundUser.save();
           return {
+            success:true,
             token,
             data:{
               email:foundUser.email,
@@ -116,15 +155,50 @@ export class UserController {
             content:`Dear ${foundUser.firstName} ${foundUser.lastName} , your login attempt has failed ,please try again or mark this action as spam`,
             year:new Date().getFullYear()
           })
-          return new UnauthorizedException({
-            message:"invalid code"
+          throw new UnauthorizedException({
+            code_error:"invalid code"
           });
         }
       }
     }
     else{
-      return new UnauthorizedException({
-        message:"user not found"
+      throw new UnauthorizedException({
+        email_error:"user not found"
+      });
+    }
+  }
+  @Post("resend-opt")
+  public async resendOpt(@Body(ValidationPipe) user:OPTCode,@RealIP() ip: string){
+    const foundUser = await this.userService.findUserByEmail(user.email);
+    if(foundUser){
+      if(foundUser.otpTrialCount < utils.maxOPTTrial){
+        const timeDiff = new Date().getTime() - foundUser.firstOPTTrial.getTime();
+        if(timeDiff > utils.verificationCodeValidity){
+          foundUser.otpTrialCount = 0;
+          await foundUser.save();
+          foundUser.validationCode = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
+          foundUser.latestLoginTrial = new Date();
+          foundUser.ip = ip;
+          await foundUser.save();
+          await this.notificationJob.add("login",{
+            email:foundUser.email,
+            firstName:foundUser.firstName,
+            lastName:foundUser.lastName,
+            validationCode:foundUser.validationCode
+          })
+          return {
+            success:true,
+            retry_message:"we have sent you a validation code to your email address please check your inbox",
+          }
+        }
+      }else{
+        throw new UnauthorizedException({
+          otp_trial_error:"max opt trial reached"
+        });
+      }
+    }else{
+      throw new UnauthorizedException({
+        email_error:"user not found"
       });
     }
   }
@@ -132,20 +206,19 @@ export class UserController {
   public async signup(@Body(ValidationPipe) user:SignupUserDto){
     const userByName = await this.userService.findUserByName({firstName:user.firstName,lastName:user.lastName});
     if(userByName){
-      throw new ConflictException({
-        message:"user with this name already exists",
-      });
+      throw new ConflictException("user with this name already exists");
     }
     const foundUser = await this.userService.findUserByEmail(user.email);
     if(foundUser){
-      throw new ConflictException({
-        message:"user with this email already exists",
-      });
+      throw new ConflictException("user with this email already exists");
     }
     const hashedPassword = await this.userService.hashPassword(user.password,10);
     const createdUser = await this.userService.create({...user,password:hashedPassword});
     const token = this.jwtService.sign(
-      {email:createdUser.email},
+      {
+        email:createdUser.email,
+        id:createdUser._id
+      },
       {
         secret:process.env.SECRET_KEY as string,
         expiresIn:"7d"
@@ -167,14 +240,21 @@ export class UserController {
         const hashedPassword = await this.userService.hashPassword(user.password,10);
         foundUser.password = hashedPassword
       }
+      await foundUser.save();
+      return {
+        success_message:"Profile updated successfully"
+      }
     }
+    throw new UnauthorizedException({
+      email_error:"user not found"
+    })
   }
   @Post("logout")
   public async logout(@Req() req: AuthenticatedRequest){
     const foundUser = await this.userService.findUserByEmail(req.user.email);
     if(!foundUser){
       throw new UnauthorizedException({
-        error_message:"user not found"
+        email_error:"user not found"
       });
     }
     foundUser.isLoggedIn = false;

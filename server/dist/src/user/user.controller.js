@@ -27,6 +27,7 @@ const update_user_dto_1 = require("./dto/update-user.dto");
 const bullmq_1 = require("@nestjs/bullmq");
 const bullmq_2 = require("bullmq");
 const cache_manager_1 = require("@nestjs/cache-manager");
+const mongoose_1 = require("@nestjs/mongoose");
 let UserController = class UserController {
     userService;
     jwtService;
@@ -38,12 +39,34 @@ let UserController = class UserController {
         this.notificationJob = notificationJob;
         this.cacheManager = cacheManager;
     }
-    async getData(req) {
+    async findUsers(req, email, firstName, lastName) {
+        return this.userService.findUserByNameOrEmail(req.user._id, { email, firstName, lastName });
+    }
+    async getDashboardData(req) {
         const statsSearchQuery = `user:${req.user.email}`;
         const stats = await this.cacheManager.get(statsSearchQuery);
         if (stats) {
             return stats;
         }
+        const userStats = await this.userService.getUserProfile(req.user._id);
+        await this.cacheManager.set(statsSearchQuery, userStats);
+        return {
+            ...userStats,
+            teams: userStats.teams
+        };
+    }
+    async getProfile(id) {
+        return await this.userService.getUserProfile(id);
+    }
+    async getMyProfile(req) {
+        const foundUser = await this.userService.getMyProfile(req.user._id);
+        return {
+            user: foundUser
+        };
+    }
+    async getFriends(req) {
+        const userData = await this.userService.getFriends(req.user._id);
+        return userData ? userData.friends : [];
     }
     async login(user, ip) {
         const foundUser = await this.userService.findUserByEmail(user.email);
@@ -62,18 +85,18 @@ let UserController = class UserController {
                     validationCode: foundUser.validationCode
                 });
                 return {
-                    message: "we have sent you a validation code to your email address please check your inbox",
+                    success: "we have sent you a validation code to your email address please check your inbox",
                 };
             }
             else {
                 throw new common_1.UnauthorizedException({
-                    message: "invalid password"
+                    password_error: "invalid password"
                 });
             }
         }
         else {
-            return new common_1.UnauthorizedException({
-                message: "user not found"
+            throw new common_1.NotFoundException({
+                email_error: "user not found"
             });
         }
     }
@@ -97,8 +120,11 @@ let UserController = class UserController {
                     });
                     foundUser.isLoggedIn = true;
                     foundUser.validationCode = 0;
+                    foundUser.otpTrialCount = 0;
+                    foundUser.firstOPTTrial = new Date();
                     await foundUser.save();
                     return {
+                        success: true,
                         token,
                         data: {
                             email: foundUser.email,
@@ -117,34 +143,69 @@ let UserController = class UserController {
                         content: `Dear ${foundUser.firstName} ${foundUser.lastName} , your login attempt has failed ,please try again or mark this action as spam`,
                         year: new Date().getFullYear()
                     });
-                    return new common_1.UnauthorizedException({
-                        message: "invalid code"
+                    throw new common_1.UnauthorizedException({
+                        code_error: "invalid code"
                     });
                 }
             }
         }
         else {
-            return new common_1.UnauthorizedException({
-                message: "user not found"
+            throw new common_1.UnauthorizedException({
+                email_error: "user not found"
+            });
+        }
+    }
+    async resendOpt(user, ip) {
+        const foundUser = await this.userService.findUserByEmail(user.email);
+        if (foundUser) {
+            if (foundUser.otpTrialCount < constants_1.utils.maxOPTTrial) {
+                const timeDiff = new Date().getTime() - foundUser.firstOPTTrial.getTime();
+                if (timeDiff > constants_1.utils.verificationCodeValidity) {
+                    foundUser.otpTrialCount = 0;
+                    await foundUser.save();
+                    foundUser.validationCode = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
+                    foundUser.latestLoginTrial = new Date();
+                    foundUser.ip = ip;
+                    await foundUser.save();
+                    await this.notificationJob.add("login", {
+                        email: foundUser.email,
+                        firstName: foundUser.firstName,
+                        lastName: foundUser.lastName,
+                        validationCode: foundUser.validationCode
+                    });
+                    return {
+                        success: true,
+                        retry_message: "we have sent you a validation code to your email address please check your inbox",
+                    };
+                }
+            }
+            else {
+                throw new common_1.UnauthorizedException({
+                    otp_trial_error: "max opt trial reached"
+                });
+            }
+        }
+        else {
+            throw new common_1.UnauthorizedException({
+                email_error: "user not found"
             });
         }
     }
     async signup(user) {
         const userByName = await this.userService.findUserByName({ firstName: user.firstName, lastName: user.lastName });
         if (userByName) {
-            throw new common_1.ConflictException({
-                message: "user with this name already exists",
-            });
+            throw new common_1.ConflictException("user with this name already exists");
         }
         const foundUser = await this.userService.findUserByEmail(user.email);
         if (foundUser) {
-            throw new common_1.ConflictException({
-                message: "user with this email already exists",
-            });
+            throw new common_1.ConflictException("user with this email already exists");
         }
         const hashedPassword = await this.userService.hashPassword(user.password, 10);
         const createdUser = await this.userService.create({ ...user, password: hashedPassword });
-        const token = this.jwtService.sign({ email: createdUser.email }, {
+        const token = this.jwtService.sign({
+            email: createdUser.email,
+            id: createdUser._id
+        }, {
             secret: process.env.SECRET_KEY,
             expiresIn: "7d"
         });
@@ -163,13 +224,20 @@ let UserController = class UserController {
                 const hashedPassword = await this.userService.hashPassword(user.password, 10);
                 foundUser.password = hashedPassword;
             }
+            await foundUser.save();
+            return {
+                success_message: "Profile updated successfully"
+            };
         }
+        throw new common_1.UnauthorizedException({
+            email_error: "user not found"
+        });
     }
     async logout(req) {
         const foundUser = await this.userService.findUserByEmail(req.user.email);
         if (!foundUser) {
             throw new common_1.UnauthorizedException({
-                error_message: "user not found"
+                email_error: "user not found"
             });
         }
         foundUser.isLoggedIn = false;
@@ -179,12 +247,43 @@ let UserController = class UserController {
 };
 exports.UserController = UserController;
 __decorate([
-    (0, common_1.Get)("data"),
+    (0, common_1.Get)("find"),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)("email")),
+    __param(2, (0, common_1.Query)("firstName")),
+    __param(3, (0, common_1.Query)("lastName")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, String, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findUsers", null);
+__decorate([
+    (0, common_1.Get)("dashboard"),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "getData", null);
+], UserController.prototype, "getDashboardData", null);
+__decorate([
+    (0, common_1.Get)("profile/:id"),
+    __param(0, (0, common_1.Param)("id", mongoose_1.IsObjectIdPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getProfile", null);
+__decorate([
+    (0, common_1.Get)("my-profile"),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getMyProfile", null);
+__decorate([
+    (0, common_1.Get)("friends"),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getFriends", null);
 __decorate([
     (0, common_1.Post)("login"),
     __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
@@ -200,6 +299,14 @@ __decorate([
     __metadata("design:paramtypes", [otp_user_dto_1.OPTCode]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "validate", null);
+__decorate([
+    (0, common_1.Post)("resend-opt"),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(1, (0, nestjs_real_ip_1.RealIP)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [otp_user_dto_1.OPTCode, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "resendOpt", null);
 __decorate([
     (0, common_1.Post)("signup"),
     __param(0, (0, common_1.Body)(common_1.ValidationPipe)),

@@ -12,7 +12,8 @@ import { NavLink } from "react-router-dom";
 import ModeToggle from "./mode-toggle";
 import { Home, LogInIcon, BookOpen, MessageCircle, LucideLayoutDashboard } from "lucide-react";
 import { useCookies } from "react-cookie";
-
+import Logo from "../../assets/logo.png"
+import { Button } from "../ui/button";
 const features = [
   {
     title: "Kanban Boards",
@@ -61,16 +62,19 @@ const features = [
 export default function Header() {
   const [cookies,,] = useCookies(["auth_token"]);
   return (
-    <header className="flex fixed top-0 left-0 z-50 flex-row justify-between items-center px-2 py-1 w-full backdrop-blur-3xl backdrop-opacity-60 sm:px-4 lg:px-6 lg:py-2">
-      <h1>
-        <NavLink to="/" className="text-lg font-bold leading-none transition-colors duration-300 md:text-1xl lg:text-2xl text-primary hover:text-primary/80">
-          TaskVortex
-        </NavLink>
-      </h1>
+    <header className="fixed top-0 left-0 z-50 flex flex-row items-center justify-between w-full px-2 py-1 backdrop-blur-3xl backdrop-opacity-60 sm:px-4 lg:px-6 lg:py-2">
+      <div className="flex items-center gap-2">
+        <img loading="lazy" src={Logo} alt="logo" className="w-12 h-12"/>
+        <h1>
+          <NavLink to="/" className="text-lg font-bold leading-none transition-colors duration-300 md:text-1xl lg:text-2xl text-primary hover:text-primary/80">
+            TaskVortex
+          </NavLink>
+        </h1>
+      </div>
       <NavigationMenu className="w-full">
-        <NavigationMenuList className="flex justify-between items-center px-4 mx-auto w-full max-w-7xl sm:px-6 lg:px-8">
+        <NavigationMenuList className="flex items-center justify-between w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="flex gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+            <NavigationMenuTrigger className="flex items-center gap-2 p-3 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
               <Home className="w-4 h-4" /> <span>Home</span>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -78,11 +82,11 @@ export default function Header() {
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
                     <NavLink
-                      className="flex flex-col justify-end p-6 w-full h-full no-underline rounded-xl transition-all duration-300 select-none group glass hover:scale-105 hover:shadow-lg outline-hidden focus:shadow-md"
+                      className="flex flex-col justify-end w-full h-full p-6 no-underline transition-all duration-300 select-none rounded-xl group glass hover:scale-105 hover:shadow-lg outline-hidden focus:shadow-md"
                       to="/"
                     >
-                      <div className="flex gap-3 items-center mb-4">
-                        <div className="p-3 rounded-xl transition-colors duration-300 bg-primary/10 group-hover:bg-primary/20">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 transition-colors duration-300 rounded-xl bg-primary/10 group-hover:bg-primary/20">
                           <Home className="w-6 h-6 text-primary" />
                         </div>
                         <div className="text-lg font-medium transition-colors duration-300 group-hover:text-primary">TaskVortex</div>
@@ -107,7 +111,7 @@ export default function Header() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="flex gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+            <NavigationMenuTrigger className="flex items-center gap-2 p-3 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
               <FaMagic className="w-4 h-4" /> <span>Features</span>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -123,14 +127,14 @@ export default function Header() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <NavLink to="/about" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+              <NavLink to="/about" className="flex flex-row items-center gap-2 p-2 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
                 <FaInfo className="w-4 h-4" /> <span>About</span>
               </NavLink>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="flex gap-2 items-center p-3 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+            <NavigationMenuTrigger className="flex items-center gap-2 p-3 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
               <FaUsers className="w-4 h-4" /> <span>Resources</span>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -145,7 +149,7 @@ export default function Header() {
           {
             cookies.auth_token && (
               <NavigationMenuItem>
-                <NavigationMenuLink href="/dashboard" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                <NavigationMenuLink href="/dashboard" className="flex flex-row items-center gap-2 p-2 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
                   <LucideLayoutDashboard className="w-4 h-4" /> <span>Dashboard</span>
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -156,21 +160,21 @@ export default function Header() {
             !cookies.auth_token ? (
               <>
                 <NavigationMenuItem>
-                  <NavigationMenuLink href="/login" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                  <NavigationMenuLink href="/login" className="flex flex-row items-center gap-2 p-2 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
                     <IoMdLogIn className="w-4 h-4" /> <span>Login</span>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/signup" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
+                    <NavigationMenuLink href="/signup" className="flex flex-row items-center gap-2 p-2 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
                       <LogInIcon className="w-4 h-4" /> <span>Signup</span>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
               </>
             ) : (
               <NavigationMenuItem>
-                <NavigationMenuLink href="/login" className="flex flex-row gap-2 items-center p-2 font-medium rounded-xl transition-all duration-300 glass hover:scale-105 hover:shadow-lg">
-                  <IoMdLogIn className="w-4 h-4" /> <span>Login</span>
-                </NavigationMenuLink>
+                <Button className="flex flex-row items-center gap-2 p-2 font-medium transition-all duration-300 rounded-xl glass hover:scale-105 hover:shadow-lg">
+                  <IoMdLogIn className="w-4 h-4" /> <span>Logout</span>
+                </Button>
               </NavigationMenuItem>
             )
           }
@@ -194,10 +198,10 @@ function ListItem({
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <NavLink to={to} className="block p-4 rounded-xl transition-all duration-300 group glass hover:scale-105 hover:shadow-lg hover:bg-white/20 dark:hover:bg-black/20">
-          <div className="flex gap-3 items-start">
+        <NavLink to={to} className="block p-4 transition-all duration-300 rounded-xl group glass hover:scale-105 hover:shadow-lg hover:bg-white/20 dark:hover:bg-black/20">
+          <div className="flex items-start gap-3">
             {Icon && (
-              <div className="flex-shrink-0 p-2 rounded-lg transition-colors duration-300 bg-primary/10 group-hover:bg-primary/20">
+              <div className="flex-shrink-0 p-2 transition-colors duration-300 rounded-lg bg-primary/10 group-hover:bg-primary/20">
                 <Icon className="w-4 h-4 text-primary" />
               </div>
             )}

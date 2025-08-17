@@ -5,7 +5,6 @@ import {Schema as MongooseSchema} from "mongoose"
 import { NotificationType } from "utils/types";
 @Schema({timestamps:true})
 export class Notification {
-    @Prop({type: MongooseSchema.Types.ObjectId, required: true})
     _id: MongooseSchema.Types.ObjectId;
     @Prop({type: String, required: true})
     content:string

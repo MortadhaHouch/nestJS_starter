@@ -23,6 +23,7 @@ let Blog = class Blog {
     dislikers;
     views;
     bookmarks;
+    isPinned;
 };
 exports.Blog = Blog;
 __decorate([
@@ -61,6 +62,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "User" }], required: false, default: [] }),
     __metadata("design:type", Array)
 ], Blog.prototype, "bookmarks", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Boolean, required: false, default: false }),
+    __metadata("design:type", Boolean)
+], Blog.prototype, "isPinned", void 0);
 exports.Blog = Blog = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Blog);

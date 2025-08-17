@@ -20,6 +20,12 @@ __decorate([
     (0, class_validator_1.IsInt)({
         message: 'code must be a number',
     }),
+    (0, class_validator_1.Min)(1000, {
+        message: "minimum acceptable value is 1000"
+    }),
+    (0, class_validator_1.Max)(9999, {
+        message: "maximum acceptable value is 9999"
+    }),
     __metadata("design:type", Number)
 ], OPTCode.prototype, "code", void 0);
 __decorate([

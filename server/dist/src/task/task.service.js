@@ -20,70 +20,48 @@ const task_entity_1 = require("./entities/task.entity");
 const types_1 = require("../../utils/types");
 let TaskService = class TaskService {
     taskModel;
+    taskFields = {
+        title: 1,
+        description: 1,
+        status: 1,
+        priority: 1,
+        dueDate: 1,
+        creator: 1,
+        createdAt: 1,
+        updatedAt: 1,
+    };
     constructor(taskModel) {
         this.taskModel = taskModel;
     }
     create(createTaskDto) {
         return this.taskModel.create(createTaskDto);
     }
-    async findAll(options = {}) {
-        try {
-            const { page = 1, limit = 10, status, userId, sortBy = 'createdAt', sortOrder = 'desc', search } = options;
-            if (page < 1 || limit < 1 || limit > 100) {
-                throw new common_1.BadRequestException('Invalid pagination parameters');
-            }
-            const query = {};
-            query.userId = userId;
-            if (status) {
-                query.status = status;
-            }
-            if (search) {
-                query.$or = [
-                    { title: { $regex: search, $options: 'i' } },
-                    { description: { $regex: search, $options: 'i' } }
-                ];
-            }
-            const sort = {};
-            sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-            const skip = (page - 1) * limit;
-            const [tasks, total] = await Promise.all([
-                this.taskModel
-                    .find(query)
-                    .sort(sort)
-                    .skip(skip)
-                    .limit(limit)
-                    .populate('userId', 'firstName lastName email')
-                    .exec(),
-                this.taskModel.countDocuments(query)
+    async findAll(id, page) {
+        if (page) {
+            const [tasks, count] = await Promise.all([
+                this.taskModel.find({ creator: id }).populate("creator", "firstName lastName email _id").populate("assignees", "firstName lastName email _id").select(this.taskFields).skip(page ? (page - 1) * 10 : 0).limit(10),
+                this.taskModel.countDocuments({ creator: id })
             ]);
             return {
                 tasks,
-                pagination: {
-                    page,
-                    limit,
-                    total,
-                    totalPages: Math.ceil(total / limit),
-                    hasNext: page < Math.ceil(total / limit),
-                    hasPrev: page > 1
-                }
+                count,
+                page: isNaN(Number(page)) ? 1 : Number(page)
             };
         }
-        catch (error) {
-            throw new common_1.BadRequestException(`Failed to fetch tasks: ${error.message}`);
-        }
+        return this.taskModel.find({ creator: id }).populate("creator", "firstName lastName email _id").populate("assignees", "firstName lastName email _id").select(this.taskFields);
     }
-    async getUserTasks(userId, ids) {
+    async getUserTasks(creator, ids) {
         const taskSearchP = ids.map((id) => this.taskModel.findOne({
             _id: id,
-            userId
+            creator
         }));
         const tasks = await Promise.all(taskSearchP);
         return tasks.flat();
     }
-    async getTasksByDateRange(userId, createdAt, dateRange) {
+    async getTasksByDateRange(creator, createdAt, dateRange) {
         if (createdAt) {
             const tasks = await this.taskModel.aggregate([
-                { $match: { createdAt: { $gte: createdAt }, userId } },
+                { $match: { createdAt: { $gte: createdAt }, creator } },
                 { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
             ]);
             return tasks;
@@ -97,23 +75,23 @@ let TaskService = class TaskService {
                 dateQuery.$lte = dateRange.to;
             }
             const tasks = await this.taskModel.aggregate([
-                { $match: { createdAt: dateQuery, userId } },
+                { $match: { createdAt: dateQuery, creator } },
                 { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
             ]);
             return tasks;
         }
     }
-    async findOverdueTasks(userId) {
+    async findOverdueTasks(creator) {
         const query = {
             overdue: { $lt: new Date() },
             status: { $ne: types_1.TaskStatus.DONE },
-            userId
+            creator
         };
-        return this.taskModel.find(query).populate('userId', 'firstName lastName email');
+        return this.taskModel.find(query).populate('creator', 'firstName lastName email').populate("assignees", "firstName lastName email _id").select(this.taskFields);
     }
-    async getTaskStats(userId) {
+    async getTaskStats(creator) {
         const stats = await this.taskModel.aggregate([
-            { $match: { userId } },
+            { $match: { creator } },
             {
                 $group: {
                     _id: '$status',
@@ -121,9 +99,9 @@ let TaskService = class TaskService {
                 }
             }
         ]);
-        const total = await this.taskModel.countDocuments({ userId });
+        const total = await this.taskModel.countDocuments({ creator });
         const overdue = await this.taskModel.countDocuments({
-            userId,
+            creator,
             overdue: { $lt: new Date() },
             status: { $ne: types_1.TaskStatus.DONE }
         });
@@ -136,19 +114,19 @@ let TaskService = class TaskService {
             }, {})
         };
     }
-    findOne(userId, id) {
+    findOne(creator, id) {
         return this.taskModel.findOne({
             _id: id,
-            userId
+            creator
         });
     }
     update(id, updateTaskDto) {
         return this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
     }
-    async remove(userId, id) {
+    async remove(creator, id) {
         const deletedTask = await this.taskModel.deleteOne({
             _id: id,
-            userId
+            creator
         });
         if (deletedTask) {
             return {

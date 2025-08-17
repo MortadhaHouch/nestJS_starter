@@ -29,13 +29,13 @@ let DiscussionController = class DiscussionController {
         return this.discussionService.findAll();
     }
     findOne(id) {
-        return this.discussionService.findOne(+id);
+        return this.discussionService.findOne(id);
     }
     update(id, updateDiscussionDto) {
-        return this.discussionService.update(+id, updateDiscussionDto);
+        return this.discussionService.update(id, updateDiscussionDto);
     }
     remove(id) {
-        return this.discussionService.remove(+id);
+        return this.discussionService.remove(id);
     }
 };
 exports.DiscussionController = DiscussionController;

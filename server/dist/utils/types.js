@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = exports.ProcessName = exports.NotificationType = void 0;
+exports.RequestStatus = exports.WorkSpaceStatus = exports.TaskPriority = exports.Role = exports.TaskStatus = exports.ProfileAccessLevel = exports.ProcessName = exports.NotificationType = void 0;
 var TaskStatus;
 (function (TaskStatus) {
     TaskStatus["DONE"] = "DONE";
@@ -47,5 +47,12 @@ var ProcessName;
     ProcessName["SOCIAL_MEDIA"] = "SOCIAL_MEDIA";
     ProcessName["ALL"] = "ALL";
     ProcessName["GMAIL"] = "GMAIL";
+    ProcessName["TEAM"] = "TEAM";
 })(ProcessName || (exports.ProcessName = ProcessName = {}));
+var ProfileAccessLevel;
+(function (ProfileAccessLevel) {
+    ProfileAccessLevel["PUBLIC"] = "PUBLIC";
+    ProfileAccessLevel["PRIVATE"] = "PRIVATE";
+    ProfileAccessLevel["FRIENDS"] = "FRIENDS";
+})(ProfileAccessLevel || (exports.ProfileAccessLevel = ProfileAccessLevel = {}));
 //# sourceMappingURL=types.js.map

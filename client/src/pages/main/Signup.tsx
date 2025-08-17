@@ -7,9 +7,10 @@ import Img from "../../../src/assets/Sign-up.svg"
 import {motion} from "framer-motion"
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { fetchData } from "../../../utils/fetchData";
 export default function Signup() {
     const [isPasswordVisible,setIsPasswordVisible]=useState(false)
-    const [cookie,,] = useCookies(['auth_token'])
+    const [cookie,setCookie,,] = useCookies(['auth_token'])
     const navigate=useNavigate()
     useEffect(()=>{
         if(cookie.auth_token){
@@ -21,20 +22,44 @@ export default function Signup() {
         reset,
         formState: { errors,isLoading },
         handleSubmit,
+        setError,
+        clearErrors
     } = useForm();
     const handleSignup=async(v:FieldValues)=>{
         try {
-            console.log(v);
-            reset();
-        } catch (error) {
+            const request = await fetchData("/user/signup","POST","",{
+                firstName:v.firstName,
+                lastName:v.lastName,
+                email:v.email,
+                password:v.password
+            })
+            if(request.error){
+                setError("errors",{
+                    type:"manual",
+                    message:Array.isArray(request.message)?request.message.join(","):request.message
+                })
+            }
+            if(request.token){
+                localStorage.setItem("email",v.email)
+                localStorage.setItem("firstName",v.firstName)
+                localStorage.setItem("lastName",v.lastName)
+                setCookie("auth_token",request.token,{
+                    path:"/",
+                    maxAge:60*60*24*7
+                })
+                clearErrors("errors");
+                reset();
+                navigate("/")
+            }
+        } catch (error:any) {
             console.log(error);
         }
     }
   return (
-    <main className='flex flex-row flex-wrap gap-4 justify-center items-center w-full min-h-screen'>
+    <main className='flex flex-row flex-wrap items-center justify-center w-full min-h-screen gap-4'>
         <motion.img 
             src={Img} 
-            className="w-[clamp(300px, 45%, 500px)] object-cover aspect-square" 
+            className="w-[clamp(300px, 45%, 500px)] object-cover aspect-square"
             width={500} 
             height={500} 
             alt=""
@@ -161,6 +186,21 @@ export default function Signup() {
                     />
                     {
                         errors.password && <p className='text-red-500'>{errors.password.message?.toString()}</p>
+                    }
+                </div>
+                <div>
+                    {
+                        errors.errors?.message && (
+                            <div>
+                                {
+                                    errors.errors?.message.toString().split(",").map((e:string,idx:number)=>{
+                                        return (
+                                            <p className="text-red-500" key={idx}>{e}</p>
+                                        )
+                                    })
+                                }
+                            </div>
+                        )
                     }
                 </div>
                 <Button type='submit' className='w-full' variant="default" disabled={isLoading}>signup</Button>

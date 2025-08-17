@@ -13,5 +13,6 @@ import { DiscussionSchema } from './entities/discussion.entity';
       { name: 'Discussion', schema: DiscussionSchema },
     ]),
   ],
+  exports: [DiscussionService],
 })
 export class DiscussionModule {}

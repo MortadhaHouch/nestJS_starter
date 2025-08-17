@@ -4,7 +4,9 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const microservices_1 = require("@nestjs/microservices");
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const helmet_1 = require("helmet");
+const constants_1 = require("../utils/constants");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, {
         logger: new common_1.ConsoleLogger({
@@ -24,10 +26,18 @@ async function bootstrap() {
         },
     });
     await app.startAllMicroservices();
+    const config = new swagger_1.DocumentBuilder()
+        .setTitle("Task Vortex API")
+        .setDescription('Task Vortex backend API documented using swagger')
+        .setVersion('1.0')
+        .addTag('Task Vortex')
+        .build();
+    const documentFactory = () => swagger_1.SwaggerModule.createDocument(app, config);
+    swagger_1.SwaggerModule.setup('api', app, documentFactory);
     app.enableCors([
         {
-            origins: ['http://localhost:5173'],
-            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            origins: constants_1.utils.allowedOrigins,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
             enableCredentials: true,
         },
     ]);

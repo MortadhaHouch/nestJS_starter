@@ -1,7 +1,15 @@
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { ArrowRight, Code, FileText, Layers, Palette, Zap } from 'lucide-react';
- 
+import {
+  ArrowRight,
+  Users,
+  ClipboardList,
+  MessageSquare,
+  Clock,
+  PieChart,
+  BrainCog,
+} from 'lucide-react';
+
 interface BentoGridItemProps {
   title: string;
   description: string;
@@ -9,7 +17,7 @@ interface BentoGridItemProps {
   className?: string;
   size?: 'small' | 'medium' | 'large';
 }
- 
+
 const BentoGridItem = ({
   title,
   description,
@@ -17,33 +25,25 @@ const BentoGridItem = ({
   className,
   size = 'small',
 }: BentoGridItemProps) => {
- 
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-        transition: { type: 'spring', damping: 25 },
-      }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0, transition: { type: 'spring', damping: 25 } }}
       viewport={{ once: true }}
       className={cn(
-        'flex overflow-hidden relative flex-col justify-between px-6 pt-6 pb-10 h-full rounded-xl border shadow-md transition-all duration-500 cursor-pointer group border-primary/10 bg-background hover:border-primary/30',
+        'flex relative flex-col justify-between px-6 pt-6 pb-10 h-full rounded-xl border shadow-md transition-all duration-500 cursor-pointer group border-primary/10 bg-background hover:border-primary/30 overflow-hidden',
         className,
       )}
     >
-      <div className="absolute -right-1/2 top-0 z-0 size-full cursor-pointer bg-[linear-gradient(to_right,#3d16165e_1px,transparent_1px),linear-gradient(to_bottom,#3d16165e_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
- 
+      <div className="absolute -right-1/2 top-0 z-0 size-full bg-[linear-gradient(to_right,#3d16165e_1px,transparent_1px),linear-gradient(to_bottom,#3d16165e_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
       <div className="absolute bottom-3 right-1 scale-[6] text-primary/5 transition-all duration-700 group-hover:scale-[6.2] group-hover:text-primary/10">
         {icon}
       </div>
- 
+
       <div className="flex relative z-10 flex-col justify-between h-full">
         <div>
-          <div className="flex justify-center items-center mb-4 w-12 h-12 rounded-full shadow transition-all duration-500 bg-primary/10 text-primary shadow-primary/10 group-hover:bg-primary/20 group-hover:shadow-primary/20">
+          <div className="flex items-center justify-center mb-4 w-12 h-12 rounded-full shadow bg-primary/10 text-primary shadow-primary/10 group-hover:bg-primary/20 group-hover:shadow-primary/20">
             {icon}
           </div>
           <h3 className="mb-2 text-xl font-semibold tracking-tight">{title}</h3>
@@ -58,50 +58,54 @@ const BentoGridItem = ({
     </motion.div>
   );
 };
- 
-const items = [
+
+const items:{
+  title:string,
+  description:string,
+  icon:React.ReactNode,
+  size:"small"|'medium'|"large"
+}[] = [
   {
-    title: 'Developer Experience',
-    description:
-      'Built with developers in mind, making implementation a breeze.',
-    icon: <Code className="size-6" />,
-    size: 'large' as const,
+    title: 'Team Collaboration',
+    description: 'Seamless team workspaces with chat, tagging, and task assignment.',
+    icon: <Users className="size-6" />,
+    size: 'large',
   },
   {
-    title: 'Accessibility',
-    description:
-      'Built with a11y best practices to ensure your app is usable by everyone.',
-    icon: <Layers className="size-6" />,
-    size: 'small' as const,
+    title: 'Task Management',
+    description: 'Organize, prioritize, and track your tasks efficiently.',
+    icon: <ClipboardList className="size-6" />,
+    size: 'medium',
   },
   {
-    title: 'Responsive Design',
-    description: 'Create layouts that adapt to any screen size with ease.',
-    icon: <Layers className="size-6" />,
-    size: 'medium' as const,
+    title: 'Real-Time Chat',
+    description: 'Communicate instantly with built-in WebSocket messaging.',
+    icon: <MessageSquare className="size-6" />,
+    size: 'small',
   },
   {
-    title: 'Customizable',
-    description: "Tailor components to match your brand's unique style.",
-    icon: <Palette className="size-6" />,
-    size: 'medium' as const,
+    title: 'Time Tracking',
+    description: 'Monitor work hours and productivity with built-in timers.',
+    icon: <Clock className="size-6" />,
+    size: 'small',
   },
   {
-    title: 'Performance',
-    description: 'Optimized for speed and efficiency across all devices.',
-    icon: <Zap className="size-6" />,
-    size: 'small' as const,
+    title: 'Analytics & Reports',
+    description: 'Gain insights with visual dashboards and progress metrics.',
+    icon: <PieChart className="size-6" />,
+    size: 'medium',
   },
   {
-    title: 'Documentation',
-    description:
-      'Comprehensive guides and examples to help you get started quickly.',
-    icon: <FileText className="size-6" />,
-    size: 'large' as const,
+    title: 'AI Recommendations',
+    description: 'Smart task suggestions and summaries powered by AI.',
+    icon: <BrainCog className="size-6" />,
+    size: 'large',
   },
 ];
- 
-export default function BentoGrid() {
+
+export default function BentoGrid(
+
+) {
   const containerVariants = {
     hidden: {},
     visible: {
@@ -111,11 +115,24 @@ export default function BentoGrid() {
       },
     },
   };
- 
+
+  const getSizeClass = (size: "small"|"medium"|"large") => {
+    switch (size) {
+      case 'large':
+        return 'col-span-12 sm:col-span-6 md:col-span-6';
+      case 'medium':
+        return 'col-span-12 sm:col-span-6 md:col-span-3';
+      case 'small':
+        return 'col-span-12 sm:col-span-6 md:col-span-2';
+      default:
+        return 'col-span-12';
+    }
+  };
+
   return (
     <div className="px-4 py-12 mx-auto max-w-6xl">
       <motion.div
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-6"
+        className="grid grid-cols-12 gap-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -127,18 +144,10 @@ export default function BentoGrid() {
             description={item.description}
             icon={item.icon}
             size={item.size}
-            className={cn(
-              item.size === 'large'
-                ? 'col-span-4'
-                : item.size === 'medium'
-                  ? 'col-span-3'
-                  : 'col-span-2',
-              'h-full',
-            )}
+            className={cn(getSizeClass(item.size), 'h-full')}
           />
         ))}
       </motion.div>
     </div>
   );
 }
- 

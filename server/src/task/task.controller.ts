@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query, Inject, UseInterceptors, ParseDatePipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Req, Query, Inject } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { IsObjectIdPipe } from '@nestjs/mongoose';
-import { AuthenticatedRequest, TaskStatus } from 'utils/types';
+import { AuthenticatedRequest } from 'utils/types';
 import { ObjectId } from 'mongoose';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -19,7 +19,7 @@ export class TaskController {
   create(@Body(ValidationPipe) createTaskDto: CreateTaskDto, @Req() req: AuthenticatedRequest) {
     const taskData = {
       ...createTaskDto,
-      userId: (req.user as any)._id
+      creator: req.user._id
     };
     return this.taskService.create(taskData);
   }
@@ -27,22 +27,8 @@ export class TaskController {
   @Get()
   async findAll(
     @Req() req: AuthenticatedRequest,
-    @Query("page") page?: string,
-    @Query("limit") limit?: string,
-    @Query("status") status?: string,
-    @Query("sortBy") sortBy?: string,
-    @Query("sortOrder") sortOrder?: 'asc' | 'desc',
-    @Query("search") search?: string
+    @Query("page") page?: number,
   ) {
-    const options = {
-      page: page ? parseInt(page) : 1,
-      limit: limit ? parseInt(limit) : 10,
-      status: status as TaskStatus,
-      userId: (req.user as any)._id,
-      sortBy,
-      sortOrder,
-      search
-    };
     const cacheKey = `${req.user.firstName}_${req.user.lastName}_all_tasks`;
     const cachedTasks = await this.cacheManager.get(cacheKey);
     if(cachedTasks){
@@ -50,14 +36,14 @@ export class TaskController {
       return cachedTasks;
     }
     console.log("cache miss");
-    const tasks = await this.taskService.findAll(options);
+    const tasks = await this.taskService.findAll(req.user._id,page);
     await this.cacheManager.set(cacheKey,tasks);
     return tasks;
   }
 
   @Get('overdue')
   findOverdue(@Req() req: AuthenticatedRequest) {
-    return this.taskService.findOverdueTasks((req.user as any)._id);
+    return this.taskService.findOverdueTasks(req.user._id);
   }
 
   @Get('stats')
@@ -72,7 +58,7 @@ export class TaskController {
     if(cachedTasks){
       return cachedTasks;
     }
-    const tasks = await this.taskService.getTasksByDateRange((req.user as any)._id,createdAt,{from,to});
+    const tasks = await this.taskService.getTasksByDateRange(req.user._id,createdAt,{from,to});
     await this.cacheManager.set(cacheKey,tasks);
     return tasks;
   }
@@ -84,7 +70,7 @@ export class TaskController {
     if(foundTask){
       return foundTask;
     }
-    const task = await this.taskService.findOne((req.user as any)._id, id);
+    const task = await this.taskService.findOne(req.user._id, id);
     await this.cacheManager.set(cacheKey,task);
     return task;
   }
@@ -106,8 +92,8 @@ export class TaskController {
   @Delete(':id')
   async remove(@Req()req:AuthenticatedRequest, @Param('id',IsObjectIdPipe) id: ObjectId) {
     const promises = await Promise.allSettled([
-      await this.taskService.remove((req.user as any)._id,id),
-      await this.cacheManager.del(`${req.user.firstName}_${req.user.lastName}_${id as any}`)
+      this.taskService.remove(req.user._id,id),
+      this.cacheManager.del(`${req.user.firstName}_${req.user.lastName}_${id as any}`)
     ])
     if(promises.every((p)=>p.status == "fulfilled")){
       return {

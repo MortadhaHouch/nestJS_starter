@@ -18,7 +18,7 @@ export class Task {
     overdue:Date;
     
     @Prop({type: MongooseSchema.Types.ObjectId, ref: "User", required: true})
-    userId: MongooseSchema.Types.ObjectId;
+    creator: MongooseSchema.Types.ObjectId;
     @Prop({tags:[String],required:false})
     tags:string[]
     @Prop({default: TaskPriority.MEDIUM, enum: Object.keys(TaskPriority).map(k => k.toString()), type: String, required: true})
@@ -33,7 +33,7 @@ export class Task {
     checklist:CheckItem[]
     @Prop({type:String,required:false})
     color:string
-    @Prop({type:String,required:false})
-    notes:string
+    @Prop({type:[String],required:false})
+    notes:string[]
 }
 export const TaskSchema = SchemaFactory.createForClass(Task);

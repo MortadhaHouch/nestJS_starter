@@ -34,6 +34,9 @@ import Community from './pages/main/Community.tsx'
 import Blog from './pages/main/Blog.tsx'
 import BlogView from './pages/main/BlogView.tsx'
 import BlogOutlet from './pages/main/BlogOutlet.tsx'
+import Profile from './pages/main/Profile.tsx'
+import Team from './pages/dashboard/Team.tsx'
+import TeamsOutlet from './pages/dashboard/TeamsOutlet.tsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -49,18 +52,21 @@ const router = createBrowserRouter(
       </Route>
       <Route path='dashboard' element={<Dashboard />}>
         <Route index element={<Main/>}/>
+        <Route path='profile/:id' element={<Profile />} />
         <Route path='assistant' element={<AIAssistant/>}/>
         <Route path='calendar' element={<Calendar/>}/>
         <Route path='friends' element={<Friends/>}/>
         <Route path='history' element={<History/>}/>
         <Route path='inbox' element={<Inbox/>}/>
-        <Route path='main' element={<Main/>}/>
         <Route path='notes' element={<Notes/>}/>
         <Route path='notifications' element={<Notifications/>}/>
         <Route path='search' element={<Search/>}/>
         <Route path='settings' element={<Settings/>}/>
         <Route path='tasks' element={<Tasks/>}/>
-        <Route path='teams' element={<Teams/>}/>
+        <Route path='teams' element={<TeamsOutlet/>}>
+          <Route index element={<Teams/>}/>
+          <Route path=':id' element={<Team/>}/>
+        </Route>
         <Route path='workspaces' element={<Workspaces/>}>
           <Route index element={<KanbanBoard/>}/>
         </Route>
@@ -72,7 +78,14 @@ const router = createBrowserRouter(
     </Route>
   )
 )
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions:{
+    queries: {
+      staleTime: 10_000,  // 10s: data is considered fresh
+      gcTime: 60_000,  // 1min: data stays in cache even after unmount
+    },
+  }
+})
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">

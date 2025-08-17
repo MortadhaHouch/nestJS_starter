@@ -19,17 +19,17 @@ class SignupUserDto extends login_user_dto_1.LoginUserDto {
 exports.SignupUserDto = SignupUserDto;
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(6, {
+    (0, class_validator_1.MinLength)(3, {
         always: true,
-        message: "firstName should be at least 6 chars"
+        message: "firstName should be at least 3 chars"
     }),
     __metadata("design:type", String)
 ], SignupUserDto.prototype, "firstName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(6, {
+    (0, class_validator_1.MinLength)(3, {
         always: true,
-        message: "lastName should be at least 6 chars"
+        message: "lastName should be at least 3 chars"
     }),
     __metadata("design:type", String)
 ], SignupUserDto.prototype, "lastName", void 0);

@@ -17,28 +17,32 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const workspace_entity_1 = require("./entities/workspace.entity");
 const mongoose_2 = require("mongoose");
-const types_1 = require("../../utils/types");
 let WorkspaceService = class WorkspaceService {
     workspaceModel;
+    workspaceFields = {
+        name: 1,
+        description: 1,
+        status: 1,
+        creator: 1,
+        members: 1,
+        createdAt: 1,
+        updatedAt: 1,
+    };
     constructor(workspaceModel) {
         this.workspaceModel = workspaceModel;
     }
     create(createWorkspaceDto, id) {
         return this.workspaceModel.create({ ...createWorkspaceDto, creator: id });
     }
-    findAll(id, p, limit, search, sortOrder, sortParams, status) {
-        const searchConfig = {
-            $or: [
-                { title: { $regex: search || "", $options: 'i' } },
-                { description: { $regex: search || "", $options: 'i' } },
-                { status: status || types_1.WorkSpaceStatus.ACTIVE },
-            ],
-        };
+    findAll(id) {
         return this.workspaceModel.find({
-            creator: id,
-            ...searchConfig,
-            ...sortParams ? { $sort: { [sortParams]: (sortOrder === 'asc') ? 1 : -1 } } : {},
-        }).skip(p ? (p - 1) * (limit || 10) : 0).limit(limit || 10);
+            $or: [
+                { creator: id },
+                { members: {
+                        $in: [id]
+                    } },
+            ]
+        }).select(this.workspaceFields).populate("creator", "firstName lastName email _id").populate("members", "firstName lastName email _id");
     }
     findOne(id) {
         return this.workspaceModel.findById(id);
@@ -46,13 +50,13 @@ let WorkspaceService = class WorkspaceService {
     update(id, updateWorkspaceDto) {
         return this.workspaceModel.updateOne({ _id: id }, { $set: updateWorkspaceDto });
     }
-    findAccessible(id, userId) {
+    findAccessible(id, creator) {
         return this.workspaceModel.findOne({
             _id: id,
             $or: [
-                { creator: userId },
+                { creator: creator },
                 { members: {
-                        $in: [userId]
+                        $in: [creator]
                     } },
             ]
         });

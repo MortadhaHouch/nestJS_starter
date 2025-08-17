@@ -17,59 +17,78 @@ const common_1 = require("@nestjs/common");
 const comment_service_1 = require("./comment.service");
 const create_comment_dto_1 = require("./dto/create-comment.dto");
 const update_comment_dto_1 = require("./dto/update-comment.dto");
+const mongoose_1 = require("@nestjs/mongoose");
 let CommentController = class CommentController {
     commentService;
     constructor(commentService) {
         this.commentService = commentService;
     }
-    create(createCommentDto) {
-        return this.commentService.create(createCommentDto);
+    async create(id, createCommentDto, req) {
+        const createdComment = await this.commentService.create(id, req.user._id, createCommentDto);
+        return {
+            comment: createdComment,
+            ok: true,
+            creator: {
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                _id: req.user._id
+            }
+        };
     }
-    findAll() {
-        return this.commentService.findAll();
+    async findAll(id) {
+        const comments = await this.commentService.findAll(id);
+        return {
+            comments,
+            ok: true
+        };
     }
-    findOne(id) {
-        return this.commentService.findOne(+id);
-    }
-    update(id, updateCommentDto) {
-        return this.commentService.update(+id, updateCommentDto);
+    async update(id, updateCommentDto, req) {
+        const updatedComment = await this.commentService.update(id, updateCommentDto);
+        return {
+            comment: updatedComment,
+            ok: true,
+            creator: {
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                _id: req.user._id
+            }
+        };
     }
     remove(id) {
-        return this.commentService.remove(+id);
+        return this.commentService.remove(id);
     }
 };
 exports.CommentController = CommentController;
 __decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Post)(":id"),
+    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_comment_dto_1.CreateCommentDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, create_comment_dto_1.CreateCommentDto, Object]),
+    __metadata("design:returntype", Promise)
 ], CommentController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], CommentController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)(":id"),
+    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], CommentController.prototype, "findOne", null);
+    __metadata("design:returntype", Promise)
+], CommentController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
+    __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_comment_dto_1.UpdateCommentDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, update_comment_dto_1.UpdateCommentDto, Object]),
+    __metadata("design:returntype", Promise)
 ], CommentController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', mongoose_1.IsObjectIdPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)

@@ -19,9 +19,11 @@ const user_service_1 = require("../../user/user.service");
 let LoggerMiddlewareService = class LoggerMiddlewareService {
     userService;
     jwtService;
-    constructor(userService, jwtService) {
+    logger;
+    constructor(userService, jwtService, logger) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.logger = logger;
     }
     validateToken(token) {
         if (token.startsWith("Bearer ") && token.substring(7).length > 0) {
@@ -61,7 +63,9 @@ __decorate([
 ], LoggerMiddlewareService.prototype, "use", null);
 exports.LoggerMiddlewareService = LoggerMiddlewareService = __decorate([
     (0, common_1.Injectable)(),
+    __param(2, (0, common_1.Inject)("Logger")),
     __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        common_1.Logger])
 ], LoggerMiddlewareService);
 //# sourceMappingURL=logger-middleware.service.js.map

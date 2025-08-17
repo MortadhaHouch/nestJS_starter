@@ -60,8 +60,8 @@ export const HeroParallax = ({
       className="h-[300vh] w-full py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Cover 
-        title="Product Showcase"
-        description="Discover our range of innovative products that transform your workflow and productivity."
+        title="TaskVortex"
+        description="Discover a wide range of useful tools for task and project management with"
       />
       <motion.div
         style={{
@@ -106,11 +106,11 @@ export const HeroParallax = ({
 
 export const Header = ({title,description}:{title:string,description:string}) => {
   return (
-    <div className="relative top-0 left-0 px-4 py-20 mx-auto w-full max-w-7xl md:py-40">
+    <div className="relative top-0 left-0 w-full px-4 py-20 mx-auto max-w-7xl md:py-40">
       <h1 className="text-2xl font-bold md:text-7xl dark:text-white">
         {title}
       </h1>
-      <p className="mt-8 max-w-2xl text-base md:text-xl dark:text-neutral-200">
+      <p className="max-w-2xl mt-8 text-base md:text-xl dark:text-neutral-200">
         {description}
       </p>
     </div>
@@ -147,12 +147,12 @@ export const ProductCard = ({
           src={product.thumbnail}
           height="600"
           width="600"
-          className="object-cover object-left-top absolute inset-0 w-full h-full"
+          className="absolute inset-0 object-cover object-left-top w-full h-full"
           alt={product.title}
         />
       </a>
       <div className="absolute inset-0 w-full h-full bg-black opacity-0 pointer-events-none group-hover/product:opacity-80"></div>
-      <h2 className="absolute bottom-4 left-4 text-white opacity-0 group-hover/product:opacity-100">
+      <h2 className="absolute text-white opacity-0 bottom-4 left-4 group-hover/product:opacity-100">
         {product.title}
       </h2>
     </motion.div>

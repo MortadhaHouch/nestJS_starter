@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
@@ -18,33 +16,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { LoaderThree } from "../ui/loader"
 
-const frameworks = [
+export function Combobox(
   {
-    value: "next.js",
-    label: "Next.js",
-  },
+    options,
+    value, 
+    setValue,
+    isLoading,
+    isError
+  }: 
   {
-    value: "sveltekit",
-    label: "SvelteKit",
+    options: {
+      value: string,
+      label: string
+    }[], 
+      value: string, 
+      setValue: (v:string)=>void,
+      isLoading:boolean,
+      isError:boolean
   },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
-
-export function Combobox() {
+  
+) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,38 +47,63 @@ export function Combobox() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-full justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            ? options.find((option) => option.value === value)?.label
+            : "Select..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
-          <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
-            <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                  }}
-                >
-                  {framework.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
+      <PopoverContent className="w-full p-0">
+        <Command className="w-full">
+          <CommandInput 
+            placeholder="Search..." 
+            className="h-9 w-full"
+            onValueChange={(v)=>{
+              console.log(v);
+              setValue(v);
+              console.log(v)
+            }}
+          />
+          <CommandList className="w-full">
+            <CommandEmpty className="w-full">No options found.</CommandEmpty>
+            <CommandGroup className="w-full">
+              {
+                isLoading ? (
+                  <CommandItem className="w-full">
+                    <LoaderThree />
+                  </CommandItem>
+                ):(
+                  isError ? (
+                    <CommandItem className="w-full">
+                      Error searching users
+                    </CommandItem>
+                  ):(
+                    <>
+                      {options.map((option) => (
+                        <CommandItem
+                          key={option.value}
+                          value={option.value}
+                          className="w-full"
+                          onSelect={(currentValue) => {
+                            setValue(currentValue === value ? "" : currentValue)
+                            setOpen(false)
+                          }}
+                        >
+                          {option.label}
+                          <Check
+                            className={cn(
+                              "ml-auto",
+                              value === option.value ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </>
+                  )
+                )
+              }
             </CommandGroup>
           </CommandList>
         </Command>

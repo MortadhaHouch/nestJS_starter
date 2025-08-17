@@ -13,5 +13,6 @@ import { MessageSchema } from './entities/message.entity';
       { name: 'Message', schema: MessageSchema },
     ]),
   ],
+  exports: [MessageService],
 })
 export class MessageModule {}

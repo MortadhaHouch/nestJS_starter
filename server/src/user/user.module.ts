@@ -1,29 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable prettier/prettier */
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
-import { User, UserSchema } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { FriendRequest, FriendRequestSchema } from './entities/request.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { BullModule } from '@nestjs/bullmq';
+
+// Entities
+import { UserSchema } from './entities/user.entity';
+import { FriendRequestSchema } from './entities/request.entity';
+// Services & Modules
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 import { ProcessName } from 'utils/types';
+import { TeamModule } from 'src/team/team.module';
+import { WorkspaceModule } from 'src/workspace/workspace.module';
+import { TaskModule } from 'src/task/task.module';
+import { BlogModule } from 'src/blog/blog.module';
+import { CommentModule } from 'src/comment/comment.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { 
-        name: User.name, 
-        schema: UserSchema 
-      },
-      { 
-        name:FriendRequest.name,
-        schema:FriendRequestSchema 
-      }
+      { name: 'User', schema: UserSchema },
+      { name: 'FriendRequest', schema: FriendRequestSchema },
     ]),
     JwtModule.register({
       global: true,
@@ -55,6 +57,11 @@ import { ProcessName } from 'utils/types';
     BullModule.registerQueue({
       name: ProcessName.GMAIL,
     }),
+    forwardRef(() => TeamModule),
+    forwardRef(() => WorkspaceModule),
+    forwardRef(() => TaskModule),
+    forwardRef(() => BlogModule),
+    forwardRef(() => CommentModule),
   ],
   controllers: [UserController],
   providers: [UserService],

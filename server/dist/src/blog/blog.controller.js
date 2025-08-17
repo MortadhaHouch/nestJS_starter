@@ -30,6 +30,7 @@ let BlogController = class BlogController {
         return createdBlog;
     }
     findAll(tags, p) {
+        console.log(tags, p);
         return this.blogService.findAll(p, tags);
     }
     async findOne(id, tags, page) {

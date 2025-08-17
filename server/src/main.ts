@@ -4,7 +4,9 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConsoleLogger } from '@nestjs/common';
 // import { doubleCsrf } from 'csrf-csrf';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { utils } from 'utils/constants';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
@@ -25,10 +27,18 @@ async function bootstrap() {
     },
   });
   await app.startAllMicroservices();
+  const config = new DocumentBuilder()
+    .setTitle("Task Vortex API")
+    .setDescription('Task Vortex backend API documented using swagger')
+    .setVersion('1.0')
+    .addTag('Task Vortex')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
   app.enableCors([
     {
-      origins: ['http://localhost:5173'],
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      origins: utils.allowedOrigins,
+      methods: ['GET', 'POST', 'PUT', 'DELETE','OPTIONS','PATCH','HEAD'],
       enableCredentials: true,
     },
   ]);

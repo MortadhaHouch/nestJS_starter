@@ -22,10 +22,11 @@ exports.TaskModule = TaskModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: task_entity_1.Task.name, schema: task_entity_1.TaskSchema },
             ]),
-            user_module_1.UserModule,
+            (0, common_1.forwardRef)(() => user_module_1.UserModule),
         ],
         controllers: [task_controller_1.TaskController],
         providers: [task_service_1.TaskService],
+        exports: [task_service_1.TaskService]
     })
 ], TaskModule);
 //# sourceMappingURL=task.module.js.map

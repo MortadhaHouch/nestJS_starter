@@ -22,56 +22,62 @@ let NoteController = class NoteController {
     constructor(noteService) {
         this.noteService = noteService;
     }
-    create(createNoteDto) {
-        return this.noteService.create(createNoteDto);
+    create(createNoteDto, req) {
+        return this.noteService.create(createNoteDto, req.user._id);
     }
-    findAll() {
-        return this.noteService.findAll();
+    findAll(req, page) {
+        return this.noteService.findAll(req.user._id, page);
     }
-    findOne(id) {
-        return this.noteService.findOne(+id);
+    findOne(id, req) {
+        return this.noteService.findOne(id, req.user._id);
     }
-    update(id, updateNoteDto) {
-        return this.noteService.update(+id, updateNoteDto);
+    update(id, updateNoteDto, req) {
+        return this.noteService.update(id, updateNoteDto, req.user._id);
     }
-    remove(id) {
-        return this.noteService.remove(+id);
+    remove(id, req) {
+        return this.noteService.remove(id, req.user._id);
     }
 };
 exports.NoteController = NoteController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_note_dto_1.CreateNoteDto]),
+    __metadata("design:paramtypes", [create_note_dto_1.CreateNoteDto, Object]),
     __metadata("design:returntype", void 0)
 ], NoteController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)("page")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", void 0)
 ], NoteController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], NoteController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_note_dto_1.UpdateNoteDto]),
+    __metadata("design:paramtypes", [String, update_note_dto_1.UpdateNoteDto, Object]),
     __metadata("design:returntype", void 0)
 ], NoteController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], NoteController.prototype, "remove", null);
 exports.NoteController = NoteController = __decorate([

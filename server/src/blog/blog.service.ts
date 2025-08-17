@@ -8,15 +8,36 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class BlogService {
+  private readonly blogFields = {
+      title:1,
+      description:1,
+      status:1,
+      creator:1,
+      createdAt:1,
+      updatedAt:1,
+      content:1,
+      tags:1,
+      likers:1,
+      dislikers:1,
+      comments:1,
+      views:1,
+      bookmarks:1
+    }
   constructor(
     @InjectModel('Blog') private readonly blogModel:Model<Blog>
   ){
 
   }
-  create(userId: ObjectId,createBlogDto: CreateBlogDto) {
-    return this.blogModel.create({...createBlogDto,creator:userId});
+  create(creator: ObjectId,createBlogDto: CreateBlogDto) {
+    return this.blogModel.create({...createBlogDto,creator:creator});
   }
-
+  async findMyBlogs(id:ObjectId){
+    return this.blogModel.find({
+      creator:id
+    })
+    .select(this.blogFields)
+    .populate("creator","firstName lastName email")
+  }
   async findAll(p?:number,tags?:string) {
     const query = {};
     let foundBlogs;
@@ -68,7 +89,12 @@ export class BlogService {
       }).populate("creator","firstName lastName email _id").skip(p?p*10:0).limit(10);
       results["similarBlogs"] = similarBlogs;
       results["count"] = similarBlogs.length;
-      results["p"] = p?p:0;
+      results["page"] = p?p:0;
+    }
+    else{
+      results["similarBlogs"] = [];
+      results["count"] = 0;
+      results["page"] = 0;
     }
     return results;
   }

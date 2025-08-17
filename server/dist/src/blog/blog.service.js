@@ -18,11 +18,33 @@ const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 let BlogService = class BlogService {
     blogModel;
+    blogFields = {
+        title: 1,
+        description: 1,
+        status: 1,
+        creator: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        content: 1,
+        tags: 1,
+        likers: 1,
+        dislikers: 1,
+        comments: 1,
+        views: 1,
+        bookmarks: 1
+    };
     constructor(blogModel) {
         this.blogModel = blogModel;
     }
-    create(userId, createBlogDto) {
-        return this.blogModel.create({ ...createBlogDto, creator: userId });
+    create(creator, createBlogDto) {
+        return this.blogModel.create({ ...createBlogDto, creator: creator });
+    }
+    async findMyBlogs(id) {
+        return this.blogModel.find({
+            creator: id
+        })
+            .select(this.blogFields)
+            .populate("creator", "firstName lastName email");
     }
     async findAll(p, tags) {
         const query = {};
@@ -75,7 +97,12 @@ let BlogService = class BlogService {
             }).populate("creator", "firstName lastName email _id").skip(p ? p * 10 : 0).limit(10);
             results["similarBlogs"] = similarBlogs;
             results["count"] = similarBlogs.length;
-            results["p"] = p ? p : 0;
+            results["page"] = p ? p : 0;
+        }
+        else {
+            results["similarBlogs"] = [];
+            results["count"] = 0;
+            results["page"] = 0;
         }
         return results;
     }

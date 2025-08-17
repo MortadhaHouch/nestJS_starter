@@ -1,40 +1,71 @@
 import {Input} from "@/components/ui/input";
 import {useForm, type FieldValues} from "react-hook-form"
-import { LucideEye, LucideEyeOff } from 'lucide-react';
+import { LogInIcon, LucideArrowRight, LucideEye, LucideEyeOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Img from "../../../src/assets/Login.svg"
 import {motion} from "framer-motion"
 import { NavLink, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import {fetchData} from "../../../utils/fetchData"
 export default function Login() {
     const [isPasswordVisible,setIsPasswordVisible]=useState(false);
-    const [cookie,,] = useCookies(['auth_token'])
+    const [isSuccess,setIsSuccess]=useState(false);
+    const [,setLoading]=useState(false);
     const navigate=useNavigate()
-    useEffect(()=>{
-        if(cookie.auth_token){
-            navigate('/')
-        }
-    },[])
     const {
         register,
         reset,
         formState: { errors,isLoading },
+        setError,
+        clearErrors,
         handleSubmit,
     } = useForm();
-    const handleSignup=async(v:FieldValues)=>{
+    const handleSignup = async (v: FieldValues) => {
+        setLoading(true);
+        // Clear all previous errors
+        clearErrors();
+        
         try {
-            const request = await fetchData("/user/login","POST","",{
-                email:v.email,
-                password:v.password
-            })
-            console.log(request);
-            reset();
-        } catch (error) {
-            console.log(error);
+            const response = await fetchData("/user/login", "POST", "", {
+                email: v.email,
+                password: v.password
+            });
+    
+            // Handle success case
+            if (response.success) {
+                localStorage.setItem("email", v.email);
+                reset();
+                setIsSuccess(true);
+                navigate("/validate");
+                return;
+            }
+    
+            // Handle specific error cases
+            if (response.email_error) {
+                setError("email", {
+                    type: "manual",
+                    message: response.email_error
+                });
+            }
+    
+            if (response.password_error) {
+                setError("password", {
+                    type: "manual",
+                    message: response.password_error
+                });
+            }
+    
+        } catch (error: any) {
+            // Handle network errors or unexpected errors
+            const errorMessage = error.response?.data?.message || "An unexpected error occurred";
+            setError("root", {
+                type: "manual",
+                message: errorMessage
+            });
+        } finally {
+            setLoading(false);
         }
-    }
+    };
     return (
         <main className='flex flex-row flex-wrap gap-4 justify-center items-center w-full min-h-screen'>
             <motion.img 
@@ -66,7 +97,7 @@ export default function Login() {
                                     message:"email is required"
                                 },
                                 pattern: {
-                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
                                     message: "invalid email address"
                                 },
                                 minLength: {
@@ -115,14 +146,35 @@ export default function Login() {
                         } 
                     />
                     {
-                        errors.password && <p className='text-red-500'>{errors.password.message?.toString()}</p>
+                        errors.password && (
+                            <p className='text-red-500'>{errors.password.message?.toString()}</p>
+                        )
                     }
                 </div>
-                <Button variant="default" className={`${isLoading&&"cursor-not-allowed"}`} disabled={isLoading}>Login</Button>
+                <Button variant="default" className={`${isLoading?"cursor-not-allowed":"cursor-pointer"} flex flex-row items-center`} disabled={isLoading}>
+                    <LogInIcon className="mr-1"/>
+                    <span>Login</span>
+                </Button>
                 <p>Don&apos;t have an account?</p>
                 <NavLink to="/signup">
                     <Button className="w-full" variant="outline">signup</Button>
                 </NavLink>
+                {
+                    isSuccess&&(
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.2 }}
+                        >
+                            <p className='text-green-500'>An OTP has been sent to your email address please check your inbox</p>
+                            <Button variant="default" onClick={()=>{
+                                navigate("/validate");
+                            }}>
+                                <LucideArrowRight className="mr-2" /> <span>Validate</span>
+                            </Button>
+                        </motion.div>
+                    )
+                }
             </motion.form>
         </main>
     )

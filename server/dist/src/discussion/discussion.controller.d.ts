@@ -4,9 +4,29 @@ import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 export declare class DiscussionController {
     private readonly discussionService;
     constructor(discussionService: DiscussionService);
-    create(createDiscussionDto: CreateDiscussionDto): string;
-    findAll(): string;
-    findOne(id: string): string;
-    update(id: string, updateDiscussionDto: UpdateDiscussionDto): string;
-    remove(id: string): string;
+    create(createDiscussionDto: CreateDiscussionDto): Promise<import("mongoose").Document<unknown, {}, import("./entities/discussion.entity").Discussion, {}> & import("./entities/discussion.entity").Discussion & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }>;
+    findAll(): Promise<(import("mongoose").Document<unknown, {}, import("./entities/discussion.entity").Discussion, {}> & import("./entities/discussion.entity").Discussion & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    })[]>;
+    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./entities/discussion.entity").Discussion, {}> & import("./entities/discussion.entity").Discussion & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }) | null>;
+    update(id: string, updateDiscussionDto: UpdateDiscussionDto): Promise<(import("mongoose").Document<unknown, {}, import("./entities/discussion.entity").Discussion, {}> & import("./entities/discussion.entity").Discussion & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }) | null>;
+    remove(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./entities/discussion.entity").Discussion, {}> & import("./entities/discussion.entity").Discussion & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }) | null>;
 }

@@ -15,6 +15,7 @@ import { BlogSchema } from './entities/blog.entity';
         schema:BlogSchema
       }
     ])
-  ]
+  ],
+  exports:[BlogService]
 })
 export class BlogModule {}

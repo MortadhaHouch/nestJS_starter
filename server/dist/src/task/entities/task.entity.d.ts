@@ -6,7 +6,7 @@ export declare class Task {
     description: string;
     status: TaskStatus;
     overdue: Date;
-    userId: MongooseSchema.Types.ObjectId;
+    creator: MongooseSchema.Types.ObjectId;
     tags: string[];
     priority: TaskPriority;
     assignees: MongooseSchema.Types.ObjectId[];
@@ -14,7 +14,7 @@ export declare class Task {
     attachments: string[];
     checklist: CheckItem[];
     color: string;
-    notes: string;
+    notes: string[];
 }
 export declare const TaskSchema: MongooseSchema<Task, import("mongoose").Model<Task, any, any, any, import("mongoose").Document<unknown, any, Task, any> & Task & Required<{
     _id: MongooseSchema.Types.ObjectId;

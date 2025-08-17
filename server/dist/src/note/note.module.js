@@ -21,7 +21,8 @@ exports.NoteModule = NoteModule = __decorate([
         providers: [note_service_1.NoteService],
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: 'Note', schema: note_entity_1.NoteSchema }])
-        ]
+        ],
+        exports: [note_service_1.NoteService]
     })
 ], NoteModule);
 //# sourceMappingURL=note.module.js.map

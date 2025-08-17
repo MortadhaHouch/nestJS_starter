@@ -26,7 +26,8 @@ exports.BlogModule = BlogModule = __decorate([
                     schema: blog_entity_1.BlogSchema
                 }
             ])
-        ]
+        ],
+        exports: [blog_service_1.BlogService]
     })
 ], BlogModule);
 //# sourceMappingURL=blog.module.js.map

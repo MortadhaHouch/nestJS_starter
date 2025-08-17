@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const workspace_service_1 = require("./workspace.service");
 const create_workspace_dto_1 = require("./dto/create-workspace.dto");
 const update_workspace_dto_1 = require("./dto/update-workspace.dto");
-const types_1 = require("../../utils/types");
 const mongoose_1 = require("@nestjs/mongoose");
 const add_users_dto_1 = require("./dto/add-users.dto");
 let WorkspaceController = class WorkspaceController {
@@ -28,8 +27,8 @@ let WorkspaceController = class WorkspaceController {
     create(req, createWorkspaceDto) {
         return this.workspaceService.create(createWorkspaceDto, req.user._id);
     }
-    findAll(req, page, limit, search, sort, sortParams, status) {
-        return this.workspaceService.findAll(req.user._id, page ? parseInt(page) : 1, limit ? parseInt(limit) : 10, search, sort, sortParams, status);
+    findAll(req) {
+        return this.workspaceService.findAll(req.user._id);
     }
     async findOne(req, id) {
         return await this.workspaceService.findAccessible(id, req.user._id);
@@ -70,14 +69,8 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Query)("page")),
-    __param(2, (0, common_1.Query)("limit")),
-    __param(3, (0, common_1.Query)("search")),
-    __param(4, (0, common_1.Query)("sort")),
-    __param(5, (0, common_1.Query)("sortParams")),
-    __param(6, (0, common_1.Query)("status")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String, String, String, String, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], WorkspaceController.prototype, "findAll", null);
 __decorate([

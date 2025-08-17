@@ -25,6 +25,7 @@ export class BlogController {
 
   @Get()
   findAll(@Query('tags') tags?:string,@Query('p') p?:number) {
+    console.log(tags,p);
     return this.blogService.findAll(p,tags);
   }
 

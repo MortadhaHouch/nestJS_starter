@@ -5,12 +5,18 @@ import { Model, ObjectId } from 'mongoose';
 import { Blog } from './entities/blog.entity';
 export declare class BlogService {
     private readonly blogModel;
+    private readonly blogFields;
     constructor(blogModel: Model<Blog>);
-    create(userId: ObjectId, createBlogDto: CreateBlogDto): Promise<import("mongoose").Document<unknown, {}, Blog, {}> & Blog & Required<{
+    create(creator: ObjectId, createBlogDto: CreateBlogDto): Promise<import("mongoose").Document<unknown, {}, Blog, {}> & Blog & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {
         __v: number;
     }>;
+    findMyBlogs(id: ObjectId): Promise<(import("mongoose").Document<unknown, {}, Blog, {}> & Blog & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
     findAll(p?: number, tags?: string): Promise<{
         results: any;
         count: any;

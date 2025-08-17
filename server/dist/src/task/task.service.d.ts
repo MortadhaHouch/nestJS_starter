@@ -2,59 +2,48 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Model, ObjectId } from 'mongoose';
 import { Task } from './entities/task.entity';
-import { TaskStatus } from 'utils/types';
-interface FindAllOptions {
-    page?: number;
-    limit?: number;
-    status?: TaskStatus;
-    userId?: ObjectId;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-    search?: string;
-}
 export declare class TaskService {
     private readonly taskModel;
+    private readonly taskFields;
     constructor(taskModel: Model<Task>);
     create(createTaskDto: CreateTaskDto): Promise<import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {
         __v: number;
     }>;
-    findAll(options?: FindAllOptions): Promise<{
+    findAll(id: ObjectId, page?: number): Promise<(import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }> & {
+        __v: number;
+    })[] | {
         tasks: (import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
             _id: import("mongoose").Schema.Types.ObjectId;
         }> & {
             __v: number;
         })[];
-        pagination: {
-            page: number;
-            limit: number;
-            total: number;
-            totalPages: number;
-            hasNext: boolean;
-            hasPrev: boolean;
-        };
+        count: number;
+        page: number;
     }>;
-    getUserTasks(userId: ObjectId, ids: ObjectId[]): Promise<((import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
+    getUserTasks(creator: ObjectId, ids: ObjectId[]): Promise<((import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {
         __v: number;
     }) | null)[]>;
-    getTasksByDateRange(userId: ObjectId, createdAt?: Date, dateRange?: {
+    getTasksByDateRange(creator: ObjectId, createdAt?: Date, dateRange?: {
         from?: Date;
         to?: Date;
     }): Promise<any[] | undefined>;
-    findOverdueTasks(userId: ObjectId): Promise<(import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
+    findOverdueTasks(creator: ObjectId): Promise<(import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {
         __v: number;
     })[]>;
-    getTaskStats(userId: ObjectId): Promise<{
+    getTaskStats(creator: ObjectId): Promise<{
         total: number;
         overdue: number;
         byStatus: any;
     }>;
-    findOne(userId: ObjectId, id: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
+    findOne(creator: ObjectId, id: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Task, {}> & Task & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }> & {
         __v: number;
@@ -72,9 +61,8 @@ export declare class TaskService {
     }> & {
         __v: number;
     }, {}, Task, "findOneAndUpdate", {}>;
-    remove(userId: ObjectId, id: ObjectId): Promise<{
+    remove(creator: ObjectId, id: ObjectId): Promise<{
         deleted: boolean;
         id: import("mongoose").Schema.Types.ObjectId;
     }>;
 }
-export {};

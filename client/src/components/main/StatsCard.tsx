@@ -102,7 +102,7 @@ export default function StatsCard({
       {/* Main card */}
       <Card className={`relative transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 ${currentColor.border} ${currentColor.hoverBorder} min-h-[200px] overflow-hidden`}>
         <CardHeader className="pb-4">
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             {/* Enhanced icon container */}
             <div className={`flex-shrink-0 p-3 bg-gradient-to-br rounded-xl shadow-lg transition-all duration-500 ${currentColor.bg} group-hover:${currentColor.hover} group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-${color}-500/30`}>
               <div className={`text-xl transition-colors duration-500 ${currentColor.text} group-hover:${currentColor.text}/90`}>
@@ -138,7 +138,7 @@ export default function StatsCard({
         
         <CardContent className="pt-0">
           {/* Value section */}
-          <div className="flex flex-col flex-1 justify-center">
+          <div className="flex flex-col justify-center flex-1">
             <p className="mb-4 text-4xl font-black leading-none transition-all duration-500 text-foreground group-hover:text-primary/90">
               {value}
             </p>
@@ -151,18 +151,18 @@ export default function StatsCard({
               transition={{ duration: 0.8, delay: 0.8 }}
               className="mt-4"
             >
-              <div className="flex justify-between items-center mb-3">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-semibold transition-colors duration-500 text-muted-foreground/80 group-hover:text-muted-foreground">
                   Progress
                 </span>
                 <span className={`text-sm font-bold transition-colors duration-500 ${currentColor.text} group-hover:${currentColor.text}/90`}>
-                  {progress || 75}%
+                  {progress}%
                 </span>
               </div>
-              <div className="overflow-hidden w-full h-3 bg-gray-200 rounded-full border border-gray-300 shadow-inner dark:bg-gray-700 dark:border-gray-600">
+              <div className="w-full h-3 overflow-hidden bg-gray-200 border border-gray-300 rounded-full shadow-inner dark:bg-gray-700 dark:border-gray-600">
                 <motion.div
                   initial={{ width: 0 }}
-                  whileInView={{ width: `${progress || 75}%` }}
+                  whileInView={{ width: `${progress}%` }}
                   viewport={{ once: true }}
                   transition={{ duration: 2, ease: "easeOut", delay: 1 }}
                   className={`overflow-hidden relative h-full bg-gradient-to-r ${currentColor.progress} rounded-full`}
@@ -188,8 +188,8 @@ export default function StatsCard({
         </CardContent>
         
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br to-transparent rounded-bl-xl opacity-0 transition-all duration-700 from-primary/30 group-hover:opacity-100" />
-        <div className="absolute bottom-0 left-0 w-8 h-8 bg-gradient-to-tr to-transparent rounded-tr-xl opacity-0 transition-all duration-700 delay-100 from-primary/20 group-hover:opacity-100" />
+        <div className="absolute top-0 right-0 w-12 h-12 transition-all duration-700 opacity-0 bg-gradient-to-br to-transparent rounded-bl-xl from-primary/30 group-hover:opacity-100" />
+        <div className="absolute bottom-0 left-0 w-8 h-8 transition-all duration-700 delay-100 opacity-0 bg-gradient-to-tr to-transparent rounded-tr-xl from-primary/20 group-hover:opacity-100" />
       </Card>
     </motion.div>
   )

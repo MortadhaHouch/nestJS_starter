@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
+const types_1 = require("../../../utils/types");
 let User = class User {
     _id;
     firstName;
@@ -23,11 +24,19 @@ let User = class User {
     isLoggedIn;
     validationCode;
     latestLoginTrial;
+    otpTrialCount;
+    firstOPTTrial;
     ip;
     friends;
     notes;
     discussions;
     notifications;
+    accessLevel;
+    views;
+    socialMediaLinks;
+    website;
+    birthDate;
+    phoneNumber;
 };
 exports.User = User;
 __decorate([
@@ -88,6 +97,14 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "latestLoginTrial", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: Number, required: false }),
+    __metadata("design:type", Number)
+], User.prototype, "otpTrialCount", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Date, required: false }),
+    __metadata("design:type", Date)
+], User.prototype, "firstOPTTrial", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: String, required: false }),
     __metadata("design:type", String)
 ], User.prototype, "ip", void 0);
@@ -107,8 +124,48 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Schema.Types.ObjectId, ref: "Notification" }], default: [], required: false }),
     __metadata("design:type", Array)
 ], User.prototype, "notifications", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, default: types_1.ProfileAccessLevel.PUBLIC, required: false }),
+    __metadata("design:type", String)
+], User.prototype, "accessLevel", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: [
+            {
+                user: {
+                    type: mongoose_2.Schema.Types.ObjectId,
+                    ref: 'User',
+                    required: true,
+                },
+                date: {
+                    type: Date,
+                    required: true,
+                },
+            },
+        ],
+        default: [],
+        required: false,
+    }),
+    __metadata("design:type", Array)
+], User.prototype, "views", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], required: false, default: [] }),
+    __metadata("design:type", Array)
+], User.prototype, "socialMediaLinks", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false }),
+    __metadata("design:type", String)
+], User.prototype, "website", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Date, required: false }),
+    __metadata("design:type", Date)
+], User.prototype, "birthDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Number, required: false }),
+    __metadata("design:type", Number)
+], User.prototype, "phoneNumber", void 0);
 exports.User = User = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ timestamps: true })
 ], User);
 exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
 //# sourceMappingURL=user.entity.js.map

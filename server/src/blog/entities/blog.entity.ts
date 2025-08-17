@@ -22,5 +22,7 @@ export class Blog {
     views:number;
     @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"User"}],required:false,default:[]})
     bookmarks:MongooseSchema.Types.ObjectId[]
+    @Prop({type:Boolean,required:false,default:false})
+    isPinned:boolean
 }   
 export const BlogSchema = SchemaFactory.createForClass(Blog);

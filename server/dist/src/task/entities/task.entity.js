@@ -19,7 +19,7 @@ let Task = class Task {
     description;
     status;
     overdue;
-    userId;
+    creator;
     tags;
     priority;
     assignees;
@@ -49,7 +49,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User", required: true }),
     __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
-], Task.prototype, "userId", void 0);
+], Task.prototype, "creator", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ tags: [String], required: false }),
     __metadata("design:type", Array)
@@ -79,8 +79,8 @@ __decorate([
     __metadata("design:type", String)
 ], Task.prototype, "color", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: String, required: false }),
-    __metadata("design:type", String)
+    (0, mongoose_1.Prop)({ type: [String], required: false }),
+    __metadata("design:type", Array)
 ], Task.prototype, "notes", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })

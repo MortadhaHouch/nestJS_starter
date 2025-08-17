@@ -1,20 +1,21 @@
 /* eslint-disable prettier/prettier */
 import { JwtService } from '@nestjs/jwt';
 
-import { Injectable, NestMiddleware, NotFoundException, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NestMiddleware, NotFoundException, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from 'src/user/user.service';
-import { AuthenticatedRequest } from 'utils/types';
+import { AuthenticatedRequest, AuthTokenPayload } from 'utils/types';
 @Injectable()
 export class LoggerMiddlewareService implements NestMiddleware {
     constructor(
         private readonly userService:UserService,
-        private readonly jwtService:JwtService
+        private readonly jwtService:JwtService,
+        @Inject("Logger") private readonly logger:Logger
     ){
     }
     validateToken(token:string){
         if(token.startsWith("Bearer ") && token.substring(7).length > 0){
-            const claims = this.jwtService.verify<{email:string,iat:number,exp:number}>(token.substring(7),{secret:process.env.SECRET_KEY});
+            const claims = this.jwtService.verify<AuthTokenPayload>(token.substring(7),{secret:process.env.SECRET_KEY});
             if(new Date(claims.exp*1000) > new Date() && new Date(claims.iat*1000) < new Date()){
                 return claims;
             }
@@ -29,6 +30,7 @@ export class LoggerMiddlewareService implements NestMiddleware {
         if(!authToken){
             throw new UnauthorizedException("unauthorized");
         }
+        // this.logger.log(authToken);
         const {email} = authToken;
         const user = await this.userService.findUserByEmail(email);
         if(!user){

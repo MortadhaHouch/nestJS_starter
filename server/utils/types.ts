@@ -49,5 +49,17 @@ export enum ProcessName {
   SOCIAL_MEDIA = 'SOCIAL_MEDIA',
   ALL = 'ALL',
   GMAIL = 'GMAIL',
+  TEAM= "TEAM"
+}
+export enum ProfileAccessLevel {
+  PUBLIC="PUBLIC",
+  PRIVATE="PRIVATE",
+  FRIENDS="FRIENDS"
+}
+export type AuthTokenPayload = {
+  email:string,
+  id:string
+  iat:number,
+  exp:number
 }
 export { TaskStatus, Role, TaskPriority,WorkSpaceStatus,RequestStatus };

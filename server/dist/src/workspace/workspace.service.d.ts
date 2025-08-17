@@ -2,16 +2,16 @@ import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
 import { Workspace } from './entities/workspace.entity';
 import { Model, ObjectId } from 'mongoose';
-import { WorkSpaceStatus } from 'utils/types';
 export declare class WorkspaceService {
     private readonly workspaceModel;
+    private readonly workspaceFields;
     constructor(workspaceModel: Model<Workspace>);
-    create(createWorkspaceDto: CreateWorkspaceDto, id: string): Promise<import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+    create(createWorkspaceDto: CreateWorkspaceDto, id: ObjectId): Promise<import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
     }>;
-    findAll(id: string, p?: number, limit?: number, search?: string, sortOrder?: 'asc' | 'desc', sortParams?: string, status?: WorkSpaceStatus): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+    findAll(id: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
@@ -34,7 +34,7 @@ export declare class WorkspaceService {
     } & {
         __v: number;
     }, {}, Workspace, "updateOne", {}>;
-    findAccessible(id: string, userId: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
+    findAccessible(id: string, creator: ObjectId): import("mongoose").Query<(import("mongoose").Document<unknown, {}, Workspace, {}> & Workspace & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

@@ -24,6 +24,7 @@ exports.MessageModule = MessageModule = __decorate([
                 { name: 'Message', schema: message_entity_1.MessageSchema },
             ]),
         ],
+        exports: [message_service_1.MessageService],
     })
 ], MessageModule);
 //# sourceMappingURL=message.module.js.map

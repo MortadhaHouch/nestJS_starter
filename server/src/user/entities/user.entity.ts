@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {Schema as MongooseSchema} from "mongoose"
-@Schema()
+import { ProfileAccessLevel } from 'utils/types';
+@Schema({timestamps:true})
 export class User {
   _id: MongooseSchema.Types.ObjectId;
   @Prop({
@@ -43,6 +44,10 @@ export class User {
   validationCode:number;
   @Prop({type:Date,required:false})
   latestLoginTrial: Date;
+  @Prop({type:Number,required:false})
+  otpTrialCount:number;
+  @Prop({type:Date,required:false})
+  firstOPTTrial:Date;
   @Prop({type:String,required:false})
   ip:string;
   @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"User"}],default:[]})
@@ -53,5 +58,33 @@ export class User {
   discussions:MongooseSchema.Types.ObjectId[]
   @Prop({type:[{type:MongooseSchema.Types.ObjectId,ref:"Notification"}],default:[],required:false})
   notifications:MongooseSchema.Types.ObjectId[]
+  @Prop({type:String,default:ProfileAccessLevel.PUBLIC,required:false})
+  accessLevel:ProfileAccessLevel;
+  @Prop({
+    type: [
+      {
+        user: {
+          type: MongooseSchema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+        date: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
+    default: [],
+    required: false,
+  })
+  views:[{user:MongooseSchema.Types.ObjectId,date:Date}]
+  @Prop({type:[String],required:false,default:[]})
+  socialMediaLinks:string[]
+  @Prop({type:String,required:false})
+  website:string
+  @Prop({type:Date,required:false})
+  birthDate:Date
+  @Prop({type:Number,required:false})
+  phoneNumber:number
 }
 export const UserSchema = SchemaFactory.createForClass(User);

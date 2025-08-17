@@ -7,7 +7,7 @@ import { useCookies } from 'react-cookie'
 export default function Dashboard() {
   const [cookie,] = useCookies(['auth_token'])
   return (
-    <main className='flex overflow-x-hidden flex-col justify-start items-center w-full min-h-screen'>
+    <main className='flex flex-col items-center justify-start w-full min-h-screen overflow-x-hidden'>
       {
         cookie.auth_token ? (
           <SidebarProvider>

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { BullModule } from '@nestjs/bullmq';
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -20,9 +20,11 @@ import { AuthProcessesModule } from './processes/auth_processes/auth_processes.m
 import { TaskProcessModule } from './processes/task_process/task_process.module';
 import { BlogModule } from './blog/blog.module';
 import { CommentModule } from './comment/comment.module';
+import { blogsCORSConfig, commentsCORSConfig, usersCORSConfig, utils } from 'utils/constants';
+import { NotificationProcessesModule } from './processes/notification_processes/notification_processes.module';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/nest_starter'),
+    MongooseModule.forRoot(process.env.MONGO_URL as string),
     UserModule,
     ThrottlerModule.forRoot({
       throttlers: [
@@ -49,34 +51,23 @@ import { CommentModule } from './comment/comment.module';
     MessageModule,
     BullModule.forRoot({
       connection: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST as string,
+        port: Number(process.env.REDIS_PORT),
       },
     }),
     AuthProcessesModule,
     TaskProcessModule,
     BlogModule,
     CommentModule,
+    NotificationProcessesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, LoggerMiddlewareService]
+  providers: [AppService, LoggerMiddlewareService,{provide:"Logger",useClass:Logger}]
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddlewareService)
-      .forRoutes('task','team','workspace','discussion','message','note','notification',{
-        path: 'blog',
-        method: RequestMethod.POST
-      },{
-        path: 'blog',
-        method: RequestMethod.PATCH
-      },{
-        path: 'blog',
-        method: RequestMethod.PUT
-      },{
-        path: 'blog',
-        method: RequestMethod.DELETE
-      });
+      .forRoutes(...utils.protectedRoutes,...blogsCORSConfig,...commentsCORSConfig,...usersCORSConfig);
   }
 }

@@ -7,19 +7,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModule = void 0;
-const mongoose_1 = require("@nestjs/mongoose");
 const common_1 = require("@nestjs/common");
-const user_service_1 = require("./user.service");
-const user_controller_1 = require("./user.controller");
-const user_entity_1 = require("./entities/user.entity");
+const mongoose_1 = require("@nestjs/mongoose");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
-const request_entity_1 = require("./entities/request.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const path_1 = require("path");
 const bullmq_1 = require("@nestjs/bullmq");
+const user_entity_1 = require("./entities/user.entity");
+const request_entity_1 = require("./entities/request.entity");
+const user_service_1 = require("./user.service");
+const user_controller_1 = require("./user.controller");
 const types_1 = require("../../utils/types");
+const team_module_1 = require("../team/team.module");
+const workspace_module_1 = require("../workspace/workspace.module");
+const task_module_1 = require("../task/task.module");
+const blog_module_1 = require("../blog/blog.module");
+const comment_module_1 = require("../comment/comment.module");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -27,14 +32,8 @@ exports.UserModule = UserModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
-                {
-                    name: user_entity_1.User.name,
-                    schema: user_entity_1.UserSchema
-                },
-                {
-                    name: request_entity_1.FriendRequest.name,
-                    schema: request_entity_1.FriendRequestSchema
-                }
+                { name: 'User', schema: user_entity_1.UserSchema },
+                { name: 'FriendRequest', schema: request_entity_1.FriendRequestSchema },
             ]),
             jwt_1.JwtModule.register({
                 global: true,
@@ -66,6 +65,11 @@ exports.UserModule = UserModule = __decorate([
             bullmq_1.BullModule.registerQueue({
                 name: types_1.ProcessName.GMAIL,
             }),
+            (0, common_1.forwardRef)(() => team_module_1.TeamModule),
+            (0, common_1.forwardRef)(() => workspace_module_1.WorkspaceModule),
+            (0, common_1.forwardRef)(() => task_module_1.TaskModule),
+            (0, common_1.forwardRef)(() => blog_module_1.BlogModule),
+            (0, common_1.forwardRef)(() => comment_module_1.CommentModule),
         ],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService],

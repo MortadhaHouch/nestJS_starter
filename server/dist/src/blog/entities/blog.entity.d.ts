@@ -10,6 +10,7 @@ export declare class Blog {
     dislikers: MongooseSchema.Types.ObjectId[];
     views: number;
     bookmarks: MongooseSchema.Types.ObjectId[];
+    isPinned: boolean;
 }
 export declare const BlogSchema: MongooseSchema<Blog, import("mongoose").Model<Blog, any, any, any, import("mongoose").Document<unknown, any, Blog, any> & Blog & Required<{
     _id: MongooseSchema.Types.ObjectId;

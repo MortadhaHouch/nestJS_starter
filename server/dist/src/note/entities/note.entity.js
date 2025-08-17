@@ -16,14 +16,9 @@ let Note = class Note {
     _id;
     title;
     content;
-    d;
-    userId;
+    creator;
 };
 exports.Note = Note;
-__decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, required: true }),
-    __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
-], Note.prototype, "_id", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, required: true }),
     __metadata("design:type", String)
@@ -33,9 +28,9 @@ __decorate([
     __metadata("design:type", String)
 ], Note.prototype, "content", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, required: true }),
-    __metadata("design:type", Object)
-], Note.prototype, "d", void 0);
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, required: true, ref: "User" }),
+    __metadata("design:type", mongoose_2.Schema.Types.ObjectId)
+], Note.prototype, "creator", void 0);
 exports.Note = Note = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Note);

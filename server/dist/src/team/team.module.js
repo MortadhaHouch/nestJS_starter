@@ -12,16 +12,28 @@ const team_service_1 = require("./team.service");
 const team_controller_1 = require("./team.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const team_entity_1 = require("./entities/team.entity");
+const types_1 = require("../../utils/types");
+const bullmq_1 = require("@nestjs/bullmq");
+const user_module_1 = require("../user/user.module");
 let TeamModule = class TeamModule {
 };
 exports.TeamModule = TeamModule;
 exports.TeamModule = TeamModule = __decorate([
     (0, common_1.Module)({
         controllers: [team_controller_1.TeamController],
-        providers: [team_service_1.TeamService],
+        providers: [
+            team_service_1.TeamService
+        ],
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: 'Team', schema: team_entity_1.TeamSchema }])
-        ]
+            mongoose_1.MongooseModule.forFeature([
+                { name: 'Team', schema: team_entity_1.TeamSchema }
+            ]),
+            bullmq_1.BullModule.registerQueue({
+                name: types_1.ProcessName.TEAM,
+            }),
+            (0, common_1.forwardRef)(() => user_module_1.UserModule)
+        ],
+        exports: [team_service_1.TeamService]
     })
 ], TeamModule);
 //# sourceMappingURL=team.module.js.map
