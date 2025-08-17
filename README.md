@@ -58,7 +58,7 @@ Get up and running in minutes with our one-command setup:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/nest-starter.git
+git clone https://github.com/MortadhaHouch/nestJS_starter.git
 cd nest-starter
 
 # Start the development environment
@@ -88,7 +88,7 @@ Visit `http://localhost:3000` to see the application in action!
   - Create, read, update, delete tasks
   - Task assignments and due dates
   - Priority levels and status tracking
-  - Task comments and attachments
+  - Task checklists and attachments
   - Task history and audit trail
 
 - **Team Collaboration**
@@ -124,23 +124,22 @@ Visit `http://localhost:3000` to see the application in action!
 
 ### Frontend
 - **Framework**: React 18 with TypeScript
-- **State Management**: React Query, Zustand
-- **Styling**: Tailwind CSS with shadcn/ui
+- **State Management**: React Query
+- **Styling**: Tailwind CSS ,shadcnUI ,aceternityUI
 - **Form Handling**: React Hook Form with Zod validation
 - **Routing**: React Router v6
 - **Real-time**: Socket.IO Client
-- **UI Components**: Radix UI Primitives, shadcn/ui
-- **Icons**: Lucide React
-- **Testing**: Jest, React Testing Library, Cypress
+- **UI Components**: Radix UI Primitives, shadcnUI
+- **Icons**: Lucide React, React Icons
 
 ### Backend (NestJS)
 - **Runtime**: Node.js 18+
 - **Framework**: NestJS 10+
 - **Database**: MongoDB with Mongoose
 - **Cache**: Redis
-- **Authentication**: JWT, Passport.js
+- **Authentication**: JWT , 2FA with Gmail services
 - **Real-time**: WebSockets with Socket.IO
-- **Queue**: BullMQ
+- **Queue**: BullMQ jobs cached with Redis
 - **Validation**: Class Validator, Class Transformer
 - **API Documentation**: Swagger/OpenAPI
 - **Testing**: Jest, Supertest
@@ -156,10 +155,7 @@ Visit `http://localhost:3000` to see the application in action!
 ### DevOps
 - **Containerization**: Docker, Docker Compose
 - **CI/CD**: GitHub Actions
-- **Monitoring**: Prometheus, Grafana
-- **Logging**: Winston, ELK Stack (optional)
 - **Error Tracking**: Sentry
-- **Performance**: New Relic (optional)
 
 ## 📋 Table of Contents
 
@@ -211,7 +207,7 @@ Visit `http://localhost:3000` to see the application in action!
 ### BullMQ Queuing in Auth Flow
 - **Asynchronous Notification Jobs:**
   - The authentication flow now uses BullMQ queues to handle login and verification notifications asynchronously.
-  - When a user logs in, a notification job is enqueued and processed by a dedicated worker.
+  - When a user logs in, a notification job about the verification code being sent to gmail is enqueued and processed by a dedicated worker.
 
 ### Notification System
 - **Modular Notification Delivery:**
@@ -239,7 +235,7 @@ Visit `http://localhost:3000` to see the application in action!
 
 | Entity        | Controller                | Main Routes (REST)                                                                                   |
 |---------------|---------------------------|------------------------------------------------------------------------------------------------------|
-| User          | `/user`                   | `POST /login`, `POST /validate`, `POST /signup`, `PATCH /update-profile`, `POST /logout`             |
+| User          | `/user`                   | `GET /profile/:id`,`POST /login`, `POST /validate`, `POST /signup`, `PATCH /update-profile`, `POST /logout`             |
 | Task          | `/task`                   | `POST /`, `GET /`, `GET /overdue`, `GET /stats`, `GET /:id`, `PATCH /:id`, `DELETE /:id`            |
 | Team          | `/team`                   | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`                                          |
 | Note          | `/note`                   | `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`                                          |
@@ -398,13 +394,13 @@ All endpoints require authentication. Ownership and access checks are enforced f
 
 ### User API
 
-| Method | Route                | Description                                                                                  | Latest Feature? |
-|--------|----------------------|----------------------------------------------------------------------------------------------|:--------------:|
-| POST   | `/user/login`        | Login with email and password. Sends a verification code to email for 2-step verification.   |                |
-| POST   | `/user/validate`     | Validate the verification code sent to email. Issues JWT on success.                         |      ✅        |
-| POST   | `/user/signup`       | Register a new user. Checks for duplicate name/email.                                        |                |
+| Method | Route                 | Description                                                                                  | Latest Feature?|
+|--------|-----------------------|----------------------------------------------------------------------------------------------|:--------------:|
+| POST   | `/user/login`         | Login with email and password. Sends a verification code to email for 2-step verification.   |                |
+| POST   | `/user/validate`      | Validate the verification code sent to email. Issues JWT on success.                         |      ✅        |
+| POST   | `/user/signup`        | Register a new user. Checks for duplicate name/email.                                        |                |
 | PATCH  | `/user/update-profile`| Update user profile (name, password).                                                        |                |
-| POST   | `/user/logout`       | Log out the current user.                                                                    |                |
+| POST   | `/user/logout`        | Log out the current user.                                                                    |                |
 
 **Latest Feature:**  
 - **2-Step Email Verification on Login:**  
